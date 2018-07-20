@@ -3,22 +3,75 @@
     <Header/>
   <el-main>
     <el-header class="header" height="240px">
-    <el-row :justify=space-around height="100%" width="100%">
-      <el-col :span="6" >
-        <div class="grid-content" >
-          <img src="~/assets/blocks.png" class="icon">
-            <span >
+      <el-row
+        class="row"
+        type="flex"
+        align="middle"
+        justify="center"
+      >
+        <el-col :span="6">
+          <div class="grid-content" >
+            <div>
+              <img src="~/assets/blocks.png" class="icon">
+            </div>
+            <div>  
+              <p>
+                BLOCK
+              </p>
+              <p >
+                #123456
+              </p>
+            </div>
+          </div>
+        </el-col>
+
+        <el-col :span="6">
+          <div class="grid-content" >
+          <div>
+            <img src="~/assets/blocks.png" class="icon">
+          </div>
+          <div>  
+            <p>
               BLOCK
-            </span>
-            <br/>
-            <span >
+            </p>
+            <p >
               #123456
-            </span>
-        </div>
+            </p>
+          </div>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="grid-content" >
+          <div>
+            <img src="~/assets/blocks.png" class="icon">
+          </div>
+          <div>  
+            <p>
+              BLOCK
+            </p>
+            <p >
+              #123456
+            </p>
+          </div>
+          </div>
+        </el-col>
+        <el-col :span="6">
+          <div class="grid-content" >
+          <div>
+            <img src="~/assets/blocks.png" class="icon">
+          </div>
+          <div>  
+            <p>
+              BLOCK
+            </p>
+            <p >
+              #123456
+            </p>
+          </div>
+          </div>
+        </el-col>
         
-      </el-col>
-      
-    </el-row>
+      </el-row>
         
     </el-header>
     <el-header height="360px" background-color="#FFF">
@@ -30,11 +83,15 @@
 </template>
 
 <style>
-
   .column {
     display: flex;
     flex-direction: column;
   }
+
+  .row {
+    width: 100%;
+  }
+
   .el-row {
     margin-bottom: 20px;
     &:last-child {
@@ -47,8 +104,8 @@
   .grid-content {
     border-radius: 4px;
     display: flex;
-    justify-content: space-around;
     align-items: center;
+    justify-content: center;
     font-family:  "Helvetica Neue",Helvetica;
     color: #757589;
     font-size: 25px;
@@ -74,9 +131,7 @@
 
  .header{
    background-color: #F7F7F9;
-   text-align: center;
    display: flex;
-   justify-content: space-around;
    align-items: center;
   } 
  .el-footer {
@@ -96,7 +151,6 @@
     background-color: #FFF;
     color: #333;
     text-align: center;
-    line-height: 560px;
   }
   
   body > .el-container {
