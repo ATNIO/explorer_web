@@ -19,7 +19,7 @@
             </div>
             <div class="right-nav">
                 <el-input v-model="input" class="input" placeholder="Search Address / Tx / Block / Dbot"></el-input>
-                <el-button icon="el-icon-search" class="button">Search</el-button>
+                <el-button icon="el-icon-search" class="button" v-on:click="this.search">Search</el-button>
             </div>
     
     </el-menu>
@@ -113,6 +113,10 @@
     methods: {
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
+      },
+      search() {
+          console.log("search")
+          console.log("input", this.input)
       }
     }
   }
