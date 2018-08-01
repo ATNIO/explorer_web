@@ -1,13 +1,14 @@
 <template>
 <div>
     <Header/>
+        <div class="content">
+            <h1>We are looking for your page...but we can't find it</h1>
+        </div>
         <video autoplay muted loop id="myVideo">
             <source src="~/assets/error.mp4" type="video/mp4">
         </video>
 
-        <div class="content">
-            <h1>We are looking for your page...but we can't find it</h1>
-        </div>
+       
     <br><br><br>
     <el-footer>
         <Footer/>
@@ -25,8 +26,6 @@
     }
 
     .content {
-        position: fixed;
-        top: 55px;
         background: rgba(0, 0, 0, 0.5);
         color: #f1f1f1;
         width: 100%;
