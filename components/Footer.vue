@@ -2,7 +2,7 @@
 <div class="main">
     <div class="footer">
         <div class="link">
-            <a href="https://github.com/ATNIO">
+            <a href="https://github.com/ATNIO" target="_blank">
                 <img src="~/assets/github.svg" class="image">
             </a>
             <p class="font">
@@ -10,7 +10,7 @@
             </p> 
         </div>
         <div class="link">
-            <a href="https://t.me/ATN_Blockchain">
+            <a href="https://t.me/ATN_Blockchain" target="_blank">
                 <img src="~/assets/telegram.svg" class="image"> 
             </a>
             <p class="font">
@@ -18,7 +18,7 @@
             </p> 
         </div>
         <div class="link">
-            <a href="https://twitter.com/atn_io">
+            <a href="https://twitter.com/atn_io" target="_blank">
                 <img src="~/assets/twitter.svg" class="image"> 
             </a>
             <p class="font">
@@ -26,7 +26,7 @@
             </p> 
         </div>
         <div class="link">
-            <a href="https://www.reddit.com/r/ATN/">
+            <a href="https://www.reddit.com/r/ATN/" target="_blank">
                 <img src="~/assets/reddit.svg" class="image"> 
             </a>
             <p class="font">
@@ -34,7 +34,7 @@
             </p> 
         </div>
         <div class="link">
-            <a href="https://medium.com/@atnio">
+            <a href="https://medium.com/@atnio" target="_blank">
                 <img src="~/assets/medium.svg" class="image"> 
             </a>
             <p class="font">
