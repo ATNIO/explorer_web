@@ -103,21 +103,42 @@
 <script>
   export default {
     data() {
-      return {
-        activeIndex: '1',
-        activeIndex2: '1',
-        input: ''
-
-      };
+        return {
+            activeIndex: '1',
+            activeIndex2: '1',
+            input: ''
+        };
     },
     methods: {
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
-      },
-      search() {
-          console.log("search")
-          console.log("input", this.input)
-      }
+        handleSelect(key, keyPath) {
+            console.log(key, keyPath);
+        },
+        search() {
+            console.log("search")
+            console.log("input", this.input)
+            console.log(this.$route.path);
+            // this.$router.push('blocks/248703')
+            this.$axios.$get("/search/" + this.input).then(res => {
+                console.log(res)
+                let type = res.type;
+                if(type == "block") {
+                    let value = res.value;
+                    let number = value.Number;
+                    this.$router.push('blocks/' + number);
+                }
+                else if(type == "transaction") {
+                    this.$router.push('transactions/' + this.input);
+                }
+                else if(type == "dbot") {
+                    this.$router.push('dbots/' + this.input);
+                }
+                else if(type == "account") {
+                    this.$router.push('accounts/' + this.input);
+                }
+            }).catch(error => {
+                    this.$router.push('error');
+            })
+        }
     }
   }
 </script>
