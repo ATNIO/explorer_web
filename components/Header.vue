@@ -124,19 +124,19 @@
                 if(type == "block") {
                     let value = res.value;
                     let number = value.Number;
-                    this.$router.push('blocks/' + number);
+                    this.$router.push('/blocks/' + number);
                 }
                 else if(type == "transaction") {
-                    this.$router.push('transactions/' + this.input);
+                    this.$router.push('/transactions/' + this.input);
                 }
                 else if(type == "dbot") {
-                    this.$router.push('dbots/' + this.input);
+                    this.$router.push('/dbots/' + this.input);
                 }
                 else if(type == "account") {
-                    this.$router.push('accounts/' + this.input);
+                    this.$router.push('/accounts/' + this.input);
                 }
             }).catch(error => {
-                    this.$router.push('error');
+                    this.$router.push('/error');
             })
         }
     }
