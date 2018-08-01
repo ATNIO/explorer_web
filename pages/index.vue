@@ -425,9 +425,10 @@ import { toDecimals } from '~/common/method.js'
                 this.transactionTable.push(transaction);
             }
             }),
-            this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
-                this.atnPrice = res[0].price_usd;
-            })
+            // this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
+            //     this.atnPrice = res[0].price_usd;
+            // })
+            this.atnPrice = 0.233416
         },
         // cancelAutoUpdate: function() { clearInterval(this.timer) },
         

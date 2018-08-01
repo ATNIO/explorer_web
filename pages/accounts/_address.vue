@@ -313,12 +313,14 @@ import { toDate, cutStr } from '~/common/method.js'
                 this.atn = parseInt(res.Balance) / 1e18;
                 console.log(this.atn)
                 this.accountDetailsTable.push({attribute: "Balance: ", value: cutStr(this.atn.toString()) + " ATN"});
-            })
-            await this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
-                let atnPrice = res[0].price_usd;
-                this.atnValue = (this.atn * atnPrice).toFixed(2)
+                this.atnValue = (this.atn * 0.233416).toFixed(2)
                 this.accountDetailsTable.push({attribute: "ATN Value: ", value: "$" + cutStr(this.atnValue.toString()) });
             })
+            // await this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
+            //     let atnPrice = res[0].price_usd;
+            //     this.atnValue = (this.atn * atnPrice).toFixed(2)
+            //     this.accountDetailsTable.push({attribute: "ATN Value: ", value: "$" + cutStr(this.atnValue.toString()) });
+            // })
             this.$axios.$get("/accounts/address/" + this.address).then(res => {
                 this.txns = res.TransactionHashes.match(new RegExp(",", "g")).length;
                 // console.log(this.txns)
