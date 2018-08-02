@@ -272,7 +272,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate } from '~/common/method.js'
+import { toDate, cutStr } from '~/common/method.js'
 
   export default {
 
@@ -312,13 +312,15 @@ import { toDate } from '~/common/method.js'
                 console.log("parseInt(res.Balance)", parseInt(res.Balance))
                 this.atn = parseInt(res.Balance) / 1e18;
                 console.log(this.atn)
-                this.accountDetailsTable.push({attribute: "Balance: ", value: this.cutStr(this.atn.toString()) + " ATN"});
+                this.accountDetailsTable.push({attribute: "Balance: ", value: cutStr(this.atn.toString()) + " ATN"});
+                this.atnValue = (this.atn * 0.233416).toFixed(2)
+                this.accountDetailsTable.push({attribute: "ATN Value: ", value: "$" + cutStr(this.atnValue.toString()) });
             })
-            await this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
-                let atnPrice = res[0].price_usd;
-                this.atnValue = (this.atn * atnPrice).toFixed(2)
-                this.accountDetailsTable.push({attribute: "ATN Value: ", value: "$" + this.cutStr(this.atnValue.toString()) });
-            })
+            // await this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
+            //     let atnPrice = res[0].price_usd;
+            //     this.atnValue = (this.atn * atnPrice).toFixed(2)
+            //     this.accountDetailsTable.push({attribute: "ATN Value: ", value: "$" + cutStr(this.atnValue.toString()) });
+            // })
             this.$axios.$get("/accounts/address/" + this.address).then(res => {
                 this.txns = res.TransactionHashes.match(new RegExp(",", "g")).length;
                 // console.log(this.txns)
@@ -399,28 +401,6 @@ import { toDate } from '~/common/method.js'
         handleClick(tab, event) {
             // console.log(tab, event);
         },
-        cutStr(str)
-        {
-            if(str.length <= 3) return str;
-            let decimals = str.substr(str.indexOf('.'), str.length);
-            str = str.substr(0, str.indexOf('.'))
-            let newStr= new Array(str.length + parseInt(str.length / 3)); 
-            newStr[newStr.length - 1]=str[str.length - 1]; 
-            let currentIndex=str.length-1; 
-            for(let i = newStr.length - 1; i >= 0; i--) 
-            { 
-                if((newStr.length - i) % 4 == 0 && i != 0) 
-                { 
-                    newStr[i] = ","; 
-                }
-                else
-                { 
-                    newStr[i] = str[currentIndex--]; 
-                } 
-            } 
-            return newStr.join("") + decimals
-        } 
-
       
     },
   }

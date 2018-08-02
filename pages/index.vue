@@ -15,7 +15,6 @@
                 <el-row
                 class="row"
                 type="flex"
-                align="middle"
                 justify="center"
                 >
                 <el-col :span="6">
@@ -208,7 +207,7 @@
     .recent-blocks {
         display: flex;
         align-items: flex-start;
-        justify-content: center;
+        justify-content: flex-start;
         flex-direction: column;
     }
 
@@ -425,9 +424,10 @@ import { toDecimals } from '~/common/method.js'
                 this.transactionTable.push(transaction);
             }
             }),
-            this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
-                this.atnPrice = res[0].price_usd;
-            })
+            // this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
+            //     this.atnPrice = res[0].price_usd;
+            // })
+            this.atnPrice = 0.233416
         },
         // cancelAutoUpdate: function() { clearInterval(this.timer) },
         
