@@ -15,7 +15,6 @@
                 <el-row
                 class="row"
                 type="flex"
-                align="middle"
                 justify="center"
                 >
                 <el-col :span="6">
@@ -208,7 +207,7 @@
     .recent-blocks {
         display: flex;
         align-items: flex-start;
-        justify-content: center;
+        justify-content: flex-start;
         flex-direction: column;
     }
 
