@@ -3,7 +3,12 @@
     <Header/>
       
     <el-main class="main">
+        <div class="right-nav">
+                    <el-input v-model="input" class="input" placeholder="Search"></el-input>
+                    <el-button icon="el-icon-search" class="button" v-on:click="this.search">Search</el-button>
+        </div><br><br>
         <div class="table">
+            
             <div class="network-status">
             <p class="status">
                 ATN Network Status
@@ -188,6 +193,10 @@ a {
   margin-bottom: 48px;
 }
 
+.right-nav {
+  display: none;
+}
+
 .network-status {
   display: flex;
   flex-direction: column;
@@ -361,19 +370,75 @@ body > .el-container {
   .row {
     flex-direction: column;
     align-items: center;
+    justify-content: center;
+    width: 100%;
   }
-  .icon {
-    margin: 10px 0;
-    margin-right: 50px;
+
+  .el-footer {
+    // background-color: #00C8FF;
+    text-align: center;
+    line-height: 60px;
   }
-  .home-blocks {
-    flex-direction: column;
+
+  .el-aside {
+    background-color: #d3dce6;
+    color: #333;
+    text-align: center;
+    line-height: 200px;
   }
-  .status {
-    margin: 0 auto;
+
+  .el-main {
+    background-color: #fff;
+    color: #333;
+    text-align: center;
   }
-  .home-left-table {
-    width: 230px;
+
+  body > .el-container {
+    margin-bottom: 40px;
+  }
+
+  .el-container:nth-child(5) .el-aside,
+  .el-container:nth-child(6) .el-aside {
+    line-height: 260px;
+  }
+
+  .el-container:nth-child(7) .el-aside {
+    line-height: 320px;
+  }
+  @media screen and (max-width: 991px) {
+    .row {
+      flex-direction: column;
+      align-items: center;
+      margin-top: 200px;
+    }
+    .icon {
+      margin: 10px 0;
+      margin-right: 50px;
+    }
+    .home-blocks {
+      flex-direction: column;
+      top: 150px;
+    }
+    .status {
+      margin: 0 auto;
+    }
+    .home-left-table {
+      width: 230px;
+    }
+    .right-nav {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      display: flex;
+    }
+    .input {
+      width: 200px;
+    }
+    .button {
+      background: #00c8ff;
+      color: #fff;
+    }
   }
 }
 </style>
@@ -427,6 +492,32 @@ import { toDecimals } from '~/common/method.js'
         methods: {
         handleSelect(key, keyPath) {
             console.log(key, keyPath);
+        },
+        search() {
+            console.log("search")
+            console.log("input", this.input)
+            console.log(this.$route.path);
+            // this.$router.push('blocks/248703')
+            this.$axios.$get("/search/" + this.input).then(res => {
+                console.log(res)
+                let type = res.type;
+                if(type == "block") {
+                    let value = res.value;
+                    let number = value.Number;
+                    this.$router.push('/blocks/' + number);
+                }
+                else if(type == "transaction") {
+                    this.$router.push('/transactions/' + this.input);
+                }
+                else if(type == "dbot") {
+                    this.$router.push('/dbots/' + this.input);
+                }
+                else if(type == "account") {
+                    this.$router.push('/accounts/' + this.input);
+                }
+            }).catch(error => {
+                    this.$router.push('/error');
+            })
         },
         async showData() {
             await this.$axios.$get("/blocks/list/5").then(res => {
