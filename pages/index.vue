@@ -373,7 +373,7 @@
         display: flex;
     }
     .input{
-        width: 250px;
+        width: 200px;
     }
     .button{
         background: #00c8ff;
