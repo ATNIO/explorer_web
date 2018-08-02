@@ -3,73 +3,65 @@
     <Header/>
       
     <el-main class="main">
-        <br><br>
         <div class="table">
-
             <div class="network-status">
             <p class="status">
                 ATN Network Status
             </p>
-            <br>
-            <el-header height="220px" class="header" >
-                <el-row
-                class="row"
-                type="flex"
-                justify="center"
-                >
-                <el-col :span="6">
-                    <div class="grid-content" >
-                    <div>
-                        <img src="~/assets/blocks.png" class="icon">
-                    </div>
-                    <div>  
-                        <p>
-                        BLOCK
-                        </p>
-                        <p >
-                        #{{latestBlockNumber}}
-                        </p>
-                    </div>
-                    </div>
-                </el-col>
+            <div height="220px" class="header" >
+                    <el-card shadow="hover">
+                        <div class="grid-content" >
+                            <div>
+                                <img src="~/assets/blocks.png" class="icon">
+                            </div>
+                            <div>  
+                                <p class="last-block">
+                                BLOCK
+                                </p>
+                                <p class="last-block">
+                                #{{latestBlockNumber}}
+                                </p>
+                            </div>
+                        </div>
+                    </el-card>
 
-                <el-col :span="6">
+                    <el-card shadow="hover">
                     <div class="grid-content" >
                     <div>
                     <img src="~/assets/sandclock.png" class="icon">
                     </div>
                     <div>  
                     <p class="last-block">
-                        LAST
+                        LAST BLOCK
                     </p>
-                    <p class="last-block">
+                    <!-- <p class="last-block">
                         BLOCK
-                    </p>
+                    </p> -->
                     <p class="last-block">
                     {{lastBlockTime}}
                     </p>
                     </div>
                     </div>
-                </el-col>
-                <el-col :span="6">
+                    </el-card>
+                    <el-card shadow="hover">
                     <div class="grid-content" >
                     <div>
                     <img src="~/assets/clock.png" class="icon">
                     </div>&nbsp;
                     <div>  
                     <p class="last-block">
-                        BLOCK
+                        BLOCK TIME
                     </p>
-                    <p class="last-block">
+                    <!-- <p class="last-block">
                         TIME
-                    </p>
-                    <p >
+                    </p> -->
+                    <p  class="last-block">
                         {{blockTime}}S
                     </p>
                     </div>
                     </div>
-                </el-col>
-                <el-col :span="6">
+                    </el-card>
+                    <el-card shadow="hover">
                     <div class="grid-content" >
                     <div>
                     <img src="~/assets/dollar.png" class="icon">
@@ -84,115 +76,98 @@
                     </p>
                     </div>
                     </div>
-                </el-col>
-                </el-row>
-            </el-header>
+                    </el-card>
+            </div>
             </div>
         </div>
 
-        <br> <br> <br> <br> <br>
-
-        <el-header height="50%" class="table">
-        <el-row
-            type="flex"
-            align="middle"
-            justify="center"
-            class="home-blocks"
-        >
-            <div class="recent-blocks" style="margin-left: 10%">
-            <p class="status">
-                Recent Blocks
-            </p>
-            <br>
-            <el-col>
-                <el-table
-                :data="blockTable"
-                style="width: 90%;"
-                type="flex"
-                align="middle"
-                justify="center">
-
-                <el-table-column
-                    prop="number"
-                    label="Block"
-                    width="150"
-                    class="home-left-table">
-                    <template slot-scope="scope">
-                        <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    prop="txns"
-                    label="TXns"
-                    width="150"
-                    class="home-left-table">
-                </el-table-column>
-                <el-table-column
-                    prop="blockHash"
-                    label="Hash"
-                    width="220"
-                    class="home-left-table">
-                    <template slot-scope="scope">
-                        <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.blockHash }}</nuxt-link>
-                    </template>
-                </el-table-column>
-                </el-table>
-            </el-col>
-            </div>
-
+        <div height="50%" class="table">
             <div class="recent-blocks">
-            <p class="status">
-                Recent Transactions
-            </p>
-            <br>
-            <el-col >
+                <p class="status">
+                    Recent Blocks
+                </p>
+            
                 <el-table
-                :data="transactionTable"
-                style="width: 100%"
-                type="flex"
-                align="middle"
-                justify="center">
+                    :data="blockTable"
+                    type="flex"
+                    align="middle"
+                    justify="center">
 
-                <el-table-column
-                    prop="txId"
-                    label="Hash"
-                    width="180">
-                    <template slot-scope="scope">
-                        <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
-                    </template>
-                </el-table-column>
-                    
-                <el-table-column
-                    prop="from"
-                    label="From"
-                    width="180">
-                    <template slot-scope="scope">
-                        <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    prop="to"
-                    label="To"
-                    width="180"
-                    >
-                    <template slot-scope="scope">
-                        <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    prop="value"
-                    label="Value"
-                    width="150"
-                    >
-                </el-table-column>
+                    <el-table-column
+                        prop="number"
+                        label="Block"
+                        width="150"
+                        class="home-left-table">
+                        <template slot-scope="scope">
+                            <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="txns"
+                        label="TXns"
+                        width="150"
+                        class="home-left-table">
+                    </el-table-column>
+                    <el-table-column
+                        prop="blockHash"
+                        label="Hash"
+                        width="220"
+                        class="home-left-table">
+                        <template slot-scope="scope">
+                            <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.blockHash }}</nuxt-link>
+                        </template>
+                    </el-table-column>
                 </el-table>
-            </el-col>
             </div>
 
-        </el-row>
-        </el-header>
+        
+            <div class="recent-blocks">
+                <p class="status">
+                    Recent Transactions
+                </p>
+                <el-table
+                    :data="transactionTable"
+                    type="flex"
+                    align="middle"
+                    justify="center">
+
+                    <el-table-column
+                        prop="txId"
+                        label="Hash"
+                        width="180">
+                        <template slot-scope="scope">
+                            <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
+                        </template>
+                    </el-table-column>
+                        
+                    <el-table-column
+                        prop="from"
+                        label="From"
+                        width="180">
+                        <template slot-scope="scope">
+                            <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="to"
+                        label="To"
+                        width="180"
+                        >
+                        <template slot-scope="scope">
+                            <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="value"
+                        label="Value"
+                        width="150"
+                        >
+                    </el-table-column>
+                </el-table>
+            </div>
+        </div>
     </el-main>
-    <br><br><br>
+
     <el-footer>
         <Footer/>
     </el-footer>
@@ -200,165 +175,206 @@
 </template>
 
 <style scoped lang="less">
+a {
+  color: #74b8fb;
+  text-decoration: none;
+}
 
-    a {
-        color: #74B8FB;
-        text-decoration: none;
-    }
+.recent-blocks {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+  margin-bottom: 48px;
+}
+
+.network-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  // margin-right: 5%;
+}
+
+.status {
+  margin-bottom: 16px;
+  font-family: "Helvetica Neue", Helvetica;
+  font-size: 30px;
+}
+
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  // margin-left: 8%;
+  padding-top: 64px;
+}
+
+.last-block {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  line-height: 1.5;
+
+  &:last-of-type {
+    color: rgb(68, 68, 68);
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  width: 1300px;
+}
+
+.el-row {
+  margin-bottom: 20px;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+.el-col {
+  border-radius: 4px;
+}
+
+.grid-content {
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  font-family: "Helvetica Neue", Helvetica;
+  color: #757589;
+  font-size: 22px;
+  padding-left: 16px;
+}
+
+.block {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.icon {
+  width: 80px;
+  height: 80px;
+  margin-right: 16px;
+}
+
+.card {
+  padding: 0px;
+  width: 280px;
+  height: 180px;
+}
+
+.header {
+  //  background-color: #F7F7F9;
+  //  background-color: rgb(3, 3, 255);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 32px;
+
+  & /deep/ .el-card {
+    width: 300px;
+    margin: 8px;
+  }
+}
+
+.table {
+  //  background-color: #F7F7F9;
+  //  background-color: rgb(3, 3, 255);
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 128px;
+}
+
+.el-footer {
+  // background-color: #00C8FF;
+  text-align: center;
+  line-height: 60px;
+}
+
+.el-aside {
+  background-color: #d3dce6;
+  color: #333;
+  text-align: center;
+  line-height: 200px;
+}
+
+.el-main {
+  background-color: #fff;
+  color: #333;
+  text-align: center;
+}
+
+body > .el-container {
+  margin-bottom: 40px;
+}
+
+.el-container:nth-child(5) .el-aside,
+.el-container:nth-child(6) .el-aside {
+  line-height: 260px;
+}
+
+.el-container:nth-child(7) .el-aside {
+  line-height: 320px;
+}
+
+@media screen and (max-width: 1174px) {
+  .header /deep/ .el-card {
+    flex: 0 1 48%;
+  }
+
+  .table {
+    flex-wrap: wrap;
 
     .recent-blocks {
-        display: flex;
-        align-items: flex-start;
-        justify-content: flex-start;
-        flex-direction: column;
+      flex: 100%;
     }
 
-    .network-status {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        width: 100%;
-        // margin-right: 5%;
+    & /deep/ .el-table {
+      width: 100%;
     }
+  }
+}
 
-    .status {
-        font-family:  "Helvetica Neue",Helvetica;
-        font-size: 30px;
-    }
+@media screen and (max-width: 991px) {
+  .header /deep/ .el-card {
+    flex: 1 1 100%;
+  }
 
-    .main {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column;
-        // margin-left: 8%;
-    }
+  .table {
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-bottom: 64px;
+  }
 
-    .last-block {
-        display: flex;
-        align-items: flex-start;
-        justify-content: flex-start;
-    }
-
-    .column {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .row {
-        width: 1300px;
-
-    }
-
-    .el-row {
-        margin-bottom: 20px;
-        &:last-child {
-        margin-bottom: 0;
-        }
-    }
-    .el-col {
-        border-radius: 4px;
-    }
-    .grid-content {
-        border-radius: 4px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family:  "Helvetica Neue",Helvetica;
-        color: #757589;
-        font-size: 22px;
-    }
-
-    .block {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .icon {
-        width: 80px;
-        height: 80px;
-    }
-
-    .card {
-        padding: 0px;
-        width: 280px;
-        height: 180px;
-    }
-
-    .header{
-    //  background-color: #F7F7F9;
-    //  background-color: rgb(3, 3, 255); 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    }
-
-
-    .table{
-    //  background-color: #F7F7F9;
-    //  background-color: rgb(3, 3, 255); 
-    display: flex;
+  .row {
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    width: 100%;
-    }
-
-    .el-footer {
-        // background-color: #00C8FF;
-        text-align: center;
-        line-height: 60px;
-    }
-    
-    .el-aside {
-        background-color: #D3DCE6;
-        color: #333;
-        text-align: center;
-        line-height: 200px;
-    }
-    
-    .el-main {
-        background-color: #FFF;
-        color: #333;
-        text-align: center;
-    }
-    
-    body > .el-container {
-        margin-bottom: 40px;
-    }
-    
-    .el-container:nth-child(5) .el-aside,
-    .el-container:nth-child(6) .el-aside {
-        line-height: 260px;
-    }
-    
-    .el-container:nth-child(7) .el-aside {
-        line-height: 320px;
-    }
-    @media screen and (max-width: 991px) {
-    .row {
-        flex-direction: column;
-        align-items: center;
-        margin-top: 200px;
-    }
-    .icon{
-        margin: 10px 0;
-        margin-right: 50px;
-    }
-    .home-blocks{
-       flex-direction: column;
-        top: 150px; 
-    }
-    .status{
-        margin: 0 auto;
-    }
-    .home-left-table{
-        width: 230px;
-    }
+  }
+  .icon {
+    margin: 10px 0;
+    margin-right: 50px;
+  }
+  .home-blocks {
+    flex-direction: column;
+  }
+  .status {
+    margin: 0 auto;
+  }
+  .home-left-table {
+    width: 230px;
+  }
 }
 </style>
 
