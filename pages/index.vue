@@ -97,13 +97,14 @@
             type="flex"
             align="middle"
             justify="center"
+            class="home-blocks"
         >
             <div class="recent-blocks" style="margin-left: 10%">
             <p class="status">
                 Recent Blocks
             </p>
             <br>
-            <el-col >
+            <el-col>
                 <el-table
                 :data="blockTable"
                 style="width: 90%;"
@@ -114,7 +115,8 @@
                 <el-table-column
                     prop="number"
                     label="Block"
-                    width="150">
+                    width="150"
+                    class="home-left-table">
                     <template slot-scope="scope">
                         <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
                     </template>
@@ -123,13 +125,13 @@
                     prop="txns"
                     label="TXns"
                     width="150"
-                    >
+                    class="home-left-table">
                 </el-table-column>
                 <el-table-column
                     prop="blockHash"
                     label="Hash"
                     width="220"
-                    >
+                    class="home-left-table">
                     <template slot-scope="scope">
                         <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.blockHash }}</nuxt-link>
                     </template>
@@ -246,6 +248,7 @@
 
     .row {
         width: 1300px;
+
     }
 
     .el-row {
@@ -336,6 +339,27 @@
     .el-container:nth-child(7) .el-aside {
         line-height: 320px;
     }
+    @media screen and (max-width: 991px) {
+    .row {
+        flex-direction: column;
+        align-items: center;
+        margin-top: 200px;
+    }
+    .icon{
+        margin: 10px 0;
+        margin-right: 50px;
+    }
+    .home-blocks{
+       flex-direction: column;
+        top: 150px; 
+    }
+    .status{
+        margin: 0 auto;
+    }
+    .home-left-table{
+        width: 230px;
+    }
+}
 </style>
 
 <script>

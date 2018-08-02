@@ -30,11 +30,11 @@
                     <i class="el-icon-menu"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item>Home</el-dropdown-item>
-                    <el-dropdown-item>Blocks</el-dropdown-item>
-                    <el-dropdown-item>Transactions</el-dropdown-item>
-                    <el-dropdown-item>Accounts</el-dropdown-item>
-                    <el-dropdown-item>Dbots</el-dropdown-item>
+                    <el-dropdown-item><nuxt-link to="/">Home</nuxt-link></el-dropdown-item>
+                    <el-dropdown-item><nuxt-link to="/blocks">Blocks</nuxt-link></el-dropdown-item>
+                    <el-dropdown-item><nuxt-link to="/transactions">Transactions</nuxt-link></el-dropdown-item>
+                    <el-dropdown-item><nuxt-link to="/accounts">Accounts</nuxt-link></el-dropdown-item>
+                    <el-dropdown-item><nuxt-link to="/dbots">Dbots</nuxt-link></el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
             <!-- <i class="el-icon-menu"></i> -->
@@ -114,6 +114,14 @@ a {
 
 .mobile-menu {
   display: none;
+}
+& /deep/.el-dropdown-menu__item{
+    font-size: 20px;
+    a {
+        text-decoration: none;
+        color: rgb(61, 60, 60);
+        
+    }
 }
 
 @media screen and (max-width: 991px) {
