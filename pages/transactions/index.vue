@@ -26,7 +26,7 @@
                 <el-table-column
                     prop="number"
                     label="Block"
-                    min-width="50">
+                    >
                     <template slot-scope="scope">
                         <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
                     </template>
@@ -35,13 +35,13 @@
                 <el-table-column
                     prop="time"
                     label="Time"
-                    min-width="80">
+                    >
                 </el-table-column>
 
                 <el-table-column
                     prop="txId"
                     label="hash"
-                    min-width="80">
+                    >
                     <template slot-scope="scope">
                         <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
                     </template>
@@ -50,7 +50,7 @@
                 <el-table-column
                     prop="from"
                     label="From"
-                    min-width="80">
+                    >
                     <template slot-scope="scope">
                         <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
                     </template>
@@ -59,7 +59,7 @@
                 <el-table-column
                     prop="to"
                     label="To"
-                    min-width="80">
+                    >
                     <template slot-scope="scope">
                         <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
                     </template>
@@ -68,7 +68,6 @@
                 <el-table-column
                     prop="value"
                     label="Value"
-                    min-width="50"
                 >
                 </el-table-column>
             </el-table>
@@ -196,6 +195,13 @@
             font-family:  "Helvetica Neue",Helvetica;
             font-size: 20px;
             float: left;
+        }
+        .description {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
         }
     }
 

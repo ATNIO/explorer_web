@@ -189,6 +189,13 @@
             font-size: 20px;
             float: left;
         }
+        .description {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
     }
     
     .el-container:nth-child(5) .el-aside,

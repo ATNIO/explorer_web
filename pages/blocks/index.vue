@@ -35,7 +35,6 @@
                 <el-table-column
                     prop="txns"
                     label="TXns"
-                    min-width="20"
                 >
                 </el-table-column>
             </el-table>
@@ -163,6 +162,13 @@
         .button {
             background: #00c8ff;
             color: #fff;
+        }
+        .description {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
         }
     }
 
