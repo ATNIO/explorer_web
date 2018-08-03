@@ -356,6 +356,9 @@ body > .el-container {
 }
 
 @media screen and (max-width: 991px) {
+  .recent-blocks{
+    width: 100px;
+  }
   .header /deep/ .el-card {
     flex: 1 1 100%;
   }
@@ -416,41 +419,8 @@ body > .el-container {
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
   }
-//   @media screen and (max-width: 991px) {
-//     .row {
-//       flex-direction: column;
-//       align-items: center;
-//       margin-top: 200px;
-//     }
-//     .icon {
-//       margin: 10px 0;
-//       margin-right: 50px;
-//     }
-//     .home-blocks {
-//       flex-direction: column;
-//       top: 150px;
-//     }
-//     .status {
-//       margin: 0 auto;
-//     }
-//     .home-left-table {
-//       width: 230px;
-//     }
-//     .right-nav {
-//       display: flex;
-//       flex-direction: row;
-//       justify-content: flex-start;
-//       align-items: center;
-//       display: flex;
-//     }
-//     .input {
-//       width: 200px;
-//     }
-//     .button {
-//       background: #00c8ff;
-//       color: #fff;
-//     }
-//   }
+
+
 }
 </style>
 

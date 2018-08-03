@@ -79,7 +79,15 @@
     justify-content: center;
     flex-direction: column;
 }
-
+ @media screen and (max-width: 991px) {
+     .footer {   
+        width: 335px;  
+        
+        p{
+            display: none;
+        }
+    }
+ }
 </style>
 
 
