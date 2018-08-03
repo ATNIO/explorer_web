@@ -30,11 +30,11 @@
                     <i class="el-icon-menu"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item><nuxt-link to="/">Home</nuxt-link></el-dropdown-item>
-                    <el-dropdown-item><nuxt-link to="/blocks">Blocks</nuxt-link></el-dropdown-item>
-                    <el-dropdown-item><nuxt-link to="/transactions">Transactions</nuxt-link></el-dropdown-item>
-                    <el-dropdown-item><nuxt-link to="/accounts">Accounts</nuxt-link></el-dropdown-item>
-                    <el-dropdown-item><nuxt-link to="/dbots">Dbots</nuxt-link></el-dropdown-item>
+                    <nuxt-link to="/"><el-dropdown-item>Home</el-dropdown-item></nuxt-link>
+                    <nuxt-link to="/blocks"><el-dropdown-item>Blocks</el-dropdown-item></nuxt-link>
+                    <nuxt-link to="/transactions"><el-dropdown-item>Transactions</el-dropdown-item></nuxt-link>
+                    <nuxt-link to="/accounts"><el-dropdown-item>Accounts</el-dropdown-item></nuxt-link>
+                    <nuxt-link to="/dbots"><el-dropdown-item>Dbots</el-dropdown-item></nuxt-link>
                 </el-dropdown-menu>
             </el-dropdown>
             <!-- <i class="el-icon-menu"></i> -->

@@ -375,7 +375,7 @@
             align-items: center;
         }
         .input {
-            width: 260px;
+            width: 200px;
         }
         .button {
             background: #00c8ff;
@@ -403,8 +403,8 @@
             font-weight: 350;
             display: flex;
             flex-direction: column;
-            // align-items: flex-start;
-            justify-content: flex-start;
+            align-items: center;
+            justify-content: space-between;
             word-break: break-all;
         }
 
@@ -421,7 +421,9 @@
         .status {
             font-family:  "Helvetica Neue",Helvetica;
             font-size: 20px;
-            float: left;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .overview {
             display: flex;
@@ -429,6 +431,7 @@
             align-items: center;
             justify-content: center;
             width: 100%;
+            height: 100%;
         }
         .textarea {
             width: 350px;

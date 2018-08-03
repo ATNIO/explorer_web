@@ -178,7 +178,7 @@
             align-items: center;
         }
         .input {
-            width: 260px;
+            width: 200px;
         }
         .button {
             background: #00c8ff;

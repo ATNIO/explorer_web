@@ -29,7 +29,7 @@
                     border
                     :data="accountDetailsTable"
                     :show-header = false
-                    style="width: 60% "
+                    class="tableOverview"
                     type="flex"
                     align="middle"
                     justify="space-between">
@@ -136,6 +136,10 @@
 </template>
 
 <style scoped lang="less">
+
+    .tableOverview {
+        width: 60%;
+    }
 
     .tag {
         font-size: 14px;
@@ -269,7 +273,7 @@
             align-items: center;
         }
         .input {
-            width: 260px;
+            width: 200px;
         }
         .button {
             background: #00c8ff;
@@ -281,20 +285,23 @@
             font-weight: 350;
             display: flex;
             flex-direction: column;
-            // align-items: flex-start;
-            justify-content: flex-start;
+            align-items: center;
+            // justify-content: flex-start;
             word-break: break-all;
         }
         .status {
             font-family:  "Helvetica Neue",Helvetica;
             font-size: 20px;
-            float: left;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .description {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
             justify-content: flex-start;
+            width: 100%;
         }
         p {
             display: flex;
@@ -303,6 +310,22 @@
             justify-content: center;
             height: 50px;
         }
+        span {
+            font-size: 16px;
+        }
+        
+        .tableOverview {
+            width: 100%;
+        }
+
+        .overview {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            width: 100%;
+        }
+        
     }
     
     body > .el-container {
