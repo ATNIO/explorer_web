@@ -13,7 +13,8 @@
                 </p>
                 <br/>
                 <p class="details">
-                    Transaction: {{ this.hash }}
+                    <span>Transaction:</span>
+                    <span> {{ this.hash }} </span>
                 </p>
             </div>
             <div class="overview">
@@ -21,49 +22,39 @@
                 <el-tabs v-model="activeName2"  type="border-card" @tab-click="handleClick" style="width: 100%">
                     <el-tab-pane label="Overview" name="first">
                         <div class="panel">
-                            <div class="name">
-                                <p>TxHash:</p><br/>
-                                <p>TxReceipt Status:</p><br/>
-                                <p>Block Height:</p><br/>
-                                <p>TimeStamp:</p><br/>
-                                <p>From:</p><br/>
-                                <p>To:</p><br/>
-                                <p>Value:</p><br/>
-                                <p>Gas Limit:</p><br/>
-                                <p>Gas Used By Txn:</p><br/>
-                                <p>Gas Price:</p><br/>
-                                <p>Actual Tx Cost/Fee:</p><br/>
-                                <p>Nonce:</p><br/>
-                                <p>InputData:</p><br/>
-                                <p></p><br/>
-                                <p></p><br/>
-                            </div>
-
-                            <div class="value">
-                                <p>{{ this.hash }}</p><br/>
-                                <template v-if="this.status == 'Success'">
-                                    <p class="receipt-status-success" >{{ this.status }}</p><br/>
+                            <div class="content">
+                                <p><span class="name">TxHash:</span><span class="value">{{ this.hash }}</span></p><br/>
+                                <p><span class="name">TxReceipt Status:</span>
+                                    <template v-if="this.status == 'Success'">
+                                        <span class="receipt-status-success" >{{ this.status }}</span><br/>
+                                    </template>
+                                    <template v-if="this.status == 'Failed'">
+                                        <span class="receipt-status-failed" >{{ this.status }}</span><br/>
+                                    </template>
+                                </p><br/>
+                                <p><span class="name">Block Height:</span><span class="value">{{ this.blockHeight }}</span></p><br/>
+                                <p><span class="name">TimeStamp:</span><span class="value">{{ this.timeStamp }}</span></p><br/>
+                                <p><span class="name">From:</span><span class="value">
+                                    <nuxt-link :to="'/accounts/' + this.from">{{ this.from }}</nuxt-link>
+                                </span></p><br/>
+                                <p><span class="name">To:</span>
+                                <template v-if="this.inputData != '0x'" >
+                                    <br/>
+                                    <span class="value">Contract &nbsp;<nuxt-link :to="'/accounts/' + this.to">{{ this.to }}</nuxt-link></span><br/>
                                 </template>
-                                <template v-if="this.status == 'Failed'">
-                                    <p class="receipt-status-failed" >{{ this.status }}</p><br/>
+                                <template v-if="this.inputData == '0x'" class="value">
+                                    <span><nuxt-link :to="'/accounts/' + this.to">{{ this.to }}</nuxt-link></span><br/>
                                 </template>
-                                <p>{{ this.blockHeight }}</p><br/>
-                                <p>{{ this.timeStamp }}</p><br/>
-                                <p><nuxt-link :to="'/accounts/' + this.from">{{ this.from }}</nuxt-link></p><br/>
-
-                                <template v-if="this.inputData != '0x'">
-                                    <p>Contract <nuxt-link :to="'/accounts/' + this.to">{{ this.to }}</nuxt-link></p><br/>
-                                </template>
-                                <template v-if="this.inputData == '0x'">
-                                    <p><nuxt-link :to="'/accounts/' + this.to">{{ this.to }}</nuxt-link></p><br/>
-                                </template>
-                                <p>{{ this.value }}</p><br/>
-                                <p>{{ this.gasLimit }}</p><br/>
-                                <p>{{ this.gasUsedByTxn }}</p><br/>
-                                <p>{{ this.gasPrice }}</p><br/>
-                                <p>{{ this.actualTxCost }}</p><br/>
-                                <p>{{ this.nonce }}</p><br/>
-                                <p><el-input
+                                </p><br/>
+                                <p><span class="name">Value:</span><span class="value">{{ this.value }}</span></p><br/>
+                                <p><span class="name">Gas Limit:</span><span class="value">{{ this.gasLimit }}</span></p><br/>
+                                <p><span class="name">Gas Used By Txn:</span><span class="value">{{ this.gasUsedByTxn }}</span></p><br/>
+                                <p><span class="name">Gas Price:</span><span class="value">{{ this.gasPrice }}</span></p><br/>
+                                <p><span class="name">Actual Tx Cost/Fee:</span><span class="value">{{ this.actualTxCost }}</span></p><br/>
+                                <p><span class="name">Nonce:</span><span class="value">{{ this.nonce }}</span></p><br/>
+                                <p><span class="name">InputData:</span><br/>
+                                <span class="value">
+                                    <el-input
                                     type="textarea"
                                     :rows="2"
                                     placeholder="0x"
@@ -71,12 +62,10 @@
                                     :disabled="true"
                                     class="textarea"
                                     >
-                                    </el-input>
-                                </p><br/>
+                                    </el-input></span></p><br/>
+                                <p></p><br/>
                             </div>
                         </div>
-                        
-                        <br>
                     </el-tab-pane>
 
                     <el-tab-pane label="Internal Transactions" name="second">
@@ -98,6 +87,32 @@
     .textarea {
         width: 350%;
     }
+    // span {
+    //     font-size: 15px;
+    // }
+    .name {
+        width: 300px;
+        font-size: 10px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+    .value {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        width: 1000px;
+        font-size: 10px;
+    }
+
+    p {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        // justify-content: flex-start;
+        width: 100%;
+        // height: 100%;
+    }
 
     .panel{
         display: flex;
@@ -107,33 +122,42 @@
         width: 100%;
         height: 100%;
     }
-    .name {
+    .content {
         display: flex;
         flex-direction: column;
         align-items: flex-start;
         justify-content: center;
-        width: 30%;
+        width: 90%;
         height: 100%;
-        font-size: 15px;
+        font-size: 10px;
+
     }
 
-    .value {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-        width: 60%;
-        height: 100%;
-        font-size: 15px;
-    }
+    // .value {
+    //     display: flex;
+    //     flex-direction: column;
+    //     align-items: flex-start;
+    //     justify-content: center;
+    //     width: 60%;
+    //     height: 100%;
+    //     font-size: 15px;
+    // }
 
     .receipt-status-success {
         color:green;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        width: 1000px;
         font-size: 15px;
     }
 
     .receipt-status-failed {
         color:red;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        width: 1000px;
         font-size: 15px;
     }
 
@@ -163,10 +187,6 @@
         align-items: space-around;
         justify-content: center;
         width: 100%;
-    }
-
-    span {
-        font-size: 20px;
     }
 
     .description {
@@ -257,6 +277,67 @@
         background-color: #FFF;
         color: #333;
         text-align: center;
+    }
+
+    @media screen and (max-width: 991px) {
+        .panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+        p {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            // width: 200px;
+            height: 40px;
+        }
+        .details {
+            font-family:  "Helvetica Neue",Helvetica;
+            font-size: 15px;
+            font-weight: 350;
+            display: flex;
+            flex-direction: column;
+            // align-items: flex-start;
+            justify-content: flex-start;
+            word-break: break-all;
+        }
+
+        .value {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: flex-start;
+            width: 300px;
+            font-size: 10px;
+            flex-wrap: wrap;
+        }
+        .status {
+            font-family:  "Helvetica Neue",Helvetica;
+            font-size: 20px;
+            float: left;
+        }
+        .overview {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .textarea {
+            width: 350px;
+        }
+        .description {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: flex-start;
+            width: 100%;
+        }
     }
     
     body > .el-container {

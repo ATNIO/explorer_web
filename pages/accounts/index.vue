@@ -53,6 +53,7 @@
             </el-table>
             <br>
             <el-pagination
+                small
                 @current-change="handleCurrentChange"
                 :current-page.sync="currentPage"
                 :page-size=this.pageSize

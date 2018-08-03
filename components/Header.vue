@@ -120,7 +120,6 @@ a {
     a {
         text-decoration: none;
         color: rgb(61, 60, 60);
-        
     }
 }
 

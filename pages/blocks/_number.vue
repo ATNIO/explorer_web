@@ -22,6 +22,7 @@
                 <br>
                 <div class="form">
                     <el-table
+                    border
                     :data="blockDetailsTable"
                     :show-header = false
                     style="width: 60% "
@@ -57,7 +58,7 @@
                             <el-table-column
                                 prop="txId"
                                 label="hash"
-                                min-width="70">
+                                >
                                 <template slot-scope="scope">
                                     <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
                                 </template>                            
@@ -65,13 +66,13 @@
                             <el-table-column
                                 prop="time"
                                 label="Time"
-                                min-width="80">
+                                >
                             </el-table-column>
 
                             <el-table-column
                                 prop="from"
                                 label="From"
-                                min-width="70">
+                                >
                                 <template slot-scope="scope">
                                     <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
                                 </template>
@@ -80,7 +81,7 @@
                             <el-table-column
                                 prop="to"
                                 label="To"
-                                min-width="70">
+                                >
                                 <template slot-scope="scope">
                                     <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
                                 </template>
@@ -89,13 +90,14 @@
                             <el-table-column
                                 prop="value"
                                 label="Value"
-                                min-width="50"
+                                
                             >
                             </el-table-column>
                         </el-table>
                         <br>
                         <el-pagination
                             @current-change="handleCurrentChange"
+                            small
                             :current-page.sync="currentPage"
                             :page-size=this.pageSize
                             layout="total, prev, pager, next"

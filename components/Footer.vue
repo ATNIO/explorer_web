@@ -6,7 +6,7 @@
                 <img src="~/assets/github.svg" class="image">
             </a>
             <p class="font">
-                github.com/atnio
+                github
             </p> 
         </div>
         <div class="link">
@@ -14,7 +14,7 @@
                 <img src="~/assets/telegram.svg" class="image"> 
             </a>
             <p class="font">
-                @ATN_Blockchain
+                telegram
             </p> 
         </div>
         <div class="link">
@@ -22,7 +22,7 @@
                 <img src="~/assets/twitter.svg" class="image"> 
             </a>
             <p class="font">
-                twitter/atn_io
+                twitter
             </p> 
         </div>
         <div class="link">
@@ -30,7 +30,7 @@
                 <img src="~/assets/reddit.svg" class="image"> 
             </a>
             <p class="font">
-                reddit.com/u/ATN_io
+                reddit
             </p> 
         </div>
         <div class="link">
@@ -38,7 +38,7 @@
                 <img src="~/assets/medium.svg" class="image"> 
             </a>
             <p class="font">
-                medium.com/@atnio
+                medium
             </p> 
         </div>
     </div>
