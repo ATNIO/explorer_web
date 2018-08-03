@@ -4,8 +4,11 @@
       
   <el-main class="main">
     <br><br>
+        <div class="right-nav">
+            <el-input v-model="input" class="input" placeholder="Search Address / Tx / Block / Dbot"></el-input>
+            <el-button icon="el-icon-search" class="button" v-on:click="this.search">Search</el-button>
+        </div><br><br>
       <div class="table">
-
         <div class="network-status">
             <div class="description">
                 <p class="status">
@@ -147,6 +150,31 @@
         color: #333;
         text-align: center;
     }
+
+    .right-nav {
+        display: none;
+    }
+
+    @media screen and (max-width: 991px) {
+        .right-nav {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .input {
+            width: 260px;
+        }
+        .button {
+            background: #00c8ff;
+            color: #fff;
+        }
+        .status {
+            font-family:  "Helvetica Neue",Helvetica;
+            font-size: 20px;
+            float: left;
+        }
+    }
     
     body > .el-container {
         margin-bottom: 40px;
@@ -184,6 +212,7 @@ const Web3 = require('web3')
             total: 0,
             currentPage: 1,
             pageSize: 10,
+            input: '',
       };
     },
     methods: {
@@ -218,7 +247,33 @@ const Web3 = require('web3')
                     this.dbotTable.push(dbot);
                 }
             })
-        }
+        },
+        search() {
+            console.log("search")
+            console.log("input", this.input)
+            console.log(this.$route.path);
+            // this.$router.push('blocks/248703')
+            this.$axios.$get("/search/" + this.input).then(res => {
+                console.log(res)
+                let type = res.type;
+                if(type == "block") {
+                    let value = res.value;
+                    let number = value.Number;
+                    this.$router.push('/blocks/' + number);
+                }
+                else if(type == "transaction") {
+                    this.$router.push('/transactions/' + this.input);
+                }
+                else if(type == "dbot") {
+                    this.$router.push('/dbots/' + this.input);
+                }
+                else if(type == "account") {
+                    this.$router.push('/accounts/' + this.input);
+                }
+            }).catch(error => {
+                    this.$router.push('/error');
+            })
+        },
       
     },
   }

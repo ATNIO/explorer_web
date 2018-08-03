@@ -4,7 +4,7 @@
         <div class="content">
             <h1>We are looking for your page...but we can't find it</h1>
         </div>
-        <video autoplay muted loop id="myVideo">
+        <video autoplay muted loop id="myVideo" class="video">
             <source src="~/assets/error.mp4" type="video/mp4">
         </video>
 
@@ -43,27 +43,10 @@
         width: 100%;
     }
 
+    .video {
+        width: 100%;
+    }
 
-
-    .el-footer {
-        // background-color: #00C8FF;
-        text-align: center;
-        line-height: 60px;
-    }
-    
-    .el-aside {
-        background-color: #D3DCE6;
-        color: #333;
-        text-align: center;
-        line-height: 200px;
-    }
-    
-    .el-main {
-        background-color: #FFF;
-        color: #333;
-        text-align: center;
-    }
-    
     body > .el-container {
         margin-bottom: 40px;
     }

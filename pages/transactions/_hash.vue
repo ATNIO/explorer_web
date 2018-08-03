@@ -4,8 +4,11 @@
       
   <el-main class="main">
     <br><br>
+        <div class="right-nav">
+            <el-input v-model="input" class="input" placeholder="Search Address / Tx / Block / Dbot"></el-input>
+            <el-button icon="el-icon-search" class="button" v-on:click="this.search">Search</el-button>
+        </div><br><br>
     <div class="table">
-
         <div class="network-status">
             <div class="description">
                 <p class="status">
@@ -23,46 +26,135 @@
                     <el-tab-pane label="Overview" name="first">
                         <div class="panel">
                             <div class="content">
-                                <p><span class="name">TxHash:</span><span class="value">{{ this.hash }}</span></p><br/>
-                                <p><span class="name">TxReceipt Status:</span>
+                                <p>
+                                    <span class="name">
+                                        TxHash:
+                                    </span>
+                                    <span class="value">
+                                        {{ this.hash }}
+                                    </span>
+                                </p>
+                                <br/>
+                                <p>
+                                    <span class="name">
+                                        TxReceipt Status:
+                                    </span>
                                     <template v-if="this.status == 'Success'">
                                         <span class="receipt-status-success" >{{ this.status }}</span><br/>
                                     </template>
                                     <template v-if="this.status == 'Failed'">
                                         <span class="receipt-status-failed" >{{ this.status }}</span><br/>
                                     </template>
+                                </p>
+                                <br/>
+                                <p>
+                                    <span class="name">
+                                        Block Height:
+                                    </span>
+                                    <span class="value">
+                                        <nuxt-link :to="'/blocks/' + this.blockHeight">{{ this.blockHeight }}</nuxt-link>
+                                    </span>
+                                </p>
+                                <br/>
+                                <p>
+                                    <span class="name">
+                                        TimeStamp:
+                                    </span>
+                                    <span class="value">
+                                        {{ this.timeStamp }}
+                                    </span>
                                 </p><br/>
-                                <p><span class="name">Block Height:</span><span class="value">{{ this.blockHeight }}</span></p><br/>
-                                <p><span class="name">TimeStamp:</span><span class="value">{{ this.timeStamp }}</span></p><br/>
-                                <p><span class="name">From:</span><span class="value">
-                                    <nuxt-link :to="'/accounts/' + this.from">{{ this.from }}</nuxt-link>
-                                </span></p><br/>
-                                <p><span class="name">To:</span>
-                                <template v-if="this.inputData != '0x'" >
-                                    <br/>
-                                    <span class="value">Contract &nbsp;<nuxt-link :to="'/accounts/' + this.to">{{ this.to }}</nuxt-link></span><br/>
-                                </template>
-                                <template v-if="this.inputData == '0x'" class="value">
-                                    <span><nuxt-link :to="'/accounts/' + this.to">{{ this.to }}</nuxt-link></span><br/>
-                                </template>
+                                <p>
+                                    <span class="name">
+                                        From:
+                                    </span>
+                                    <span class="value">
+                                        <nuxt-link :to="'/accounts/' + this.from">
+                                            {{ this.from }}
+                                        </nuxt-link>
+                                    </span>
                                 </p><br/>
-                                <p><span class="name">Value:</span><span class="value">{{ this.value }}</span></p><br/>
-                                <p><span class="name">Gas Limit:</span><span class="value">{{ this.gasLimit }}</span></p><br/>
-                                <p><span class="name">Gas Used By Txn:</span><span class="value">{{ this.gasUsedByTxn }}</span></p><br/>
-                                <p><span class="name">Gas Price:</span><span class="value">{{ this.gasPrice }}</span></p><br/>
-                                <p><span class="name">Actual Tx Cost/Fee:</span><span class="value">{{ this.actualTxCost }}</span></p><br/>
-                                <p><span class="name">Nonce:</span><span class="value">{{ this.nonce }}</span></p><br/>
-                                <p><span class="name">InputData:</span><br/>
-                                <span class="value">
-                                    <el-input
-                                    type="textarea"
-                                    :rows="2"
-                                    placeholder="0x"
-                                    v-model="this.inputData"
-                                    :disabled="true"
-                                    class="textarea"
-                                    >
-                                    </el-input></span></p><br/>
+                                <p>
+                                    <span class="name">
+                                        To:
+                                    </span>
+                                    <template v-if="this.inputData != '0x'" >
+                                        <br/>
+                                        <span class="value">Contract &nbsp;<nuxt-link :to="'/accounts/' + this.to">{{ this.to }}</nuxt-link></span><br/>
+                                    </template>
+                                    <template v-if="this.inputData == '0x'" class="value">
+                                        <span><nuxt-link :to="'/accounts/' + this.to">{{ this.to }}</nuxt-link></span><br/>
+                                    </template>
+                                </p><br/>
+                                <p>
+                                    <span class="name">
+                                        Value:
+                                    </span>
+                                    <span class="value">
+                                        {{ this.value }}
+                                    </span>
+                                </p>
+                                <br/>
+                                <p>
+                                    <span class="name">
+                                        Gas Limit:
+                                    </span>
+                                    <span class="value">
+                                        {{ this.gasLimit }}
+                                    </span>
+                                </p>
+                                <br/>
+                                <p>
+                                    <span class="name">
+                                        Gas Used By Txn:
+                                    </span>
+                                    <span class="value">
+                                        {{ this.gasUsedByTxn }}
+                                    </span>
+                                </p>
+                                <br/>
+                                <p>
+                                    <span class="name">
+                                        Gas Price:
+                                    </span>
+                                    <span class="value">
+                                        {{ this.gasPrice }}
+                                    </span>
+                                </p>
+                                <br/>
+                                <p>
+                                    <span class="name">
+                                        Actual Tx Cost/Fee:
+                                        </span>
+                                    <span class="value">
+                                        {{ this.actualTxCost }}
+                                    </span>
+                                </p>
+                                <br/>
+                                <p>
+                                    <span class="name">
+                                        Nonce:
+                                    </span>
+                                    <span class="value">
+                                        {{ this.nonce }}
+                                    </span>
+                                </p>
+                                <br/>
+                                <div class="inputData">
+                                    <span class="name">InputData:</span><br/>
+                                    <div class="value">
+                                        <el-input
+                                            type="textarea"
+                                            :rows="2"
+                                            placeholder="0x"
+                                            v-model="this.inputData"
+                                            :disabled="true"
+                                            class="textarea"
+                                        >
+                                        </el-input>
+                                    </div>
+                                </div>
+                                <br/>
                                 <p></p><br/>
                             </div>
                         </div>
@@ -84,12 +176,7 @@
 
 <style scoped lang="less">
 
-    .textarea {
-        width: 350%;
-    }
-    // span {
-    //     font-size: 15px;
-    // }
+
     .name {
         width: 300px;
         font-size: 10px;
@@ -103,6 +190,13 @@
         justify-content: flex-start;
         width: 1000px;
         font-size: 10px;
+    }
+
+    .inputData {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
     }
 
     p {
@@ -132,16 +226,6 @@
         font-size: 10px;
 
     }
-
-    // .value {
-    //     display: flex;
-    //     flex-direction: column;
-    //     align-items: flex-start;
-    //     justify-content: center;
-    //     width: 60%;
-    //     height: 100%;
-    //     font-size: 15px;
-    // }
 
     .receipt-status-success {
         color:green;
@@ -279,7 +363,24 @@
         text-align: center;
     }
 
+    .right-nav {
+        display: none;
+    }
+
     @media screen and (max-width: 991px) {
+        .right-nav {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .input {
+            width: 260px;
+        }
+        .button {
+            background: #00c8ff;
+            color: #fff;
+        }
         .panel {
             display: flex;
             flex-direction: column;
@@ -294,7 +395,7 @@
             align-items: flex-start;
             justify-content: center;
             // width: 200px;
-            height: 40px;
+            height: 50px;
         }
         .details {
             font-family:  "Helvetica Neue",Helvetica;
@@ -312,9 +413,10 @@
             flex-direction: row;
             justify-content: flex-start;
             align-items: flex-start;
-            width: 300px;
+            width: 100%;
             font-size: 10px;
             flex-wrap: wrap;
+            word-break: break-all;
         }
         .status {
             font-family:  "Helvetica Neue",Helvetica;
@@ -336,6 +438,12 @@
             flex-direction: column;
             align-items: flex-start;
             justify-content: flex-start;
+            width: 100%;
+        }
+        .inputData {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
             width: 100%;
         }
     }
@@ -390,6 +498,7 @@ import { toDate, toDecimals } from '~/common/method.js'
             nonce: '',
             inputData: '',
             activeName2: 'first',
+            input: '',
       };
     },
     methods: {
@@ -421,16 +530,32 @@ import { toDate, toDecimals } from '~/common/method.js'
         handleClick(tab, event) {
             // console.log(tab, event);
         },
-        cell({row, column, rowIndex, columnIndex}) {
-            //第八列添加 red 类
-            // return 'red'
-            if(columnIndex == 0) {
-                return 'red'
-            }
-            // if(columnIndex == 1 && rowIndex == 2){
-                
-            // }
-        }
+        search() {
+            console.log("search")
+            console.log("input", this.input)
+            console.log(this.$route.path);
+            // this.$router.push('blocks/248703')
+            this.$axios.$get("/search/" + this.input).then(res => {
+                console.log(res)
+                let type = res.type;
+                if(type == "block") {
+                    let value = res.value;
+                    let number = value.Number;
+                    this.$router.push('/blocks/' + number);
+                }
+                else if(type == "transaction") {
+                    this.$router.push('/transactions/' + this.input);
+                }
+                else if(type == "dbot") {
+                    this.$router.push('/dbots/' + this.input);
+                }
+                else if(type == "account") {
+                    this.$router.push('/accounts/' + this.input);
+                }
+            }).catch(error => {
+                    this.$router.push('/error');
+            })
+        },
       
     },
   }

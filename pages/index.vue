@@ -4,7 +4,7 @@
       
     <el-main class="main">
         <div class="right-nav">
-                    <el-input v-model="input" class="input" placeholder="Search"></el-input>
+                    <el-input v-model="input" class="input" placeholder="Search Address / Tx / Block / Dbot"></el-input>
                     <el-button icon="el-icon-search" class="button" v-on:click="this.search">Search</el-button>
         </div><br><br>
         <div class="table">
@@ -369,7 +369,7 @@ body > .el-container {
     align-items: center;
   }
   .input {
-      width: 200px;
+      width: 260px;
     }
     .button {
       background: #00c8ff;

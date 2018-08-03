@@ -73,6 +73,9 @@
     width: 1100px;
     // margin-right: 15%;
 }
+p{
+    display: none;
+}
 
 .link {
     display: flex;

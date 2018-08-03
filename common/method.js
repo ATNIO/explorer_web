@@ -62,7 +62,7 @@ export const cutStr = function(str){
 
 export const toDecimals = function(temp) {
     var e = parseInt(temp.toString().split('e-')[1]);
-    console.log("e",e)
+    // console.log("e",e)
     if (e) {
         temp *= Math.pow(10,e-1);
         temp = '0.' + (new Array(e)).join('0') + temp.toString().substring(2);
