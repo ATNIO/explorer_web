@@ -457,13 +457,6 @@
         .el-tabs {
             height: 1000px;
         }
-        .network-status {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-        }
     }
     
     body > .el-container {
