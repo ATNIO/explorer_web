@@ -224,7 +224,6 @@ const Web3 = require('web3')
     },
     methods: {
         handleSelect(key, keyPath) {
-            console.log(key, keyPath);
         },
         showData() {
             this.$axios.$get("/dbots/allList/10/0").then(res => {
@@ -238,12 +237,10 @@ const Web3 = require('web3')
                 }
             })
             this.$axios.$get("/dbots/count").then(res => {
-                console.log(res)
                 this.total = res.count;
             })
         },
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
             this.$axios.$get("/dbots/allList/10/" + ((parseInt(val) - 1) * 15)).then(res => {
                 this.dbotTable = [];
                 for( let r of res ) {
@@ -256,12 +253,8 @@ const Web3 = require('web3')
             })
         },
         search() {
-            console.log("search")
-            console.log("input", this.input)
-            console.log(this.$route.path);
             // this.$router.push('blocks/248703')
             this.$axios.$get("/search/" + this.input).then(res => {
-                console.log(res)
                 let type = res.type;
                 if(type == "block") {
                     let value = res.value;

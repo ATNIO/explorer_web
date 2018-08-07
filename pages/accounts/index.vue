@@ -232,13 +232,13 @@ import axios from 'axios'
     },
     methods: {
         handleSelect(key, keyPath) {
-            console.log(key, keyPath);
+            // console.log(key, keyPath);
         },
         showData() {
             this.$axios.$get("/accounts/list/15").then(res => {
                 for( let r of res ) {
                     let account = {};
-                    console.log("accounts list res", res)
+                    // console.log("accounts list res", res)
                     account.address = r.Address;
                     account.balance = parseInt(r.Balance) / 1e18 + " ATN";
                     let temp = (parseInt(r.Balance) / 1e18 / 1e12).toFixed(11);
@@ -254,12 +254,12 @@ import axios from 'axios'
                 }
             })
             this.$axios.$get("/accounts/count").then(res => {
-                console.log(res)
+                // console.log(res)
                 this.total = res.count;
             })
         },
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
+            // console.log(`当前页: ${val}`);
             this.$axios.$get("/accounts/list/15/" + ((parseInt(val) - 1) * 15)).then(res => {
                 this.accountTable = [];
                 for( let r of res ) {
@@ -271,12 +271,7 @@ import axios from 'axios'
             })
         },
         search() {
-            console.log("search")
-            console.log("input", this.input)
-            console.log(this.$route.path);
-            // this.$router.push('blocks/248703')
             this.$axios.$get("/search/" + this.input).then(res => {
-                console.log(res)
                 let type = res.type;
                 if(type == "block") {
                     let value = res.value;

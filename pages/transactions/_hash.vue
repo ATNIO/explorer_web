@@ -534,19 +534,14 @@ import { toDate, toDecimals } from '~/common/method.js'
             })
         },
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
 
         },
         handleClick(tab, event) {
             // console.log(tab, event);
         },
         search() {
-            console.log("search")
-            console.log("input", this.input)
-            console.log(this.$route.path);
             // this.$router.push('blocks/248703')
             this.$axios.$get("/search/" + this.input).then(res => {
-                console.log(res)
                 let type = res.type;
                 if(type == "block") {
                     let value = res.value;

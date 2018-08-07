@@ -156,15 +156,9 @@ a {
     },
     methods: {
         handleSelect(key, keyPath) {
-            console.log(key, keyPath);
         },
         search() {
-            console.log("search")
-            console.log("input", this.input)
-            console.log(this.$route.path);
-            // this.$router.push('blocks/248703')
             this.$axios.$get("/search/" + this.input).then(res => {
-                console.log(res)
                 let type = res.type;
                 if(type == "block") {
                     let value = res.value;

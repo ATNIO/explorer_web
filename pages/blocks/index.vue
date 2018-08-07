@@ -210,7 +210,6 @@ import axios from 'axios'
     },
     methods: {
         handleSelect(key, keyPath) {
-            console.log(key, keyPath);
         },
         showData() {
             this.$axios.$get("/blocks/list/15").then(res => {
@@ -222,12 +221,10 @@ import axios from 'axios'
                 }
             })
             this.$axios.$get("/blocks/count").then(res => {
-                console.log(res)
                 this.total = res.count;
             })
         },
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
             this.$axios.$get("/blocks/list/15/" + ((parseInt(val) - 1) * 15)).then(res => {
                 this.blockTable = [];
                 for( let r of res ) {
@@ -239,12 +236,8 @@ import axios from 'axios'
             })
         },
         search() {
-            console.log("search")
-            console.log("input", this.input)
-            console.log(this.$route.path);
             // this.$router.push('blocks/248703')
             this.$axios.$get("/search/" + this.input).then(res => {
-                console.log(res)
                 let type = res.type;
                 if(type == "block") {
                     let value = res.value;

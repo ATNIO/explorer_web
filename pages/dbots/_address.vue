@@ -312,7 +312,6 @@ const Web3 = require('web3')
     },
     asyncData({ params }) {
         // console.log("params address", params.address)
-        console.log("params", params)
         return { dbotAddress: params.address }
     },
 
@@ -333,7 +332,6 @@ const Web3 = require('web3')
             // console.log(key, keyPath);
         },
         async showData() {
-            console.log("this dbotAddress", this.dbotAddress)
             this.$axios.$get("/dbots/address/" + this.dbotAddress).then(res => {
                 this.dbotDetailsTable.push({attribute: "Address:", value: res.Address});
                 this.dbotDetailsTable.push({attribute: "Name:", value: Web3.utils.hexToAscii(res.Name)});
@@ -352,12 +350,8 @@ const Web3 = require('web3')
             // console.log(tab, event);
         },
         search() {
-            console.log("search")
-            console.log("input", this.input)
-            console.log(this.$route.path);
             // this.$router.push('blocks/248703')
             this.$axios.$get("/search/" + this.input).then(res => {
-                console.log(res)
                 let type = res.type;
                 if(type == "block") {
                     let value = res.value;

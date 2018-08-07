@@ -382,11 +382,11 @@ import { toDate, cutStr } from '~/common/method.js'
             // console.log(key, keyPath);
         },
         async showData() {
-            console.log("this address", this.address)
+            // console.log("this address", this.address)
             this.$axios.$get("/accounts/address/" + this.address).then(res => {
-                console.log("parseInt(res.Balance)", parseInt(res.Balance))
+                // console.log("parseInt(res.Balance)", parseInt(res.Balance))
                 this.atn = parseInt(res.Balance) / 1e18;
-                console.log(this.atn)
+                // console.log(this.atn)
                 this.accountDetailsTable.push({attribute: "Balance: ", value: cutStr(this.atn.toString()) + " ATN"});
                 this.atnValue = (this.atn * 0.233416).toFixed(2)
                 this.accountDetailsTable.push({attribute: "ATN Value: ", value: "$" + cutStr(this.atnValue.toString()) });
@@ -417,7 +417,7 @@ import { toDate, cutStr } from '~/common/method.js'
                     if(keyA > keyB) return -1;
                     return 0;
                 })
-                console.log("res", res);
+                // console.log("res", res);
                 for(let r of res) {
                     let tx = {};
                     tx.blockNumber = r.BlockNumber;
@@ -444,7 +444,7 @@ import { toDate, cutStr } from '~/common/method.js'
             
         },
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
+            // console.log(`当前页: ${val}`);
             this.$axios.$get("/transactions/list/10/" + ((parseInt(val) - 1) * 10) + "/account/" + this.address).then(res => {
                 // console.log(res);
                 this.transactionTable = [];
@@ -477,12 +477,12 @@ import { toDate, cutStr } from '~/common/method.js'
             // console.log(tab, event);
         },
         search() {
-            console.log("search")
-            console.log("input", this.input)
-            console.log(this.$route.path);
+            // console.log("search")
+            // console.log("input", this.input)
+            // console.log(this.$route.path);
             // this.$router.push('blocks/248703')
             this.$axios.$get("/search/" + this.input).then(res => {
-                console.log(res)
+                // console.log(res)
                 let type = res.type;
                 if(type == "block") {
                     let value = res.value;

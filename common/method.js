@@ -35,7 +35,7 @@ export const toDate = function(timestamp){
                                     timeType[i] + ' ' + timeDisplay2[i] + ' ago';
         if(time != '')break;
     }
-    console.log("time", time)
+    // console.log("time", time)
     return time;
 }
 

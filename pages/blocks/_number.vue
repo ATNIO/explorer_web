@@ -339,7 +339,6 @@ import { toDate } from '~/common/method.js'
     },
     asyncData({ params }) {
         // console.log("params address", params.address)
-        console.log("params", params)
         return { blockNumber: params.number }
     },
 
@@ -366,7 +365,6 @@ import { toDate } from '~/common/method.js'
             // console.log(key, keyPath);
         },
         async showData() {
-            console.log("this blockNumber", this.blockNumber)
             this.$axios.$get("/blocks/number/" + this.blockNumber).then(res => {
                 this.blockDetailsTable.push({attribute: "Block:", value: res.Number});
                 this.blockDetailsTable.push({attribute: "Transactions:", value: res.Txns});
@@ -395,7 +393,6 @@ import { toDate } from '~/common/method.js'
             })
         },
         handleCurrentChange(val) {
-            console.log(`当前页: ${val}`);
             this.$axios.$get("/transactions/list/10/" + ((parseInt(val) - 1) * 10) + "/blocknumber/" + this.blockNumber).then(res => {
                 for(let r of res) {
                     let tx = {};
@@ -416,12 +413,8 @@ import { toDate } from '~/common/method.js'
             // console.log(tab, event);
         },
         search() {
-            console.log("search")
-            console.log("input", this.input)
-            console.log(this.$route.path);
             // this.$router.push('blocks/248703')
             this.$axios.$get("/search/" + this.input).then(res => {
-                console.log(res)
                 let type = res.type;
                 if(type == "block") {
                     let value = res.value;

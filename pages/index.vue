@@ -116,7 +116,7 @@
                     <el-table-column
                         prop="blockHash"
                         label="Hash"
-                        width="220"
+                        width="150"
                         class="home-left-table">
                         <template slot-scope="scope">
                             <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.blockHash }}</nuxt-link>
@@ -191,6 +191,7 @@ a {
   justify-content: flex-start;
   flex-direction: column;
   margin-bottom: 48px;
+  margin-left: 20px;
 }
 
 .right-nav {
@@ -310,6 +311,7 @@ a {
   // background-color: #00C8FF;
   text-align: center;
   line-height: 60px;
+  margin-top: -150px;
 }
 
 .el-aside {
@@ -472,15 +474,10 @@ import { toDecimals } from '~/common/method.js'
         },
         methods: {
         handleSelect(key, keyPath) {
-            console.log(key, keyPath);
         },
         search() {
-            console.log("search")
-            console.log("input", this.input)
-            console.log(this.$route.path);
             // this.$router.push('blocks/248703')
             this.$axios.$get("/search/" + this.input).then(res => {
-                console.log(res)
                 let type = res.type;
                 if(type == "block") {
                     let value = res.value;
@@ -519,7 +516,6 @@ import { toDecimals } from '~/common/method.js'
                 block.number = r.Number;
                 block.txns = r.Txns;
                 block.blockHash = r.Hash.toString().substr(0,9) + '...';
-                console.log(block.blockHash)
                 this.blockTable.push(block);
             }
             })
