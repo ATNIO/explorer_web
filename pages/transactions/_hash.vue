@@ -8,9 +8,7 @@
             <el-input v-model="input" class="input" placeholder="Search Address / Tx / Block / Dbot"></el-input>
             <el-button icon="el-icon-search" class="button" v-on:click="this.search">Search</el-button>
         </div><br><br>
-    <div class="table">
-        <div class="network-status">
-            <div class="description">
+        <div class="description">
                 <p class="status">
                     Transaction Details
                 </p>
@@ -20,6 +18,8 @@
                     <span> {{ this.hash }} </span>
                 </p>
             </div>
+    <div class="table">
+        <div class="network-status">
             <div class="overview">
                 <br><br><br>
                 <el-tabs v-model="activeName2"  type="border-card" @tab-click="handleClick" style="width: 100%">
@@ -341,7 +341,6 @@
         align-items: center;
         justify-content: center;
         width: 100%;
-        height: 1200px;
     }
 
     .el-footer {
