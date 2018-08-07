@@ -22,7 +22,7 @@
             </div>
             <div class="overview">
                 <br><br><br>
-                <el-tabs v-model="activeName2"  type="border-card" @tab-click="handleClick" style="width: 100%;height: 70%; float: bottom;">
+                <el-tabs v-model="activeName2"  type="border-card" @tab-click="handleClick" >
                     <el-tab-pane label="Overview" name="first">
                         <div class="panel">
                             <div class="content">
@@ -366,6 +366,10 @@
     .right-nav {
         display: none;
     }
+    
+    .el-tabs {
+        width: 100%;
+    }
 
     @media screen and (max-width: 991px) {
         .right-nav {
@@ -373,6 +377,7 @@
             flex-direction: row;
             justify-content: flex-start;
             align-items: center;
+            height: 50px;
         }
         .input {
             width: 200px;
@@ -442,12 +447,17 @@
             align-items: flex-start;
             justify-content: flex-start;
             width: 100%;
+            height: 150px;
         }
         .inputData {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
             width: 100%;
+        }
+        .el-tabs {
+            width: 100%;
+            height: 1000px;
         }
     }
     
