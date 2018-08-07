@@ -375,6 +375,7 @@
             flex-direction: row;
             justify-content: flex-start;
             align-items: center;
+            height: 50px;
         }
         .input {
             width: 200px;
@@ -444,6 +445,7 @@
             align-items: flex-start;
             justify-content: flex-start;
             width: 100%;
+            height: 150px;
         }
         .inputData {
             display: flex;
