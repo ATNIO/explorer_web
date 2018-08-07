@@ -86,7 +86,75 @@
                                         <span><nuxt-link :to="'/accounts/' + this.to">{{ this.to }}</nuxt-link></span><br/>
                                     </template>
                                 </p><br/>
-                                
+                                <p>
+                                    <span class="name">
+                                        Value:
+                                    </span>
+                                    <span class="value">
+                                        {{ this.value }}
+                                    </span>
+                                </p>
+                                <br/>
+                                <p>
+                                    <span class="name">
+                                        Gas Limit:
+                                    </span>
+                                    <span class="value">
+                                        {{ this.gasLimit }}
+                                    </span>
+                                </p>
+                                <br/>
+                                <p>
+                                    <span class="name">
+                                        Gas Used By Txn:
+                                    </span>
+                                    <span class="value">
+                                        {{ this.gasUsedByTxn }}
+                                    </span>
+                                </p>
+                                <br/>
+                                <p>
+                                    <span class="name">
+                                        Gas Price:
+                                    </span>
+                                    <span class="value">
+                                        {{ this.gasPrice }}
+                                    </span>
+                                </p>
+                                <br/>
+                                <p>
+                                    <span class="name">
+                                        Actual Tx Cost/Fee:
+                                        </span>
+                                    <span class="value">
+                                        {{ this.actualTxCost }}
+                                    </span>
+                                </p>
+                                <br/>
+                                <p>
+                                    <span class="name">
+                                        Nonce:
+                                    </span>
+                                    <span class="value">
+                                        {{ this.nonce }}
+                                    </span>
+                                </p>
+                                <br/>
+                                <div class="inputData">
+                                    <span class="name">InputData:</span><br/>
+                                    <div class="value">
+                                        <el-input
+                                            type="textarea"
+                                            :rows="2"
+                                            placeholder="0x"
+                                            v-model="this.inputData"
+                                            :disabled="true"
+                                            class="textarea"
+                                        >
+                                        </el-input>
+                                    </div>
+                                </div>
+                                <br/>
                                 <p></p><br/>
                             </div>
                         </div>
@@ -165,7 +233,7 @@
         flex-direction: row;
         justify-content: flex-start;
         width: 1000px;
-        font-size: 15px;
+        font-size: 10px;
     }
 
     .receipt-status-failed {
@@ -174,7 +242,7 @@
         flex-direction: row;
         justify-content: flex-start;
         width: 1000px;
-        font-size: 15px;
+        font-size: 10px;
     }
 
     .tag {
@@ -381,6 +449,9 @@
             flex-direction: column;
             align-items: flex-start;
             width: 100%;
+        }
+        .el-tabs {
+            height: 1000px;
         }
     }
     

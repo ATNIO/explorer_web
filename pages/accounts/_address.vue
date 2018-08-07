@@ -61,19 +61,19 @@
                             <el-table-column
                                 prop="blockNumber"
                                 label="Block"
-                                min-width="50">
+                                >
                             </el-table-column>
 
                             <el-table-column
                                 prop="time"
                                 label="Time"
-                                min-width="80">
+                                >
                             </el-table-column>
 
                             <el-table-column
                                 prop="txId"
                                 label="hash"
-                                min-width="70">
+                                >
                                 <template slot-scope="scope">
                                     <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
                                 </template>
@@ -82,7 +82,7 @@
                             <el-table-column
                                 prop="from"
                                 label="From"
-                                min-width="70">
+                                >
                                 <template slot-scope="scope">
                                     <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
                                 </template>
@@ -91,7 +91,7 @@
                             <el-table-column
                                 prop="tag"
                                 label=""
-                                min-width="35">
+                                >
                                 <template slot-scope="scope">
                                     <el-tag :type="scope.row.tag" size="small" class="tag">{{ scope.row.tagValue }}</el-tag>
                                 </template>
@@ -100,7 +100,7 @@
                             <el-table-column
                                 prop="to"
                                 label="To"
-                                min-width="70">
+                                >
                                 <template slot-scope="scope">
                                     <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
                                 </template>
@@ -109,7 +109,7 @@
                             <el-table-column
                                 prop="value"
                                 label="Value"
-                                min-width="50"
+                                
                             >
                             </el-table-column>
                         </el-table>
