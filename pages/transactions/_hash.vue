@@ -22,7 +22,7 @@
             </div>
             <div class="overview">
                 <br><br><br>
-                <el-tabs v-model="activeName2"  type="border-card" @tab-click="handleClick" style="width: 100%;height: 100%">
+                <el-tabs v-model="activeName2"  type="border-card" @tab-click="handleClick" style="width: 100%;height: 70%; float: bottom;">
                     <el-tab-pane label="Overview" name="first">
                         <div class="panel">
                             <div class="content">
@@ -220,7 +220,7 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        justify-content: center;
+        justify-content: flex-start;
         width: 90%;
         height: 100%;
         font-size: 10px;
