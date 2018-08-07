@@ -78,13 +78,19 @@
                                     <span class="name">
                                         To:
                                     </span>
-                                    <template v-if="this.inputData != '0x'" >
+                                    <span class="value">
+                                        <nuxt-link :to="'/accounts/' + this.to">
+                                            {{ this.to }}
+                                        </nuxt-link>
+                                    </span>
+                                    <br/>
+                                    <!-- <template v-if="this.inputData != '0x'" >
                                         <br/>
                                         <span class="value">Contract &nbsp;<nuxt-link :to="'/accounts/' + this.to">{{ this.to }}</nuxt-link></span><br/>
                                     </template>
                                     <template v-if="this.inputData == '0x'" class="value">
                                         <span><nuxt-link :to="'/accounts/' + this.to">{{ this.to }}</nuxt-link></span><br/>
-                                    </template>
+                                    </template> -->
                                 </p><br/>
                                 <p>
                                     <span class="name">
