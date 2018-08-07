@@ -22,7 +22,7 @@
             </div>
             <div class="overview">
                 <br><br><br>
-                <el-tabs v-model="activeName2"  type="border-card" @tab-click="handleClick" style="width: 100%">
+                <el-tabs v-model="activeName2"  type="border-card" @tab-click="handleClick" style="width: 100%;height: 100%">
                     <el-tab-pane label="Overview" name="first">
                         <div class="panel">
                             <div class="content">
