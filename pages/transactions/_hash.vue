@@ -409,6 +409,7 @@
             align-items: center;
             justify-content: space-between;
             word-break: break-all;
+            height: 50px;
         }
 
         .value {
@@ -427,6 +428,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            height: 20px;
         }
         .overview {
             display: flex;
@@ -445,7 +447,7 @@
             align-items: flex-start;
             justify-content: flex-start;
             width: 100%;
-            height: 150px;
+            height: 100px;
         }
         .inputData {
             display: flex;
