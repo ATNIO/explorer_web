@@ -498,7 +498,13 @@ import { toDecimals } from '~/common/method.js'
             })
         },
         async showData() {
-            await this.$axios.$get("/blocks/list/5").then(res => {
+
+            this.$axios.$get("/blocks/maxBlockNumber").then(res => {
+                console.log(res);
+                this.latestBlockNumber = res;
+            })
+
+            this.$axios.$get("/blocks/list/5").then(res => {
             // console.log(res);
 
             var date = new Date(res[0].Timestamp*1000);
@@ -507,7 +513,7 @@ import { toDecimals } from '~/common/method.js'
             var seconds = "0" + date.getSeconds();
             var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
-            this.latestBlockNumber = res[0].Number;
+            // this.latestBlockNumber = res[0].Number;
             this.lastBlockTime = formattedTime;
 
 
@@ -519,7 +525,7 @@ import { toDecimals } from '~/common/method.js'
                 this.blockTable.push(block);
             }
             })
-            await this.$axios.$get("/transactions/list/5").then(res => {
+            this.$axios.$get("/transactions/list/5").then(res => {
             for( let r of res ) {
                 let transaction = {};
                 transaction.txId = r.Hash.toString().substr(0,9) + '...';
@@ -532,10 +538,10 @@ import { toDecimals } from '~/common/method.js'
                 this.transactionTable.push(transaction);
             }
             }),
-            // this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
-            //     this.atnPrice = res[0].price_usd;
-            // })
-            this.atnPrice = 0.233416
+            this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
+                this.atnPrice = res[0].price_usd;
+            })
+            // this.atnPrice = 0.233416
         },
         // cancelAutoUpdate: function() { clearInterval(this.timer) },
         
