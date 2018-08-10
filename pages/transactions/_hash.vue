@@ -167,6 +167,39 @@
                     </el-tab-pane>
 
                     <el-tab-pane label="Internal Transactions" name="second">
+                        <el-table
+                            :data="internalData"
+                            style="width: 100%"
+                            type="flex"
+                            align="middle"
+                            justify="center"
+                            >
+                            <el-table-column
+                                prop="type"
+                                label="Type"
+                                >
+                            </el-table-column>
+                            <el-table-column
+                                prop="from"
+                                label="From"
+                                >
+                                <template slot-scope="scope">
+                                    <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                prop="to"
+                                label="To"
+                                >
+                                <template slot-scope="scope">
+                                    <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                prop="value"
+                                label="Value">
+                            </el-table-column>
+                        </el-table>
                     </el-tab-pane>
                 </el-tabs>
             </div>
@@ -185,17 +218,19 @@
 
     .name {
         width: 300px;
-        font-size: 10px;
+        font-size: 15px;
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
+        font-family: Helvetica Neue;
     }
     .value {
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
         width: 1000px;
-        font-size: 10px;
+        font-size: 15px;
+        font-family: Helvetica Neue;
     }
 
     .inputData {
@@ -227,9 +262,9 @@
         flex-direction: column;
         align-items: flex-start;
         justify-content: flex-start;
-        width: 90%;
+        width: 100%;
         // height: 100%;
-        font-size: 10px;
+        font-size: 15px;
 
     }
 
@@ -239,7 +274,7 @@
         flex-direction: row;
         justify-content: flex-start;
         width: 1000px;
-        font-size: 10px;
+        font-size: 15px;
     }
 
     .receipt-status-failed {
@@ -248,7 +283,7 @@
         flex-direction: row;
         justify-content: flex-start;
         width: 1000px;
-        font-size: 10px;
+        font-size: 15px;
     }
 
     .tag {
@@ -423,7 +458,7 @@
             justify-content: flex-start;
             align-items: flex-start;
             width: 100%;
-            font-size: 10px;
+            font-size: 15px;
             flex-wrap: wrap;
             word-break: break-all;
         }
@@ -515,6 +550,7 @@ import { toDate, toDecimals } from '~/common/method.js'
             inputData: '',
             activeName2: 'first',
             input: '',
+            internalData: [],
       };
     },
     methods: {
@@ -537,6 +573,22 @@ import { toDate, toDecimals } from '~/common/method.js'
                 this.inputData = res.Input;
                 if(res.Status == "1")this.status = "Success";
                 else this.status = "Failed";
+            })
+
+            this.$axios.$get("/traces/hash/" + this.hash).then(res => {
+                let trace = res.Trace;
+                console.log(res)
+                for(let t of trace) {
+                    let data = {};
+                    data.from = t.From.toString().substr(0,15) + '...';
+                    data.fromAddress = t.From;
+                    data.to = t.To.toString().substr(0,15) + '...';
+                    data.toAddress = t.To;
+                    data.input = t.Input;
+                    data.value = t.Value;
+                    data.type = t.Op;
+                    this.internalData.push(data);
+                }
             })
         },
         handleCurrentChange(val) {

@@ -355,7 +355,7 @@ import { toDate, cutStr } from '~/common/method.js'
         Footer
     },
     asyncData({ params }) {
-        // console.log("params address", params.address)
+        console.log("params address", params.address)
         return { address: params.address }
     },
 

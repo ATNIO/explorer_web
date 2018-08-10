@@ -102,11 +102,12 @@
                             <el-table-column
                                 prop="time"
                                 label="Time"
-                                class="home-left-table">
+                                class="home-left-table"
+                                >
                             </el-table-column>
                             <el-table-column
                                 prop="txns"
-                                label="TXns"
+                                label="Txns"
                                 class="home-left-table">
                             </el-table-column>
                             <el-table-column
@@ -149,7 +150,7 @@
                                 </template>
                             </el-table-column>
                             <el-table-column
-                                prop="time1"
+                                prop="time"
                                 label="Time">
                             </el-table-column>    
                             <el-table-column
@@ -400,7 +401,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDecimals } from '~/common/method.js'
+import { toDate, toDecimals } from '~/common/method.js'
 // import * as axios from '../static/js/axios.js'
 // import api from '../static/js/api.js'
 
@@ -474,7 +475,7 @@ import { toDecimals } from '~/common/method.js'
                 this.latestBlockNumber = res;
             })
 
-            this.$axios.$get("/blocks/list/5").then(res => {
+            this.$axios.$get("/blocks/list/8").then(res => {
             // console.log(res);
 
             var date = new Date(res[0].Timestamp*1000);
@@ -491,6 +492,7 @@ import { toDecimals } from '~/common/method.js'
                 let block = {};
                 block.number = r.Number;
                 block.txns = r.Txns;
+                block.time = toDate(r.Timestamp);
                 block.blockHash = r.Hash.toString().substr(0,9) + '...';
                 this.blockTable.push(block);
             }
@@ -505,6 +507,7 @@ import { toDecimals } from '~/common/method.js'
                 transaction.to = r.To.toString().substr(0,9) + '...';
                 transaction.toAddress = r.To.toString();
                 transaction.value = toDecimals(r.Value / 1e18) + " ATN";
+                transaction.time = toDate(r.Timestamp);
                 this.transactionTable.push(transaction);
             }
             }),

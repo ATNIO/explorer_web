@@ -12,8 +12,8 @@ export const toDate = function(timestamp){
     // console.log("days", days)
     let time = '';
     let timeType = [days, hours, minutes, seconds];
-    let timeDisplay1 = ["days", "hours", "minutes", "seconds"];
-    let timeDisplay2 = ["day", "hour", "minute", "second"];
+    let timeDisplay1 = ["days", "hrs", "mins", "secs"];
+    let timeDisplay2 = ["day", "hr", "min", "sec"];
     //  console.log("timeType", timeType)
     for(let i = 0; i < timeType.length; i++) {
         if(i + 1 < timeType.length) {

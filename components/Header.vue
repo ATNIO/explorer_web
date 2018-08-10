@@ -91,6 +91,7 @@
         handleSelect(key, keyPath) {
         },
         search() {
+            console.log(this.input)
             this.$axios.$get("/search/" + this.input).then(res => {
                 let type = res.type;
                 if(type == "block") {
