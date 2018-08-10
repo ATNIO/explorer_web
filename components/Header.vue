@@ -1,35 +1,45 @@
 <template>
+<div>
     <div class="head">
         <div class="wrapper">
             <img src="~/assets/atn.png" class="image" >
-            <el-menu
-                :default-active="activeIndex2"
-                class="el-menu-demo nav"
-                mode="horizontal"
-                @select="handleSelect"
-                text-color="#fff"
-                active-text-color="#ffd04b"
-            >
-                <el-menu-item index="2" class="font"><nuxt-link to="/">Home</nuxt-link></el-menu-item>
-                <el-menu-item index="3" class="font"><nuxt-link to="/blocks">Blocks</nuxt-link></el-menu-item>
-                <el-menu-item index="4" class="font"><nuxt-link to="/transactions">Transactions</nuxt-link></el-menu-item>
-                <el-menu-item index="5" class="font"><nuxt-link to="/accounts">Accounts</nuxt-link></el-menu-item>
-                <el-menu-item index="6" class="font"><nuxt-link to="/dbots">Dbots</nuxt-link></el-menu-item>
-            </el-menu>
+            <div class="right" v-bind:class="searchShow ? 'space-between' : 'center'">
+                <el-menu
+                    :default-active="activeIndex2"
+                    class="el-menu-demo nav"
+                    mode="horizontal"
+                    @select="handleSelect"
+                    text-color="#fff"
+                    active-text-color="#ffd04b"
+                    router
+                >
+                    <el-menu-item index="/" class="font" >Home</el-menu-item>
+                    <el-menu-item index="/blocks" class="font">Blocks</el-menu-item>
+                    <el-menu-item index="/transactions" class="font">Transactions</el-menu-item>
+                    <el-menu-item index="/accounts" class="font">Accounts</el-menu-item>
+                    <el-menu-item index="/dbots" class="font">Dbots</el-menu-item>
+                </el-menu>
+                <div class="search" v-show="searchShow">
+                    <el-input v-model="input" class="input" placeholder="Search Address / Tx / Block / Dbot"></el-input>
+                    <i class="search-icon" v-on:click="this.search"></i>
+                </div>
+            </div>
         </div>
-        <div class="wrapper-search">
+        <div class="wrapper-search" v-show="!searchShow">
              <div class="search">
                 <el-input v-model="input" class="input" placeholder="Search Address / Tx / Block / Dbot"></el-input>
                 <!-- <el-button icon="el-icon-search" class="button" v-on:click="this.search">Search</el-button> -->
                 <i class="search-icon" v-on:click="this.search"></i>
             </div>
         </div>
-       
     </div>
+</div>
+
 </template>
 
 <style scoped lang="less">
 .head{
+    // display: none;
     height: 280px;
     background-image: linear-gradient(90deg, #9976EB 0%, #0EC7F7 100%);
     .wrapper{
@@ -38,18 +48,48 @@
         display: flex;
         align-items: center;
         .image{
-            margin-right: 256px;
+            // margin-right: 256px;
             width: 44px;
             height: 41px;
         }
         .nav{
-            flex: 1;
             background: transparent;
             border: 0;
         }
 
         & /deep/ .el-menu-item:not(.is-disabled):hover {
             background: transparent;
+        }
+
+        .right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            .search{
+                width: 306px;
+                height: 36px;
+                position: relative;
+                
+                .search-icon{
+                    width: 20px;
+                    height: 20px;
+                    background-image: url(../assets/home-search-icon.png);
+                    position: absolute;
+                    right: 16px;
+                    bottom: 9px;
+                }
+                & /deep/ .el-input__inner{
+                    border-radius: 20px;
+                }
+            }
+        }
+
+        .space-between {
+            justify-content: space-between;
+        }
+
+        .center {
+            justify-content: center;
         }
     }
     .wrapper-search{
@@ -73,8 +113,6 @@
             }
         }
     }
-
-
 }
 </style>
 
@@ -86,6 +124,14 @@
             activeIndex2: '1',
             input: ''
         };
+    },
+    computed: {
+        pageName () {
+            return this.$route.name;
+        },
+        searchShow () {
+            return this.pageName !== 'index';
+        },
     },
     methods: {
         handleSelect(key, keyPath) {

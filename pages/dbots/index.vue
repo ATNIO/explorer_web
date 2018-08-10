@@ -3,59 +3,72 @@
     <Header/>
       
   <el-main class="main">
-    <br><br>
+    <!-- <br><br>
         <div class="right-nav">
             <el-input v-model="input" class="input" placeholder="Search Address / Tx / Block / Dbot"></el-input>
             <el-button icon="el-icon-search" class="button" v-on:click="this.search">Search</el-button>
-        </div><br><br>
+        </div><br><br> -->
       <div class="table">
         <div class="network-status">
             <div class="description">
-                <p class="status">
-                    ATN Network Dbots
-                </p>
+                <p>ATN Dbots</p>
             </div>
-            <br><br>
-            <el-table
+            <el-card class="table-card">
+                <el-table
                 :data="dbotTable"
-                style="width: 800px; "
-                type="flex"
-                align="middle"
-                justify="center">
+                 :header-cell-style="{ 
+                    background:'#F4F6F9',
+                    padding:'0px',
+                    textAlign:'center'
+                }"
+                :header-row-style="{
+                    height:'36px',
+                }"
+                :cell-style="{
+                    textAlign:'center',
+                    height:'60px',                                                               
+                    color:'#788091'
+                }">
 
-                <el-table-column
-                    prop="name"
-                    label="Name"
-                    min-width="100">
-                    <template slot-scope="scope">
-                        <nuxt-link :to="'/dbots/' + scope.row.dbotAddress">{{ scope.row.name }}</nuxt-link>
-                    </template>
-                </el-table-column>
+                    <el-table-column
+                        prop="name"
+                        label="Name"
+                        min-width="100">
+                        <template slot-scope="scope">
+                            <nuxt-link :to="'/dbots/' + scope.row.dbotAddress">{{ scope.row.name }}</nuxt-link>
+                        </template>
+                    </el-table-column>
 
-                <el-table-column
-                    prop="domain"
-                    label="Domain"
-                    min-width="100">
-                </el-table-column>
+                    <el-table-column
+                        prop="domain"
+                        label="Domain"
+                        min-width="100">
+                    </el-table-column>
 
-                <el-table-column
-                    prop="address"
-                    label="Address"
-                    min-width="100">
-                    <template slot-scope="scope">
-                        <nuxt-link :to="'/dbots/' + scope.row.dbotAddress">{{ scope.row.address }}</nuxt-link>
-                    </template>
-                </el-table-column>
-            </el-table>
-            <br>
-            <el-pagination
-                small
-                @current-change="handleCurrentChange"
-                :current-page.sync="currentPage"
-                :page-size=this.pageSize
-                layout="total, prev, pager, next"
-                :total=this.total>
-            </el-pagination>
+                    <el-table-column
+                        prop="address"
+                        label="Address"
+                        min-width="100">
+                        <template slot-scope="scope">
+                            <nuxt-link :to="'/dbots/' + scope.row.dbotAddress">{{ scope.row.address }}</nuxt-link>
+                        </template>
+                    </el-table-column>
+                     <el-table-column
+                        prop="txzhash"
+                        label="TxzHash"
+                        min-width="100">
+                    </el-table-column>
+                </el-table>
+                <el-pagination
+                    small
+                    @current-change="handleCurrentChange"
+                    :current-page.sync="currentPage"
+                    :page-size=this.pageSize
+                    layout="total, prev, pager, next"
+                    :total=this.total>
+                </el-pagination>
+            </el-card>
+            
             </div>
         </div>
     </el-main>
@@ -76,23 +89,28 @@
     .description {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
         justify-content: center;
-        width: 800px;
+        margin-bottom: 64px;
+        font-family: PingFangSC-Semibold;
+        font-size: 36px;
+        color: #FFFFFF;
     }
 
     .network-status {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        width: 100%;
+        width: 1050px;
+        position: absolute;
+        top: 110px;
     }
+      & /deep/ .el-card__body{
+            padding: 0;
+            width: 1050px;
+            height: 754px;
+            flex: 1;
+        }
 
-    .status {
-        font-family:  "Helvetica Neue",Helvetica;
-        font-size: 30px;
-    }
 
     .table{
         //  background-color: #F7F7F9;
@@ -132,9 +150,10 @@
     }
 
     .el-footer {
-        // background-color: #00C8FF;
         text-align: center;
         line-height: 60px;
+        margin-top: 600px;
+        
         
     }
     
