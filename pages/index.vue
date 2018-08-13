@@ -512,7 +512,7 @@ import { toDate, toDecimals } from '~/common/method.js'
             }
             }),
             this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
-                this.atnPrice = res[0].price_usd;
+                this.atnPrice = parseFloat(res[0].price_usd).toFixed(5);
             })
             // this.atnPrice = 0.233416
         },

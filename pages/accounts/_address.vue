@@ -388,14 +388,14 @@ import { toDate, cutStr } from '~/common/method.js'
                 this.atn = parseInt(res.Balance) / 1e18;
                 // console.log(this.atn)
                 this.accountDetailsTable.push({attribute: "Balance: ", value: cutStr(this.atn.toString()) + " ATN"});
-                this.atnValue = (this.atn * 0.233416).toFixed(2)
+                // this.atnValue = (this.atn * 0.233416).toFixed(2)
                 this.accountDetailsTable.push({attribute: "ATN Value: ", value: "$" + cutStr(this.atnValue.toString()) });
             })
-            // await this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
-            //     let atnPrice = res[0].price_usd;
-            //     this.atnValue = (this.atn * atnPrice).toFixed(2)
-            //     this.accountDetailsTable.push({attribute: "ATN Value: ", value: "$" + cutStr(this.atnValue.toString()) });
-            // })
+            this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
+                let atnPrice = res[0].price_usd;
+                this.atnValue = (this.atn * atnPrice).toFixed(2)
+                this.accountDetailsTable.push({attribute: "ATN Value: ", value: "$" + cutStr(this.atnValue.toString()) });
+            })
             this.$axios.$get("/accounts/address/" + this.address).then(res => {
                 this.txns = res.TransactionHashes.match(new RegExp(",", "g")).length;
                 // console.log(this.txns)
@@ -422,10 +422,10 @@ import { toDate, cutStr } from '~/common/method.js'
                     let tx = {};
                     tx.blockNumber = r.BlockNumber;
                     tx.time = toDate(r.Timestamp);
-                    tx.from = r.From.toString().substr(0,15) + '...';
-                    tx.txId = r.Hash.toString().substr(0,15) + '...'
+                    tx.from = r.From.toString().substr(0,10) + '...';
+                    tx.txId = r.Hash.toString().substr(0,10) + '...'
                     tx.hash = r.Hash.toString();
-                    tx.to = r.To.toString().substr(0,15) + '...';
+                    tx.to = r.To.toString().substr(0,10) + '...';
                     tx.fromAddress = r.From.toString();
                     tx.toAddress = r.To.toString();
                     tx.value = r.Value / 1e18 + ' ATN';
@@ -452,10 +452,10 @@ import { toDate, cutStr } from '~/common/method.js'
                     let tx = {};
                     tx.blockNumber = r.BlockNumber;
                     tx.time = toDate(r.Timestamp);
-                    tx.from = r.From.toString().substr(0,15) + '...';
-                    tx.txId = r.Hash.toString().substr(0,15) + '...'
+                    tx.from = r.From.toString().substr(0,10) + '...';
+                    tx.txId = r.Hash.toString().substr(0,10) + '...'
                     tx.hash = r.Hash.toString();
-                    tx.to = r.To.toString().substr(0,15) + '...';
+                    tx.to = r.To.toString().substr(0,10) + '...';
                     tx.fromAddress = r.From.toString();
                     tx.toAddress = r.To.toString();
                     tx.value = r.Value / 1e18 + ' ATN';

@@ -138,23 +138,10 @@
         width: 100%;
     }
 
-
-    .table{
-        //  background-color: #F7F7F9;
-        //  background-color: rgb(3, 3, 205); 
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-    }
-
     .el-footer {
         text-align: center;
         line-height: 60px;
         margin-top: 600px;
-        
-        
     }
     
     .el-aside {

@@ -383,9 +383,9 @@ import { toDate } from '~/common/method.js'
                     tx.txId = r.Hash.toString().substr(0,20) + '...';
                     tx.hash = r.Hash.toString();
                     tx.time = toDate(r.Timestamp);
-                    tx.from = r.From.toString().substr(0,15) + '...';
+                    tx.from = r.From.toString().substr(0,10) + '...';
                     tx.fromAddress = r.From.toString()
-                    tx.to = r.To.toString().substr(0,15) + '...';
+                    tx.to = r.To.toString().substr(0,10) + '...';
                     tx.toAddress = r.To.toString();
                     tx.value = r.Value / 1e18 + ' ATN';
                     this.transactionTable.push(tx);
@@ -399,9 +399,9 @@ import { toDate } from '~/common/method.js'
                     tx.txId = r.Hash.toString().substr(0,20) + '...';
                     tx.hash = r.Hash.toString();
                     tx.time = toDate(r.Timestamp);
-                    tx.from = r.From.toString().substr(0,15) + '...';
+                    tx.from = r.From.toString().substr(0,10) + '...';
                     tx.fromAddress = r.From.toString()
-                    tx.to = r.To.toString().substr(0,15) + '...';
+                    tx.to = r.To.toString().substr(0,10) + '...';
                     tx.toAddress = r.To.toString();
                     tx.value = r.Value / 1e18 + ' ATN';
                     this.transactionTable.push(tx);

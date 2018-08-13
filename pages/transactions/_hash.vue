@@ -580,9 +580,9 @@ import { toDate, toDecimals } from '~/common/method.js'
                 console.log(res)
                 for(let t of trace) {
                     let data = {};
-                    data.from = t.From.toString().substr(0,15) + '...';
+                    data.from = t.From.toString().substr(0,10) + '...';
                     data.fromAddress = t.From;
-                    data.to = t.To.toString().substr(0,15) + '...';
+                    data.to = t.To.toString().substr(0,10) + '...';
                     data.toAddress = t.To;
                     data.input = t.Input;
                     data.value = t.Value;

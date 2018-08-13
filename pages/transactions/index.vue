@@ -3,83 +3,92 @@
     <Header/>
       
   <el-main class="main">
-    <br><br>
+    <!-- <br><br>
         <div class="right-nav">
             <el-input v-model="input" class="input" placeholder="Search Address / Tx / Block / Dbot"></el-input>
             <el-button icon="el-icon-search" class="button" v-on:click="this.search">Search</el-button>
-        </div><br><br>
+        </div><br><br> -->
       <div class="table">
+
         <div class="network-status">
             <div class="description">
-                <p class="status">
-                    ATN Network Transactions
-                </p>
+                <p>ATN Transactions</p>
             </div>
-            <br><br>
-            <el-table
-                :data="transactionTable"
-                style="width: 70%; "
-                type="flex"
-                align="middle"
-                justify="center">
+            <el-card class="table-card">
+                <el-table
+                    :data="transactionTable"
+                    :header-cell-style="{ 
+                        background:'#F4F6F9',
+                        padding:'0px',
+                        textAlign:'center'
+                    }"
+                    :header-row-style="{
+                        height:'36px',
+                    }"
+                    :cell-style="{
+                        textAlign:'center',
+                        height:'60px',                                                               
+                        color:'#788091'
+                    }">
 
-                <el-table-column
-                    prop="number"
-                    label="Block"
+                    <el-table-column
+                        prop="number"
+                        label="Block"
+                        >
+                        <template slot-scope="scope">
+                            <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column
+                        prop="time"
+                        label="Time"
+                        >
+                    </el-table-column>
+
+                    <el-table-column
+                        prop="txId"
+                        label="hash"
+                        >
+                        <template slot-scope="scope">
+                            <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column
+                        prop="from"
+                        label="From"
+                        >
+                        <template slot-scope="scope">
+                            <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column
+                        prop="to"
+                        label="To"
+                        >
+                        <template slot-scope="scope">
+                            <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
+                        </template>
+                    </el-table-column>
+
+                    <el-table-column
+                        prop="value"
+                        label="Value"
                     >
-                    <template slot-scope="scope">
-                        <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
-                    </template>
-                </el-table-column>
-
-                <el-table-column
-                    prop="time"
-                    label="Time"
-                    >
-                </el-table-column>
-
-                <el-table-column
-                    prop="txId"
-                    label="hash"
-                    >
-                    <template slot-scope="scope">
-                        <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
-                    </template>
-                </el-table-column>
-
-                <el-table-column
-                    prop="from"
-                    label="From"
-                    >
-                    <template slot-scope="scope">
-                        <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
-                    </template>
-                </el-table-column>
-
-                <el-table-column
-                    prop="to"
-                    label="To"
-                    >
-                    <template slot-scope="scope">
-                        <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
-                    </template>
-                </el-table-column>
-
-                <el-table-column
-                    prop="value"
-                    label="Value"
-                >
-                </el-table-column>
-            </el-table>
-            <br>
-            <el-pagination
-                small
-                @current-change="handleCurrentChange"
-                :current-page.sync="currentPage"
-                :page-size=this.pageSize
-                layout="total, prev, pager, next"
-                :total=this.total>
-            </el-pagination>
+                    </el-table-column>
+                </el-table>
+                <br>
+                <el-pagination
+                    small
+                    @current-change="handleCurrentChange"
+                    :current-page.sync="currentPage"
+                    :page-size=this.pageSize
+                    layout="total, prev, pager, next"
+                    :total=this.total>
+                </el-pagination>
+            </el-card>
             </div>
         </div>
     </el-main>
@@ -100,17 +109,27 @@
     .description {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
         justify-content: center;
-        width: 70%;
+        margin-bottom: 64px;
+        font-family: PingFangSC-Semibold;
+        font-size: 36px;
+        color: #FFFFFF;
+    }
+
+    & /deep/ .el-card__body{
+        padding: 0;
+        width: 850px;
+        height: 754px;
+        flex: 1;
     }
 
     .network-status {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        width: 100%;
+        width: 1050px;
+        position: absolute;
+        top: 110px;
     }
 
     .status {
@@ -156,10 +175,9 @@
     }
 
     .el-footer {
-        // background-color: #00C8FF;
         text-align: center;
         line-height: 60px;
-        
+        margin-top: 600px;
     }
     
     .el-aside {
@@ -253,10 +271,10 @@ import { toDate } from '~/common/method.js'
                     let transaction = {};
                     transaction.number = r.BlockNumber;
                     transaction.time = toDate(r.Timestamp);
-                    transaction.txId = r.Hash.toString().substr(0,15) + '...';
+                    transaction.txId = r.Hash.toString().substr(0,10) + '...';
                     transaction.hash = r.Hash.toString();
-                    transaction.from = r.From.toString().substr(0,15) + '...';
-                    transaction.to = r.To.toString().substr(0,15) + '...';
+                    transaction.from = r.From.toString().substr(0,10) + '...';
+                    transaction.to = r.To.toString().substr(0,10) + '...';
                     transaction.fromAddress = r.From.toString()
                     transaction.toAddress = r.To.toString()
                     transaction.value = r.Value / 1e18 + ' ATN'
@@ -274,10 +292,10 @@ import { toDate } from '~/common/method.js'
                     let transaction = {};
                     transaction.number = r.BlockNumber;
                     transaction.time = toDate(r.Timestamp);
-                    transaction.txId = r.Hash.toString().substr(0,15) + '...';
+                    transaction.txId = r.Hash.toString().substr(0,10) + '...';
                     transaction.hash = r.Hash.toString();
-                    transaction.from = r.From.toString().substr(0,15) + '...';
-                    transaction.to = r.To.toString().substr(0,15) + '...';
+                    transaction.from = r.From.toString().substr(0,10) + '...';
+                    transaction.to = r.To.toString().substr(0,10) + '...';
                     transaction.fromAddress = r.From.toString()
                     transaction.toAddress = r.To.toString()
                     transaction.value = r.Value / 1e18 + ' ATN'
