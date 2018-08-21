@@ -20,14 +20,30 @@
                     <el-menu-item index="/dbots" class="font">Dbots</el-menu-item>
                 </el-menu>
                 <div class="search" v-show="searchShow">
-                    <el-input v-model="input" class="input" placeholder="Search Address / Tx / Block / Dbot"></el-input>
+                    <el-input v-model="input" class="input" placeholder="Search" @keyup.enter.native="search"></el-input>
                     <i class="search-icon" v-on:click="this.search"></i>
                 </div>
             </div>
         </div>
+        <div class="mobile-menu">
+            <img src="~/assets/atn.png" class="image" >
+            <el-dropdown trigger="click">
+                <span class="el-dropdown-link">
+                    <i class="el-icon-menu"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                    <nuxt-link to="/"><el-dropdown-item>Home</el-dropdown-item></nuxt-link>
+                    <nuxt-link to="/blocks"><el-dropdown-item>Blocks</el-dropdown-item></nuxt-link>
+                    <nuxt-link to="/transactions"><el-dropdown-item>Transactions</el-dropdown-item></nuxt-link>
+                    <nuxt-link to="/accounts"><el-dropdown-item>Accounts</el-dropdown-item></nuxt-link>
+                    <nuxt-link to="/dbots"><el-dropdown-item>Dbots</el-dropdown-item></nuxt-link>
+                </el-dropdown-menu>
+            </el-dropdown>
+            <!-- <i class="el-icon-menu"></i> -->
+        </div>
         <div class="wrapper-search" v-show="!searchShow">
              <div class="search">
-                <el-input v-model="input" class="input" placeholder="Search Address / Tx / Block / Dbot"></el-input>
+                <el-input v-model="input" class="input" placeholder="Search" @keyup.enter.native="search"></el-input>
                 <!-- <el-button icon="el-icon-search" class="button" v-on:click="this.search">Search</el-button> -->
                 <i class="search-icon" v-on:click="this.search"></i>
             </div>
@@ -42,6 +58,9 @@
     // display: none;
     height: 280px;
     background-image: linear-gradient(90deg, #9976EB 0%, #0EC7F7 100%);
+    .mobile-menu {
+        display: none;
+    }
     .wrapper{
         margin: 0 auto;
         width: 1050px;
@@ -92,6 +111,7 @@
             justify-content: center;
         }
     }
+
     .wrapper-search{
        margin-top: 60px;
         .search{
@@ -114,6 +134,37 @@
         }
     }
 }
+@media screen and (max-width: 991px) {
+        .head {
+            height: 56px;
+            background-image: linear-gradient(90deg, #9976EB 0%, #0EC7F7 100%);
+            .wrapper {
+                display: none;
+            }
+            .image{
+                // margin-right: 256px;
+                width: 44px;
+                height: 41px;
+            }
+            .mobile-menu {
+                width: 100%;
+                height: 56px;
+                padding: 3px 16px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                // background: #00c8ff;
+                .el-icon-menu {
+                    font-size: 32px;
+                    color: #ffffff;
+                }
+            }
+            .wrapper-search {
+                display: none;
+            }
+        }
+        
+    }
 </style>
 
 <script>

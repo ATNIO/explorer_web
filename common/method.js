@@ -19,15 +19,7 @@ export const toDate = function(timestamp){
         if(i + 1 < timeType.length) {
             // console.log(i ,"timeType[i]", timeType[i])
             if(timeType[i] > 0) {
-                if(timeType[i + 1] > 0) {
-                    if(timeType[i] > 1) {
-                        time = timeType[i + 1] > 1 ? timeType[i] + ' ' + timeDisplay1[i] + ' ' + timeType[i + 1] + ' ' + timeDisplay1[i + 1] + ' ago':
-                                                timeType[i] + ' ' + timeDisplay1[i] + ' ' + timeType[i + 1] + ' ' + timeDisplay2[i + 1] + ' ago';
-                    }
-                    else time = timeType[i + 1] > 1 ? timeType[i] + ' ' + timeDisplay2[i] + ' ' + timeType[i + 1] + ' ' + timeDisplay1[i + 1] + ' ago':
-                                                timeType[i] + ' ' + timeDisplay2[i] + ' ' + timeType[i + 1] + ' ' + timeDisplay2[i + 1] + ' ago';
-                }
-                else time = timeType[i] > 1 ? timeType[i] + ' ' + timeDisplay1[i] + ' ago':
+                time = timeType[i] > 1 ? timeType[i] + ' ' + timeDisplay1[i] + ' ago':
                                             timeType[i] + ' ' + timeDisplay2[i] + ' ago';
             }
         }

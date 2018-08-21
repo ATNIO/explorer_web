@@ -3,14 +3,14 @@
     <Header/>
       
   <el-main class="main">
-    <!-- <br><br>
-        <div class="right-nav">
-            <el-input v-model="input" class="input" placeholder="Search Address / Tx / Block / Dbot"></el-input>
-            <el-button icon="el-icon-search" class="button" v-on:click="this.search">Search</el-button>
-        </div><br><br> -->
       <div class="table">
-
         <div class="network-status">
+            <div class="right-nav">
+                <div class="search">
+                    <el-input v-model="input" class="input" placeholder="Search" @keyup.enter.native="search"></el-input>
+                    <i class="search-icon" v-on:click="this.search"></i>
+                </div>
+            </div><br><br>
             <div class="description">
                 <p>ATN Blocks</p>
             </div>
@@ -46,16 +46,32 @@
                     </el-table-column>
                 </el-table>
                 <br>
-                <el-pagination
-                    small
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="currentPage"
-                    :page-size=this.pageSize
-                    layout="total, prev, pager, next"
-                    :total=this.total>
-                </el-pagination>
+                <div class="page">
+                    <el-pagination
+                        small
+                        @current-change="handleCurrentChange"
+                        :current-page.sync="currentPage"
+                        :page-size=this.pageSize
+                        layout="total, prev, pager, next"
+                        :total=this.total>
+                    </el-pagination>
+                </div>
+                <div class="mobile-page">
+                    <el-pagination
+                        small
+                        @current-change="handleCurrentChange"
+                        :current-page.sync="currentPage"
+                        :page-size=this.pageSize
+                        :pager-count=3
+                        layout="prev, pager,next"
+                        :total=this.total
+                        >
+                    </el-pagination>
+                </div>
             </el-card>
-            </div>
+        </div>
+
+            
         </div>
     </el-main>
     <br> <br>
@@ -84,7 +100,7 @@
 
     & /deep/ .el-card__body{
         padding: 0;
-        width: 850px;
+        width: 1050px;
         height: 754px;
         flex: 1;
     }
@@ -132,14 +148,7 @@
     .el-footer {
         text-align: center;
         line-height: 60px;
-        margin-top: 600px;
-    }
-    
-    .el-aside {
-        background-color: #D3DCE6;
-        color: #333;
-        text-align: center;
-        line-height: 200px;
+        margin-top: 680px;
     }
     
     .el-main {
@@ -150,7 +159,47 @@
     .right-nav {
         display: none;
     }
+    
+    .mobile-page {
+        display: none;
+    }
     @media screen and (max-width: 991px) {
+        & /deep/ .el-card__body{
+            padding: 0;
+            width: 450px;
+            height: 800px;
+            flex: 1;
+        }
+        .search {
+            width: 425px;
+            height: 40px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+
+            .search-icon{
+                width: 24px;
+                height: 24px;
+                background-image: url(~/assets/home-search-icon.png);
+                position: absolute;
+                right: 34px;
+                top: 8px;
+            }
+            & /deep/ .el-input__inner{
+                border-radius: 20px;
+                width: 400px;
+                text-align: center;
+            }
+        }
+
+        .el-footer {
+            // background-color: #00C8FF;
+            text-align: center;
+            line-height: 60px;
+            margin-top: 1000px;
+            width: 100%;
+        }
         .status {
             font-family:  "Helvetica Neue",Helvetica;
             font-size: 20px;
@@ -174,6 +223,112 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            width: 100%;
+            color: #000;
+            font-family:  "Helvetica Neue",Helvetica;
+            font-size: 20px;
+            float: left;
+        }
+        .network-status {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 100%;
+        }
+    }
+
+    @media screen and (max-width: 591px) {
+        .mobile-page {
+            display: inline;
+        }
+        .page {
+            display: none;
+        }
+        & /deep/ .el-card__body{
+            padding: 0;
+            width: 200px;
+            height: 800px;
+            flex: 1;
+        }
+        .search {
+            width: 250px;
+            height: 40px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+
+            .search-icon{
+                width: 24px;
+                height: 24px;
+                background-image: url(~/assets/home-search-icon.png);
+                position: absolute;
+                right: 34px;
+                top: 8px;
+            }
+            & /deep/ .el-input__inner{
+                border-radius: 20px;
+                width: 230px;
+                text-align: center;
+            }
+        }
+
+        .el-footer {
+            // background-color: #00C8FF;
+            text-align: center;
+            line-height: 60px;
+            margin-top: 1000px;
+            width: 100%;
+        }
+        .status {
+            font-family:  "Helvetica Neue",Helvetica;
+            font-size: 20px;
+            float: left;
+        }
+        .right-nav {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .input {
+            width: 200px;
+        }
+        .button {
+            background: #00c8ff;
+            color: #fff;
+        }
+        .description {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            color: #000;
+            font-family:  "Helvetica Neue",Helvetica;
+            font-size: 20px;
+            float: left;
+        }
+        .network-status {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
             width: 100%;
         }
     }
@@ -210,7 +365,7 @@ import axios from 'axios'
             blockTable: [],
             total: 0,
             currentPage: 1,
-            pageSize: 15,
+            pageSize: 11,
             input: '',
       };
     },
@@ -218,7 +373,7 @@ import axios from 'axios'
         handleSelect(key, keyPath) {
         },
         showData() {
-            this.$axios.$get("/blocks/list/15").then(res => {
+            this.$axios.$get("/blocks/list/" + this.pageSize).then(res => {
                 for( let r of res ) {
                     let block = {};
                     block.number = r.Number;
@@ -231,7 +386,7 @@ import axios from 'axios'
             })
         },
         handleCurrentChange(val) {
-            this.$axios.$get("/blocks/list/15/" + ((parseInt(val) - 1) * 15)).then(res => {
+            this.$axios.$get("/blocks/list/" + this.pageSize + "/" + ((parseInt(val) - 1) * this.pageSize)).then(res => {
                 this.blockTable = [];
                 for( let r of res ) {
                     let block = {};

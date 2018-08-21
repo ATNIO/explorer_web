@@ -3,20 +3,21 @@
     <Header/>
       
   <el-main class="main">
-    <!-- <br><br>
-        <div class="right-nav">
-            <el-input v-model="input" class="input" placeholder="Search Address / Tx / Block / Dbot"></el-input>
-            <el-button icon="el-icon-search" class="button" v-on:click="this.search">Search</el-button>
-        </div><br><br> -->
       <div class="table">
         <div class="network-status">
+            <div class="right-nav">
+                <div class="search">
+                    <el-input v-model="input" class="input" placeholder="Search" @keyup.enter.native="search"></el-input>
+                    <i class="search-icon" v-on:click="this.search"></i>
+                </div>
+            </div><br><br>
             <div class="description">
                 <p>ATN Dbots</p>
             </div>
             <el-card class="table-card">
                 <el-table
                 :data="dbotTable"
-                 :header-cell-style="{ 
+                :header-cell-style="{ 
                     background:'#F4F6F9',
                     padding:'0px',
                     textAlign:'center'
@@ -27,7 +28,8 @@
                 :cell-style="{
                     textAlign:'center',
                     height:'60px',                                                               
-                    color:'#788091'
+                    color:'#788091',
+                    fontFamily: 'PingFangSC-Regular',
                 }">
 
                     <el-table-column
@@ -42,31 +44,49 @@
                     <el-table-column
                         prop="domain"
                         label="Domain"
-                        min-width="100">
+                        min-width="200">
                     </el-table-column>
 
                     <el-table-column
                         prop="address"
                         label="Address"
-                        min-width="100">
+                        min-width="200">
                         <template slot-scope="scope">
                             <nuxt-link :to="'/dbots/' + scope.row.dbotAddress">{{ scope.row.address }}</nuxt-link>
                         </template>
                     </el-table-column>
                      <el-table-column
-                        prop="txzhash"
-                        label="TxzHash"
-                        min-width="100">
+                        prop="txId"
+                        label="TxHash"
+                        min-width="200">
+                        <template slot-scope="scope">
+                            <nuxt-link :to="'/transactions/' + scope.row.txHash">{{ scope.row.txId }}</nuxt-link>
+                        </template>
                     </el-table-column>
                 </el-table>
-                <el-pagination
-                    small
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="currentPage"
-                    :page-size=this.pageSize
-                    layout="total, prev, pager, next"
-                    :total=this.total>
-                </el-pagination>
+                <br>
+                <div class="page">
+                    <el-pagination
+                        small
+                        @current-change="handleCurrentChange"
+                        :current-page.sync="currentPage"
+                        :page-size=this.pageSize
+                        layout="total, prev, pager, next"
+                        :total=this.total>
+                    </el-pagination>
+                </div>
+                <div class="mobile-page">
+                    <el-pagination
+                        small
+                        @current-change="handleCurrentChange"
+                        :current-page.sync="currentPage"
+                        :page-size=this.pageSize
+                        layout="prev, pager,next"
+                        :total=this.total
+                        :pager-count=3
+                        >
+                    </el-pagination>
+                </div>
             </el-card>
             
             </div>
@@ -141,7 +161,7 @@
     .el-footer {
         text-align: center;
         line-height: 60px;
-        margin-top: 600px;
+        margin-top: 680px;
     }
     
     .el-aside {
@@ -157,11 +177,60 @@
         text-align: center;
     }
 
+    .el-pagination {
+        font-family: PingFangSC-Medium;
+        font-size: 16px;
+        color: #5E6062;
+    }
+
     .right-nav {
         display: none;
     }
-
+    .mobile-page {
+        display: none;
+    }
     @media screen and (max-width: 991px) {
+        & /deep/ .el-card__body{
+            padding: 0;
+            width: 450px;
+            height: 800px;
+            flex: 1;
+        }
+        .search {
+            width: 425px;
+            height: 40px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+
+            .search-icon{
+                width: 24px;
+                height: 24px;
+                background-image: url(~/assets/home-search-icon.png);
+                position: absolute;
+                right: 34px;
+                top: 8px;
+            }
+            & /deep/ .el-input__inner{
+                border-radius: 20px;
+                width: 400px;
+                text-align: center;
+            }
+        }
+
+        .el-footer {
+            // background-color: #00C8FF;
+            text-align: center;
+            line-height: 60px;
+            margin-top: 1000px;
+            width: 100%;
+        }
+        .status {
+            font-family:  "Helvetica Neue",Helvetica;
+            font-size: 20px;
+            float: left;
+        }
         .right-nav {
             display: flex;
             flex-direction: row;
@@ -175,16 +244,117 @@
             background: #00c8ff;
             color: #fff;
         }
+        .description {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            color: #000;
+            font-family:  "Helvetica Neue",Helvetica;
+            font-size: 20px;
+            float: left;
+        }
+        .network-status {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 100%;
+        }
+    }
+
+    @media screen and (max-width: 591px) {
+        .mobile-page {
+            display: inline;
+        }
+        .page {
+            display: none;
+        }
+        & /deep/ .el-card__body{
+            padding: 0;
+            width: 200px;
+            height: 800px;
+            flex: 1;
+        }
+        .search {
+            width: 250px;
+            height: 40px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+
+            .search-icon{
+                width: 24px;
+                height: 24px;
+                background-image: url(~/assets/home-search-icon.png);
+                position: absolute;
+                right: 34px;
+                top: 8px;
+            }
+            & /deep/ .el-input__inner{
+                border-radius: 20px;
+                width: 230px;
+                text-align: center;
+            }
+        }
+
+        .el-footer {
+            // background-color: #00C8FF;
+            text-align: center;
+            line-height: 60px;
+            margin-top: 1000px;
+            width: 100%;
+        }
         .status {
             font-family:  "Helvetica Neue",Helvetica;
             font-size: 20px;
             float: left;
+        }
+        .right-nav {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .input {
+            width: 200px;
+        }
+        .button {
+            background: #00c8ff;
+            color: #fff;
         }
         .description {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            width: 100%;
+            color: #000;
+            font-family:  "Helvetica Neue",Helvetica;
+            font-size: 20px;
+            float: left;
+        }
+        .network-status {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
             width: 100%;
         }
     }
@@ -224,7 +394,7 @@ const Web3 = require('web3')
             dbotTable: [],
             total: 0,
             currentPage: 1,
-            pageSize: 10,
+            pageSize: 11,
             input: '',
       };
     },
@@ -232,13 +402,15 @@ const Web3 = require('web3')
         handleSelect(key, keyPath) {
         },
         showData() {
-            this.$axios.$get("/dbots/allList/10/0").then(res => {
+            this.$axios.$get("/dbots/allList/" + this.pageSize + "/0").then(res => {
                 for( let r of res ) {
                     let dbot = {};
                     dbot.name = Web3.utils.hexToAscii(r.Name).toString();
                     dbot.domain = Web3.utils.hexToAscii(r.Domain).toString();
                     dbot.address = r.Address.toString().substr(0,20) + '...';
                     dbot.dbotAddress = r.Address.toString();
+                    dbot.txId = r.TxHash.toString().substr(0,20) + '...';
+                    dbot.txHash = r.TxHash.toString();
                     this.dbotTable.push(dbot);
                 }
             })
@@ -247,7 +419,7 @@ const Web3 = require('web3')
             })
         },
         handleCurrentChange(val) {
-            this.$axios.$get("/dbots/allList/10/" + ((parseInt(val) - 1) * 15)).then(res => {
+            this.$axios.$get("/dbots/allList/" + this.pageSize + "/" + ((parseInt(val) - 1) * this.pageSize)).then(res => {
                 this.dbotTable = [];
                 for( let r of res ) {
                     let dbot = {};

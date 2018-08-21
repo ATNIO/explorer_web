@@ -4,52 +4,102 @@
       
   <el-main class="main">
     <br><br>
-        <div class="right-nav">
-            <el-input v-model="input" class="input" placeholder="Search Address / Tx / Block / Dbot"></el-input>
-            <el-button icon="el-icon-search" class="button" v-on:click="this.search">Search</el-button>
-        </div><br><br>
-    <div class="table">
+      <div class="table">
         <div class="network-status">
-            <div class="description">
-                <p class="status">
-                    Block Details
-                </p>
-                <br/>
-                <p class="details">
-                    Number: #{{ this.blockNumber }}
-                </p>
-            </div>
-            <br><br><br>
-            <div class="overview">
-                <p class="p-overview">Overview</p>
-                <br>
-                <div class="form">
-                    <el-table
-                    border
-                    :data="blockDetailsTable"
-                    :show-header = false
-                    class="tableOverview"
-                    type="flex"
-                    align="middle"
-                    justify="space-between">
-                    
-                        <el-table-column
-                            prop="attribute"
-                            label=""
-                            >
-                        </el-table-column>
-
-                        <el-table-column
-                            prop="value"
-                            label=""
-                            >
-                        </el-table-column>
-                        
-                    </el-table>
+            <div class="right-nav">
+                <div class="search">
+                    <el-input v-model="input" class="input" placeholder="Search" @keyup.enter.native="search"></el-input>
+                    <i class="search-icon" v-on:click="this.search"></i>
                 </div>
-                <br><br><br>
-                <el-tabs v-model="activeName2"  type="border-card" @tab-click="handleClick" style="width: 100%">
-                    <el-tab-pane label="Transactions" name="first">
+            </div><br><br>
+            <div class="description">
+                <p>Block Details</p>
+            </div>
+            <el-card class="table-card">
+                <div slot="header" class="clearfix">
+                    <img src="~/assets/address.png" class="address_image" />
+                    <span class="address">Hash: {{ this.blockHash }}</span>
+                    <a href="#"><img src="~/assets/copy.png" class="copy_image"
+                        v-clipboard:copy="this.blockHash"
+                        v-clipboard:success="onCopy"
+                        v-clipboard:error="onError"/></a>
+                </div>
+                <div class="table">
+                        <div class="form">
+                            <el-table
+                                :data="leftTable"
+                                :show-header="false"
+                                class="left-table"
+                                type="flex"
+                                align="middle"
+                                justify="space-between"
+                                >
+                            
+                                <el-table-column
+                                    prop="attribute"
+                                    >
+                                </el-table-column>
+
+                                <el-table-column
+                                    prop="value"
+                                    label=""
+                                    align="right"
+                                    >
+                                </el-table-column>
+                                
+                            </el-table>
+                            <div class="common-right-table">
+                                <el-table
+                                    :data="rightTable"
+                                    :show-header = false
+                                    class="right-table"
+                                    type="flex"
+                                    align="middle"
+                                    justify="space-between">
+                                
+                                        <el-table-column
+                                            prop="attribute"
+                                            label=""
+                                            >
+                                        </el-table-column>
+
+                                        <el-table-column
+                                            prop="value"
+                                            label=""
+                                            align="right"
+                                            min-width="400"
+                                            >
+                                        </el-table-column>
+                                </el-table>
+                            </div>
+
+                            <div class="mobile-right-table">
+                                <el-table
+                                :data="rightTable"
+                                :show-header = false
+                                class="right-table"
+                                type="flex"
+                                align="middle"
+                                justify="space-between">
+                            
+                                    <el-table-column
+                                        prop="attribute"
+                                        label=""
+                                        >
+                                    </el-table-column>
+
+                                    <el-table-column
+                                        prop="value"
+                                        label=""
+                                        align="left"
+                                        >
+                                    </el-table-column>
+                                </el-table>
+                            </div>
+                        </div>
+                    <br><br><br>
+                    <el-tabs v-model="activeName2"  type="border-card" @tab-click="handleClick" style="width: 100%;">
+                        <el-tab-pane label="Transactions" name="first">
                         <el-table
                             :data="transactionTable"
                             style="width: 100%; "
@@ -58,19 +108,19 @@
                             justify="center">
 
                             <el-table-column
-                                prop="txId"
-                                label="hash"
+                                prop="hash"
+                                label="Hash"
                                 >
                                 <template slot-scope="scope">
                                     <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
-                                </template>                            
-                                </el-table-column>
+                                </template>
+                            </el-table-column>
+                                
                             <el-table-column
                                 prop="time"
                                 label="Time"
                                 >
                             </el-table-column>
-
                             <el-table-column
                                 prop="from"
                                 label="From"
@@ -79,7 +129,6 @@
                                     <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
                                 </template>
                             </el-table-column>
-
                             <el-table-column
                                 prop="to"
                                 label="To"
@@ -87,19 +136,17 @@
                                 <template slot-scope="scope">
                                     <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
                                 </template>
-                            </el-table-column>
-
+                            </el-table-column>                        
                             <el-table-column
                                 prop="value"
                                 label="Value"
-                                
-                            >
+                                >
                             </el-table-column>
                         </el-table>
                         <br>
                         <el-pagination
-                            @current-change="handleCurrentChange"
                             small
+                            @current-change="handleCurrentChange"
                             :current-page.sync="currentPage"
                             :page-size=this.pageSize
                             layout="total, prev, pager, next"
@@ -108,8 +155,9 @@
                     </el-tab-pane>
                 </el-tabs>
             </div>
+        </el-card>
         </div>
-    </div>
+      </div>
     </el-main>
     <br> <br>
   <el-footer>
@@ -120,30 +168,55 @@
 
 <style scoped lang="less">
 
-    .tableOverview {
-        width: 60%;
-    }
 
     .tag {
         font-size: 14px;
     }
 
-    .overview {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-        width: 70%;
-    }
-
     .form {
         display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: center;
-        width: 100%;
-    }
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        width: 1100px;
+        margin: 27px 60px 0 60px;
 
+        .left-table {
+            // width: 150px;
+            margin-right: 50px;
+
+            // & /deep/ .el-table_1_column_1 {
+            //     font-family: PingFangSC-Medium;
+            //     font-size: 16px;
+            //     color: #0D2138;
+            // }
+
+            // & /deep/ .el-table_1_column_2 {
+            //     font-family: PingFangSC-Regular;
+            //     font-size: 16px;
+            //     color: #788091;
+            //     text-align: right;
+            // }
+        }
+        .right-table {
+            width: 300px;
+            margin-left: 20px;
+
+            // & /deep/ .el-table_2_column_3 {
+            //     font-family: PingFangSC-Medium;
+            //     font-size: 16px;
+            //     color: #0D2138;
+            // }
+
+            // & /deep/ .el-table_2_column_4 {
+            //     font-family: PingFangSC-Regular;
+            //     font-size: 16px;
+            //     color: #788091;
+            //     text-align: right;
+            // }
+        }
+
+    }
     .form .balance {
         display: flex;
         flex-direction: row;
@@ -159,9 +232,66 @@
     .description {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
         justify-content: center;
-        width: 70%;
+        margin-bottom: 64px;
+        font-family: PingFangSC-Semibold;
+        font-size: 36px;
+        color: #FFFFFF;
+    }
+
+    & /deep/ .el-card__body{
+        padding: 0;
+        width: 1200px;
+        height: 754px;
+        flex: 1;
+    }
+
+    & /deep/ .el-card__header {
+        height: 93px;
+        width: 1200px;
+        background: #F4F6F9;
+        display: flex;
+        align-items: center;
+    }
+
+    & /deep/ .el-tabs__content {
+        height: 576px;
+    }
+
+    .clearfix {
+        display: flex;
+        // content: "";
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .address_image {
+        width: 30px;
+        height: 30px;
+        margin-left: 56px;
+    }
+
+    .address {
+        font-family: PingFangSC-Medium;
+        font-size: 24px;
+        color: #788091;
+        width: 1000px;
+        margin-left: 16px;
+        margin-right: 16px;
+    }
+
+    .copy_image {
+        width: 27px;
+        height: 27px;
+    }
+    
+    .network-status {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 1100px;
+        position: absolute;
+        top: 110px;
     }
 
     a {
@@ -169,12 +299,10 @@
         text-decoration: none;
     }
 
-    .network-status {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
+    .el-footer {
+        text-align: center;
+        line-height: 60px;
+        margin-top: 750px;
     }
 
     .status {
@@ -215,23 +343,6 @@
         width: 100%;
     }
 
-
-    .table{
-        //  background-color: #F7F7F9;
-        //  background-color: rgb(3, 3, 205); 
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-    }
-
-    .el-footer {
-        // background-color: #00C8FF;
-        text-align: center;
-        line-height: 60px;
-        
-    }
     
     .el-aside {
         background-color: #D3DCE6;
@@ -245,10 +356,291 @@
         color: #333;
         text-align: center;
     }
+
     .right-nav {
         display: none;
     }
+
+    .common-right-table {
+        display: flex;
+        width: 550px;
+    }
+    
+    .mobile-right-table {
+        display: none;
+    }
+
     @media screen and (max-width: 991px) {
+        & /deep/ .el-card__body{
+            padding: 0;
+            width: 675px;
+            height: 875px;
+            flex: 1;
+        }
+
+        .el-main {
+            display: none;
+        }
+        .address_image {
+            width: 20px;
+            height: 20px;
+            // margin-left: 56px;
+        }
+        .address {
+            font-family: PingFangSC-Medium;
+            font-size: 16px;
+            color: #788091;
+            width: 500px;
+            word-break: break-all;
+        }
+        & /deep/ .el-card__header {
+            height: 93px;
+            width: 100%;
+            background: #F4F6F9;
+            display: flex;
+            align-items: center;
+        }
+
+        .common-right-table {
+            display: flex;
+            width: 500px;
+        }
+        
+        .mobile-right-table {
+            display: none;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            width: 500px;
+            align-items: center;
+            justify-content: center;
+            margin: 0 0 0 0;
+
+            .left-table {
+                width: 500px;
+                margin-right: 0;
+
+                // & /deep/ .el-table_1_column_1 {
+                //     font-family: PingFangSC-Medium;
+                //     font-size: 16px;
+                //     color: #0D2138;
+                // }
+
+                // & /deep/ .el-table_1_column_2 {
+                //     font-family: PingFangSC-Regular;
+                //     font-size: 16px;
+                //     color: #788091;
+                //     text-align: right;
+                // }
+            }
+            .right-table {
+                width: 500px;
+                margin-left: 0px;
+            }
+        }
+        .table{
+            //  background-color: #F7F7F9;
+            //  background-color: rgb(3, 3, 205); 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            // width: 100%;
+        }
+
+        .right-nav {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        
+        .search {
+            width: 644px;
+            height: 40px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+
+            .search-icon{
+                width: 24px;
+                height: 24px;
+                background-image: url(~/assets/home-search-icon.png);
+                position: absolute;
+                right: 34px;
+                top: 8px;
+            }
+            & /deep/ .el-input__inner{
+                border-radius: 20px;
+                width: 640px;
+                text-align: center;
+            }
+        }
+
+        .el-footer {
+            // background-color: #00C8FF;
+            text-align: center;
+            line-height: 60px;
+            margin-top: 1100px;
+            width: 100%;
+        }
+        .status {
+            font-family:  "Helvetica Neue",Helvetica;
+            font-size: 20px;
+            float: left;
+        }
+        
+        .input {
+            width: 200px;
+        }
+        .button {
+            background: #00c8ff;
+            color: #fff;
+        }
+        .description {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            color: #000;
+            font-family:  "Helvetica Neue",Helvetica;
+            font-size: 20px;
+            float: left;
+        }
+        .network-status {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 1200px;
+            margin-top: -50px;
+        }
+        .main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 100%;
+        }
+    }
+
+    @media screen and (max-width: 591px) {
+        & /deep/ .el-card__body{
+            padding: 0;
+            width: 375px;
+            height: 875px;
+            flex: 1;
+        }
+
+        .address_image {
+            width: 20px;
+            height: 20px;
+            margin-left: -10px;
+        }
+        .address {
+            font-family: PingFangSC-Medium;
+            font-size: 16px;
+            color: #788091;
+            width: 260px;
+            word-break: break-all;
+        }
+        & /deep/ .el-card__header {
+            height: 93px;
+            width: 375px;
+            background: #F4F6F9;
+            display: flex;
+            align-items: center;
+        }
+        
+        .common-right-table {
+            display: none;
+        }
+        
+        .mobile-right-table {
+            display: flex;
+            width: 300px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            width: 300px;
+            align-items: center;
+            justify-content: center;
+            margin: 0 0 0 0;
+
+            .left-table {
+                width: 500px;
+                margin-right: 0;
+
+                // & /deep/ .el-table_1_column_1 {
+                //     font-family: PingFangSC-Medium;
+                //     font-size: 16px;
+                //     color: #0D2138;
+                // }
+
+                // & /deep/ .el-table_1_column_2 {
+                //     font-family: PingFangSC-Regular;
+                //     font-size: 16px;
+                //     color: #788091;
+                //     text-align: right;
+                // }
+            }
+            .right-table {
+                width: 500px;
+                margin-left: 0px;
+                text-align: left;
+            }
+        }
+        .table{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 400px;
+        }
+        .search {
+            width: 250px;
+            height: 40px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+
+            .search-icon{
+                width: 24px;
+                height: 24px;
+                background-image: url(~/assets/home-search-icon.png);
+                position: absolute;
+                right: 34px;
+                top: 8px;
+            }
+            & /deep/ .el-input__inner{
+                border-radius: 20px;
+                width: 230px;
+                text-align: center;
+            }
+        }
+
+        .el-footer {
+            // background-color: #00C8FF;
+            text-align: center;
+            line-height: 60px;
+            margin-top: 1100px;
+            width: 100%;
+        }
+        .status {
+            font-family:  "Helvetica Neue",Helvetica;
+            font-size: 20px;
+            float: left;
+        }
         .right-nav {
             display: flex;
             flex-direction: row;
@@ -262,55 +654,35 @@
             background: #00c8ff;
             color: #fff;
         }
-        .details {
-            font-family:  "Helvetica Neue",Helvetica;
-            font-size: 15px;
-            font-weight: 350;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            // justify-content: flex-start;
-            word-break: break-all;
-        }
-        .status {
-            font-family:  "Helvetica Neue",Helvetica;
-            font-size: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
         .description {
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            width: 100%;
-        }
-        p {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            justify-content: center;
-            height: 50px;
-        }
-        span {
-            font-size: 16px;
-        }
-        
-        .tableOverview {
-            width: 100%;
-        }
-
-        .overview {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
             justify-content: center;
             width: 100%;
+            color: #000;
+            font-family:  "Helvetica Neue",Helvetica;
+            font-size: 20px;
+            float: left;
         }
-
+        .network-status {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 1200px;
+            margin-top: -50px;
+        }
+        .main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 100%;
+        }
     }
-    
+
     body > .el-container {
         margin-bottom: 40px;
     }
@@ -330,6 +702,10 @@ import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
 import { toDate } from '~/common/method.js'
+import VueClipboard from 'vue-clipboard2';
+import Vue from 'vue'
+
+Vue.use(VueClipboard);
 
   export default {
 
@@ -347,11 +723,13 @@ import { toDate } from '~/common/method.js'
     },
     data() {
       return {
+            blockHash: '',
             blockNumber: '',
-            blockDetailsTable: [],
+            leftTable: [],
+            rightTable: [],
             total: 0,
             currentPage: 1,
-            pageSize: 10,
+            pageSize: 8,
             atn: '',
             atnValue: '',
             txns: '',
@@ -366,21 +744,21 @@ import { toDate } from '~/common/method.js'
         },
         async showData() {
             this.$axios.$get("/blocks/number/" + this.blockNumber).then(res => {
-                this.blockDetailsTable.push({attribute: "Block:", value: res.Number});
-                this.blockDetailsTable.push({attribute: "Transactions:", value: res.Txns});
-                this.blockDetailsTable.push({attribute: "Miner", value: res.Miner});
-                this.blockDetailsTable.push({attribute: "Block Hash", value: res.Hash});
-                this.blockDetailsTable.push({attribute: "Size", value: res.Size});
+                this.blockHash = res.Hash;
+                this.leftTable.push({attribute: "Block Number", value: res.Number});
+                this.leftTable.push({attribute: "Block Transactions", value: res.Txns});
+                this.rightTable.push({attribute: "Miner", value: res.Miner});
+                this.rightTable.push({attribute: "Size", value: res.Size});
             })
 
             this.$axios.$get("/transactions/count/blocknumber/" + this.blockNumber).then(res => {
                 this.total = res.count;
             })
 
-            this.$axios.$get("/transactions/list/10/0/blocknumber/" + this.blockNumber).then(res => {
+            this.$axios.$get("/transactions/list/8/0/blocknumber/" + this.blockNumber).then(res => {
                 for(let r of res) {
                     let tx = {};
-                    tx.txId = r.Hash.toString().substr(0,20) + '...';
+                    tx.txId = r.Hash.toString().substr(0,10) + '...';
                     tx.hash = r.Hash.toString();
                     tx.time = toDate(r.Timestamp);
                     tx.from = r.From.toString().substr(0,10) + '...';
@@ -393,10 +771,10 @@ import { toDate } from '~/common/method.js'
             })
         },
         handleCurrentChange(val) {
-            this.$axios.$get("/transactions/list/10/" + ((parseInt(val) - 1) * 10) + "/blocknumber/" + this.blockNumber).then(res => {
+            this.$axios.$get("/transactions/list/8/" + ((parseInt(val) - 1) * 10) + "/blocknumber/" + this.blockNumber).then(res => {
                 for(let r of res) {
                     let tx = {};
-                    tx.txId = r.Hash.toString().substr(0,20) + '...';
+                    tx.txId = r.Hash.toString().substr(0,10) + '...';
                     tx.hash = r.Hash.toString();
                     tx.time = toDate(r.Timestamp);
                     tx.from = r.From.toString().substr(0,10) + '...';
@@ -434,7 +812,12 @@ import { toDate } from '~/common/method.js'
                     this.$router.push('/error');
             })
         },
-      
+        onCopy() {
+            alert("复制成功！");
+        },
+        onError() {
+            // alert();
+        },
     },
   }
 </script>

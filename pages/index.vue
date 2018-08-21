@@ -2,6 +2,12 @@
 <div>
     <Header/>      
     <el-main class="main">
+        <div class="right-nav">
+            <div class="search">
+                <el-input v-model="input" class="input" placeholder="Search"></el-input>
+                <i class="search-icon" v-on:click="this.search"></i>
+            </div>
+        </div><br><br>
         <div class="table">
             <div class="network-status">
                 <div class="header" >
@@ -12,7 +18,7 @@
                                 BLOCK
                                 </p>
                                 <p class="last-block1">
-                                #{{latestBlockNumber}}
+                                {{latestBlockNumber}}
                                 </p>
                             </div>
                             <div>
@@ -69,7 +75,7 @@
             </div>
         </div>
 
-        <div class="table">
+        <div class="table2">
             <div class="wrapper-blocks">
                 <div class="left-wrapper">
                     <div class="typeface">Recent Blocks</div>
@@ -77,9 +83,10 @@
                         <el-table
                             :data="blockTable"
                             :header-cell-style="{ 
-                                background:'#F4F6F9',
+                                background:'#51B3FA',
                                 padding:'0px', 
-                                textAlign:'center'                                
+                                textAlign:'center',   
+                                color: '#fff',                        
                             }"
                             :header-row-style="{
                                 height:'36px'
@@ -87,7 +94,8 @@
                             :cell-style="{
                                 textAlign:'center',
                                 height:'60px', 
-                                color:'#788091'
+                                color:'#788091',
+                                fontFamily: 'PingFangSC-Regular',
                             }">
 
                             <el-table-column
@@ -103,6 +111,7 @@
                                 prop="time"
                                 label="Time"
                                 class="home-left-table"
+                                width="110"
                                 >
                             </el-table-column>
                             <el-table-column
@@ -112,7 +121,7 @@
                             </el-table-column>
                             <el-table-column
                                 prop="blockHash"
-                                label="Hash"
+                                label="BlockHash"
                                 class="home-left-table"
                                 width="120px">
                                 <template slot-scope="scope">
@@ -129,9 +138,10 @@
                         <el-table
                             :data="transactionTable"
                             :header-cell-style="{ 
-                                background:'#F4F6F9',
+                                 background:'#51B3FA',
                                 padding:'0px',
-                                textAlign:'center'
+                                textAlign:'center',
+                                color: '#fff',
                             }"
                             :header-row-style="{
                                 height:'36px',
@@ -139,19 +149,21 @@
                             :cell-style="{
                                 textAlign:'center',
                                 height:'60px',                                                               
-                                color:'#788091'
+                                color:'#788091',
+                                fontFamily: 'PingFangSC-Regular',
                             }">
 
                             <el-table-column
                                 prop="txId"
-                                label="Hash">
+                                label="TxHash">
                                 <template slot-scope="scope">
                                     <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
                                 </template>
                             </el-table-column>
                             <el-table-column
                                 prop="time"
-                                label="Time">
+                                label="Time"
+                                width="110">
                             </el-table-column>    
                             <el-table-column
                                 prop="from"
@@ -198,6 +210,13 @@
   flex-direction: column;
 
   .table {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 64px;
+  }
+
+  .table2 {
     display: flex;
     justify-content: center;
     width: 100%;
@@ -280,6 +299,7 @@
         color: #74B8FB ;
         font-size: 16px;
         text-decoration: none;
+        font-family: PingFangSC-Regular;
         // white-space: nowrap; 
         // overflow:hidden;
     }
@@ -289,13 +309,13 @@
     .left-wrapper{
         .blocks{
             width: 396px;
-            height: 524px;
+            height: 518px;
         }
     }
     .right-wrapper{
         .transactions{
             width: 630px;
-            height: 524px;
+            height: 518px;
 
         }
     }  
@@ -308,7 +328,10 @@
 .el-footer {
   text-align: center;
   line-height: 60px;
-  margin-top: -150px;
+  margin-top: -100px;
+}
+.right-nav{
+    display: none;
 }
 
 @media screen and (max-width: 1174px) {
@@ -329,69 +352,155 @@
 }
 
 @media screen and (max-width: 991px) {
-  .recent-blocks{
-    width: 100px;
-  }
-  .header /deep/ .el-card {
-    flex: 1 1 100%;
-  }
-  .right-nav {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-  }
-  .input {
-      width: 200px;
+    .recent-blocks{
+        width: 100px;
+    }
+    // .header /deep/ .el-card {
+    //     flex: 1 1 100%;
+    //     background-color: #fff;
+    // }
+    .right-nav {
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 50px;
+        .search{
+            width: 306px;
+            height: 36px;
+            position: relative;
+            
+            .search-icon{
+                width: 20px;
+                height: 20px;
+                background-image: url(../assets/home-search-icon.png);
+                position: absolute;
+                right: 16px;
+                bottom: 9px;
+            }
+            & /deep/ .el-input__inner{
+                border-radius: 20px;
+            }
+        }
+    }
+    .header {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 550px;
     }
     .button {
       background: #00c8ff;
       color: #fff;
     }
-  .table {
-    align-items: flex-start;
-    justify-content: flex-start;
-    margin-bottom: 64px;
-  }
+    .main {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
 
-  .row {
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-  }
+        .table {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            // width: 100%;
+            margin-bottom: 64px;
+            height: 580px;
+        }
+        .table2 {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-bottom: 128px;
+        }
+    }
+    .row {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
 
-  .el-footer {
-    // background-color: #00C8FF;
-    text-align: center;
-    line-height: 60px;
-  }
+    .el-footer {
+        // background-color: #00C8FF;
+        text-align: center;
+        line-height: 60px;
+    }
 
-  .el-aside {
-    background-color: #d3dce6;
-    color: #333;
-    text-align: center;
-    line-height: 200px;
-  }
+    .el-aside {
+        background-color: #d3dce6;
+        color: #333;
+        text-align: center;
+        line-height: 200px;
+    }
 
-  .el-main {
-    background-color: #fff;
-    color: #333;
-    text-align: center;
-  }
+    .el-main {
+        background-color: #fff;
+        color: #333;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        // height: 100%;
+    }
 
-  body > .el-container {
-    margin-bottom: 40px;
-  }
+    .wrapper-blocks{
+        // width: 1050px;
+        // margin-top: 500px;
+        // height: 1000px;
+        width: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        //公共的写最上面了
+        .typeface{  
+            font-family: PingFangSC-Medium;
+            font-size: 28px;
+            color: #0D2138;
+            text-align: left;
+        }
+        a{
+            color: #74B8FB ;
+            font-size: 16px;
+            text-decoration: none;
+            font-family: PingFangSC-Regular;
+            // white-space: nowrap; 
+            // overflow:hidden;
+        }
+        & /deep/ .el-card__body{
+            padding: 0;
+        }
+        .left-wrapper{
+            .blocks{
+                width: 260px;
+                height: 518px;
+                margin-bottom: 64px;
+            }
+        }
+        .right-wrapper{
+            .transactions{
+                width: 260px;
+                height: 538px;
 
-  .el-container:nth-child(5) .el-aside,
-  .el-container:nth-child(6) .el-aside {
-    line-height: 260px;
-  }
+            }
+        }
+    }
 
-  .el-container:nth-child(7) .el-aside {
-    line-height: 320px;
-  }
+    body > .el-container {
+        margin-bottom: 40px;
+    }
+
+    .el-container:nth-child(5) .el-aside,
+    .el-container:nth-child(6) .el-aside {
+        line-height: 260px;
+    }
+
+    .el-container:nth-child(7) .el-aside {
+        line-height: 320px;
+    }
 
 
 }
@@ -430,18 +539,18 @@ import { toDate, toDecimals } from '~/common/method.js'
             // this.timer = setInterval(this.showBlocks, 5000)
         },
         data() {
-        return {
-            activeIndex: '1',
-            activeIndex2: '1',
-            input: '',
-            latestBlockNumber: '',
-            lastBlockTime: '',
-            blockTime: '5.000',
-            atnPrice: '',
-            blockTable: [],
-            transactionTable: [],
-            // timer: '',
-        };
+            return {
+                activeIndex: '1',
+                activeIndex2: '1',
+                input: '',
+                latestBlockNumber: 'loading...',
+                lastBlockTime: 'loading...',
+                blockTime: '3.000',
+                atnPrice: 'loading...',
+                blockTable: [],
+                transactionTable: [],
+                // timer: '',
+            };
         },
         methods: {
         handleSelect(key, keyPath) {
@@ -470,47 +579,88 @@ import { toDate, toDecimals } from '~/common/method.js'
         },
         async showData() {
 
-            this.$axios.$get("/blocks/maxBlockNumber").then(res => {
-                console.log(res);
-                this.latestBlockNumber = res;
+            // this.$axios.$get("/blocks/maxBlockNumber").then(res => {
+            //     console.log(res);
+            //     this.latestBlockNumber = res;
+            // })
+
+            this.$axios.$get("/web/list/8/0").then(res => {
+                let blocks = res.blocks;
+                console.log("blocks", blocks);
+                var date = new Date(blocks[0].Timestamp*1000);
+                var hours = date.getHours();
+                var minutes = "0" + date.getMinutes();
+                var seconds = "0" + date.getSeconds();
+                var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+                this.latestBlockNumber = blocks[0].Number;
+                this.lastBlockTime = formattedTime;
+
+
+                for( let r of blocks ) {
+                    let block = {};
+                    block.number = r.Number;
+                    block.txns = r.Txns;
+                    block.time = toDate(r.Timestamp);
+                    // block.time = '2 days ago'
+                    block.blockHash = r.Hash.toString().substr(0,9) + '...';
+                    this.blockTable.push(block);
+                }
+
+                let transactions = res.transactions;
+                for( let r of transactions ) {
+                    let transaction = {};
+                    transaction.txId = r.Hash.toString().substr(0,9) + '...';
+                    transaction.hash = r.Hash.toString();
+                    transaction.from = r.From.toString().substr(0,9) + '...';
+                    transaction.fromAddress = r.From.toString();
+                    transaction.to = r.To.toString().substr(0,9) + '...';
+                    transaction.toAddress = r.To.toString();
+                    transaction.value = toDecimals(r.Value / 1e18) + " ATN";
+                    transaction.time = toDate(r.Timestamp);
+                    // transaction.time = "2 years ago"
+                    this.transactionTable.push(transaction);
+                }
             })
 
-            this.$axios.$get("/blocks/list/8").then(res => {
-            // console.log(res);
+            // this.$axios.$get("/blocks/list/8").then(res => {
+            //     // console.log(res);
 
-            var date = new Date(res[0].Timestamp*1000);
-            var hours = date.getHours();
-            var minutes = "0" + date.getMinutes();
-            var seconds = "0" + date.getSeconds();
-            var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+            //     var date = new Date(res[0].Timestamp*1000);
+            //     var hours = date.getHours();
+            //     var minutes = "0" + date.getMinutes();
+            //     var seconds = "0" + date.getSeconds();
+            //     var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
-            // this.latestBlockNumber = res[0].Number;
-            this.lastBlockTime = formattedTime;
+            //     this.latestBlockNumber = res[0].Number;
+            //     this.lastBlockTime = formattedTime;
 
 
-            for( let r of res ) {
-                let block = {};
-                block.number = r.Number;
-                block.txns = r.Txns;
-                block.time = toDate(r.Timestamp);
-                block.blockHash = r.Hash.toString().substr(0,9) + '...';
-                this.blockTable.push(block);
-            }
-            })
-            this.$axios.$get("/transactions/list/5").then(res => {
-            for( let r of res ) {
-                let transaction = {};
-                transaction.txId = r.Hash.toString().substr(0,9) + '...';
-                transaction.hash = r.Hash.toString();
-                transaction.from = r.From.toString().substr(0,9) + '...';
-                transaction.fromAddress = r.From.toString();
-                transaction.to = r.To.toString().substr(0,9) + '...';
-                transaction.toAddress = r.To.toString();
-                transaction.value = toDecimals(r.Value / 1e18) + " ATN";
-                transaction.time = toDate(r.Timestamp);
-                this.transactionTable.push(transaction);
-            }
-            }),
+            //     for( let r of res ) {
+            //         let block = {};
+            //         block.number = r.Number;
+            //         block.txns = r.Txns;
+            //         block.time = toDate(r.Timestamp);
+            //         // block.time = '2 days ago'
+            //         block.blockHash = r.Hash.toString().substr(0,9) + '...';
+            //         this.blockTable.push(block);
+            //     }
+            // })
+            // this.$axios.$get("/transactions/list/8").then(res => {
+            //     for( let r of res ) {
+            //         let transaction = {};
+            //         transaction.txId = r.Hash.toString().substr(0,9) + '...';
+            //         transaction.hash = r.Hash.toString();
+            //         transaction.from = r.From.toString().substr(0,9) + '...';
+            //         transaction.fromAddress = r.From.toString();
+            //         transaction.to = r.To.toString().substr(0,9) + '...';
+            //         transaction.toAddress = r.To.toString();
+            //         transaction.value = toDecimals(r.Value / 1e18) + " ATN";
+            //         transaction.time = toDate(r.Timestamp);
+            //         // transaction.time = "2 years ago"
+            //         this.transactionTable.push(transaction);
+            //     }
+            // }),
             this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
                 this.atnPrice = parseFloat(res[0].price_usd).toFixed(5);
             })

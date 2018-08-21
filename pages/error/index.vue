@@ -1,14 +1,13 @@
 <template>
 <div>
-    <Header/>
+    <Header style="height: 80px;"/>
         <div class="content">
-            <h1>We are looking for your page...but we can't find it</h1>
+            <h1>We are looking for the data...but we can't find it</h1>
         </div>
         <video autoplay muted loop id="myVideo" class="video">
             <source src="~/assets/error.mp4" type="video/mp4">
         </video>
 
-       
     <br><br><br>
     <el-footer>
         <Footer/>

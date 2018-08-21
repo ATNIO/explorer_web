@@ -3,14 +3,14 @@
     <Header/>
       
   <el-main class="main">
-    <!-- <br><br>
-        <div class="right-nav">
-            <el-input v-model="input" class="input" placeholder="Search Address / Tx / Block / Dbot"></el-input>
-            <el-button icon="el-icon-search" class="button" v-on:click="this.search">Search</el-button>
-        </div><br><br> -->
       <div class="table">
-
         <div class="network-status">
+            <div class="right-nav">
+                <div class="search">
+                    <el-input v-model="input" class="input" placeholder="Search" @keyup.enter.native="search"></el-input>
+                    <i class="search-icon" v-on:click="this.search"></i>
+                </div>
+            </div><br><br>
             <div class="description">
                 <p>ATN Transactions</p>
             </div>
@@ -43,12 +43,14 @@
                     <el-table-column
                         prop="time"
                         label="Time"
+                        min-width="100"
                         >
                     </el-table-column>
 
                     <el-table-column
                         prop="txId"
                         label="hash"
+                        min-width="150"
                         >
                         <template slot-scope="scope">
                             <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
@@ -58,6 +60,7 @@
                     <el-table-column
                         prop="from"
                         label="From"
+                        min-width="150"
                         >
                         <template slot-scope="scope">
                             <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
@@ -67,6 +70,7 @@
                     <el-table-column
                         prop="to"
                         label="To"
+                        min-width="150"
                         >
                         <template slot-scope="scope">
                             <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
@@ -80,14 +84,27 @@
                     </el-table-column>
                 </el-table>
                 <br>
-                <el-pagination
-                    small
-                    @current-change="handleCurrentChange"
-                    :current-page.sync="currentPage"
-                    :page-size=this.pageSize
-                    layout="total, prev, pager, next"
-                    :total=this.total>
-                </el-pagination>
+                <div class="page">
+                    <el-pagination
+                        small
+                        @current-change="handleCurrentChange"
+                        :current-page.sync="currentPage"
+                        :page-size=this.pageSize
+                        layout="total, prev, pager, next"
+                        :total=this.total>
+                    </el-pagination>
+                </div>
+                <div class="mobile-page">
+                    <el-pagination
+                        small
+                        @current-change="handleCurrentChange"
+                        :current-page.sync="currentPage"
+                        :page-size=this.pageSize
+                        layout="prev, pager,next"
+                        :total=this.total
+                        >
+                    </el-pagination>
+                </div>
             </el-card>
             </div>
         </div>
@@ -118,7 +135,7 @@
 
     & /deep/ .el-card__body{
         padding: 0;
-        width: 850px;
+        width: 1050px;
         height: 754px;
         flex: 1;
     }
@@ -163,21 +180,10 @@
         width: 100%;
     }
 
-
-    .table{
-        //  background-color: #F7F7F9;
-        //  background-color: rgb(3, 3, 205); 
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-    }
-
     .el-footer {
         text-align: center;
         line-height: 60px;
-        margin-top: 600px;
+        margin-top: 680px;
     }
     
     .el-aside {
@@ -195,7 +201,52 @@
     .right-nav {
         display: none;
     }
+    .mobile-page {
+        display: none;
+    }
+
     @media screen and (max-width: 991px) {
+        & /deep/ .el-card__body{
+            padding: 0;
+            width: 450px;
+            height: 800px;
+            flex: 1;
+        }
+        .search {
+            width: 425px;
+            height: 40px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+
+            .search-icon{
+                width: 24px;
+                height: 24px;
+                background-image: url(~/assets/home-search-icon.png);
+                position: absolute;
+                right: 34px;
+                top: 8px;
+            }
+            & /deep/ .el-input__inner{
+                border-radius: 20px;
+                width: 400px;
+                text-align: center;
+            }
+        }
+
+        .el-footer {
+            // background-color: #00C8FF;
+            text-align: center;
+            line-height: 60px;
+            margin-top: 1000px;
+            width: 100%;
+        }
+        .status {
+            font-family:  "Helvetica Neue",Helvetica;
+            font-size: 20px;
+            float: left;
+        }
         .right-nav {
             display: flex;
             flex-direction: row;
@@ -209,16 +260,117 @@
             background: #00c8ff;
             color: #fff;
         }
+        .description {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            color: #000;
+            font-family:  "Helvetica Neue",Helvetica;
+            font-size: 20px;
+            float: left;
+        }
+        .network-status {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            width: 100%;
+        }
+    }
+
+    @media screen and (max-width: 591px) {
+        .mobile-page {
+            display: inline;
+        }
+        .page {
+            display: none;
+        }
+        & /deep/ .el-card__body{
+            padding: 0;
+            width: 200px;
+            height: 800px;
+            flex: 1;
+        }
+        .search {
+            width: 250px;
+            height: 40px;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+
+            .search-icon{
+                width: 24px;
+                height: 24px;
+                background-image: url(~/assets/home-search-icon.png);
+                position: absolute;
+                right: 34px;
+                top: 8px;
+            }
+            & /deep/ .el-input__inner{
+                border-radius: 20px;
+                width: 230px;
+                text-align: center;
+            }
+        }
+
+        .el-footer {
+            // background-color: #00C8FF;
+            text-align: center;
+            line-height: 60px;
+            margin-top: 1000px;
+            width: 100%;
+        }
         .status {
             font-family:  "Helvetica Neue",Helvetica;
             font-size: 20px;
             float: left;
+        }
+        .right-nav {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+        }
+        .input {
+            width: 200px;
+        }
+        .button {
+            background: #00c8ff;
+            color: #fff;
         }
         .description {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            width: 100%;
+            color: #000;
+            font-family:  "Helvetica Neue",Helvetica;
+            font-size: 20px;
+            float: left;
+        }
+        .network-status {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        .main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
             width: 100%;
         }
     }
@@ -258,7 +410,7 @@ import { toDate } from '~/common/method.js'
             transactionTable: [],
             total: 0,
             currentPage: 1,
-            pageSize: 15,
+            pageSize: 11,
             input: '',
       };
     },
@@ -266,7 +418,7 @@ import { toDate } from '~/common/method.js'
         handleSelect(key, keyPath) {
         },
         showData() {
-            this.$axios.$get("/transactions/list/15").then(res => {
+            this.$axios.$get("/transactions/list/" + this.pageSize).then(res => {
                 for( let r of res ) {
                     let transaction = {};
                     transaction.number = r.BlockNumber;
@@ -279,6 +431,7 @@ import { toDate } from '~/common/method.js'
                     transaction.toAddress = r.To.toString()
                     transaction.value = r.Value / 1e18 + ' ATN'
                     this.transactionTable.push(transaction);
+                    
                 }
             })
             this.$axios.$get("/transactions/count").then(res => {
@@ -286,7 +439,7 @@ import { toDate } from '~/common/method.js'
             })
         },
         handleCurrentChange(val) {
-            this.$axios.$get("/transactions/list/15/" + ((parseInt(val) - 1) * 15)).then(res => {
+            this.$axios.$get("/transactions/list/" + this.pageSize + "/" + ((parseInt(val) - 1) * this.pageSize)).then(res => {
                 this.transactionTable = [];
                 for( let r of res ) {
                     let transaction = {};
