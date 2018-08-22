@@ -29,7 +29,13 @@
                         textAlign:'center',
                         height:'60px',                                                               
                         color:'#788091'
-                    }">
+                    }"
+                    empty-text="Loading..."
+                    v-loading="loading"
+                    element-loading-text="Loading..."
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-customClass="loading"
+                    >
 
                     <el-table-column
                         prop="number"
@@ -103,6 +109,17 @@
         width: 1050px;
         height: 754px;
         flex: 1;
+    }
+
+    .loading {
+        width: 100%;
+        height: 754px;
+    }
+
+    & /deep/ .el-table__empty-block {
+        height: 754px;
+        background-color: #fff;
+        color: #fff;
     }
 
     .network-status {
@@ -367,6 +384,7 @@ import axios from 'axios'
             currentPage: 1,
             pageSize: 11,
             input: '',
+            loading: true,
       };
     },
     methods: {
@@ -380,6 +398,7 @@ import axios from 'axios'
                     block.txns = r.Txns;
                     this.blockTable.push(block);
                 }
+                this.loading = false;
             })
             this.$axios.$get("/blocks/count").then(res => {
                 this.total = res.count;

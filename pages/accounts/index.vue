@@ -30,7 +30,13 @@
                         textAlign:'center',
                         height:'60px',                                                               
                         color:'#788091'
-                    }">
+                    }"
+                    empty-text="Loading..."
+                    v-loading="loading"
+                    element-loading-text="Loading..."
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-customClass="loading"
+                    >
 
                     <el-table-column
                         prop="address"
@@ -139,6 +145,17 @@
         font-family:  "Helvetica Neue",Helvetica;
         font-size: 27px;
         font-weight: 300
+    }
+
+    .loading {
+        width: 100%;
+        height: 754px;
+    }
+
+    & /deep/ .el-table__empty-block {
+        height: 754px;
+        background-color: #fff;
+        color: #fff;
     }
 
     .table{
@@ -397,6 +414,7 @@ import axios from 'axios'
             currentPage: 1,
             pageSize: 11,
             input: '',
+            loading: true,
       };
     },
     methods: {
@@ -421,6 +439,7 @@ import axios from 'axios'
                     account.txCount = (r.TransactionHashes.toString().match(new RegExp(",", "g")) || []).length
                     this.accountTable.push(account);
                 }
+                this.loading = false;
             })
             this.$axios.$get("/accounts/count").then(res => {
                 // console.log(res)

@@ -29,7 +29,13 @@
                         textAlign:'center',
                         height:'60px',                                                               
                         color:'#788091'
-                    }">
+                    }"
+                    empty-text=" "
+                    v-loading="loading"
+                    element-loading-text="Loading..."
+                    element-loading-spinner="el-icon-loading"
+                    element-loading-customClass="loading"
+                    >
 
                     <el-table-column
                         prop="number"
@@ -138,6 +144,17 @@
         width: 1050px;
         height: 754px;
         flex: 1;
+    }
+
+    .loading {
+        width: 100%;
+        height: 754px;
+    }
+
+    & /deep/ .el-table__empty-block {
+        height: 754px;
+        background-color: #fff;
+        color: #fff;
     }
 
     .network-status {
@@ -412,6 +429,7 @@ import { toDate } from '~/common/method.js'
             currentPage: 1,
             pageSize: 11,
             input: '',
+            loading: true,
       };
     },
     methods: {
@@ -433,6 +451,7 @@ import { toDate } from '~/common/method.js'
                     this.transactionTable.push(transaction);
                     
                 }
+                this.loading = false;
             })
             this.$axios.$get("/transactions/count").then(res => {
                 this.total = res.count;

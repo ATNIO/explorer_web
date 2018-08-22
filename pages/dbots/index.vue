@@ -30,7 +30,13 @@
                     height:'60px',                                                               
                     color:'#788091',
                     fontFamily: 'PingFangSC-Regular',
-                }">
+                }"
+                empty-text=" "
+                v-loading="loading"
+                element-loading-text="Loading..."
+                element-loading-spinner="el-icon-loading"
+                element-loading-customClass="loading"
+                >
 
                     <el-table-column
                         prop="name"
@@ -115,7 +121,8 @@
         font-size: 36px;
         color: #FFFFFF;
     }
-
+    
+    
     .network-status {
         display: flex;
         flex-direction: column;
@@ -124,12 +131,24 @@
         position: absolute;
         top: 110px;
     }
-      & /deep/ .el-card__body{
-            padding: 0;
-            width: 1050px;
-            height: 754px;
-            flex: 1;
-        }
+
+    & /deep/ .el-card__body{
+        padding: 0;
+        width: 1050px;
+        height: 754px;
+        flex: 1;
+    }
+
+    .loading {
+        width: 100%;
+        height: 754px;
+    }
+
+    & /deep/ .el-table__empty-block {
+        height: 754px;
+        background-color: #fff;
+        color: #fff;
+    }
 
 
     .table{
@@ -396,6 +415,7 @@ const Web3 = require('web3')
             currentPage: 1,
             pageSize: 11,
             input: '',
+            loading: true,
       };
     },
     methods: {
@@ -413,6 +433,7 @@ const Web3 = require('web3')
                     dbot.txHash = r.TxHash.toString();
                     this.dbotTable.push(dbot);
                 }
+                this.loading = false;
             })
             this.$axios.$get("/dbots/count").then(res => {
                 this.total = res.count;

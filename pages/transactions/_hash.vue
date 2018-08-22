@@ -57,6 +57,7 @@
                                         </span>
                                         <span class="value">
                                             <nuxt-link :to="'/blocks/' + this.blockHeight">{{ this.blockHeight }}</nuxt-link>
+                                            &nbsp;{{ this.confirmations }}
                                         </span>
                                     </p>
                                     <br/>
@@ -835,7 +836,7 @@ Vue.use(VueClipboard);
     data() {
       return {
             hash: '',
-            status: 'Success',
+            status: '',
             blockHeight: '',
             timeStamp: '',
             from: '',
@@ -852,6 +853,7 @@ Vue.use(VueClipboard);
             internalData: [],
             isContract: 'false',
             pending: 'false',
+            confirmations: ''
       };
     },
     methods: {
@@ -863,6 +865,12 @@ Vue.use(VueClipboard);
             await this.$axios.$get("/transactions/hash/" + this.hash).then(res => {
                 console.log(res.BlockNumber)
                 this.blockHeight = res.BlockNumber;
+                this.$axios.$get("/blocks/count").then(res => {
+                    let confirmations = res.count - this.blockHeight;
+                    if(confirmations > 1)
+                        this.confirmations = "(" + confirmations + " block confirmations)";
+                    else this.confirmations = "(" + confirmations + " block confirmation)";
+                })
                 this.timeStamp = toDate(res.Timestamp);
                 this.from = res.From;
                 this.to = res.To;
@@ -878,24 +886,27 @@ Vue.use(VueClipboard);
                 this.nonce = res.Nonce;
                 this.inputData = res.Input;
                 // console.log("inputdata", Web3.utils.hexToUtf8(this.inputData))
+                this.pending = res.Pending;
                 if(res.Pending === 'true') {
-                    this.pending = 'true';
-                    this.status = "Pending";
+                    this.status = "Pending...";
+                    console.log("pending this.pending", this.pending)
+                    let vm = this;
                     let interval = setInterval(async function() {
-                        if(this.pending === 'true') {
-                            console.log("send")
-                            await this.$axios.$get("/transactions/hash/" + this.hash).then(res => {
-                                this.pending = res.Pending;
+                        console.log("send vm.pending", vm.pending)
+                        if(vm.pending == 'true') {
+                            await vm.$axios.$get("/transactions/hash/" + vm.hash).then(res => {
+                                vm.pending = res.Pending;
                             })
                         }
                         else {
+                            console.log("res.Status", res.Status)
                             if(res.Status == "1") {
-                                this.status = "Success";
+                                vm.status = "Success";
                             }
-                            else this.status = "Failed";
+                            else vm.status = "Failed";
                             clearInterval(interval);
                         }
-                    }, 1000)
+                    }, 2000)
                     
                 }
                 else {
@@ -925,18 +936,6 @@ Vue.use(VueClipboard);
             .catch(error => {
                 console.log("trace error", error)
             })
-        },
-        refresh() {
-            console.log("this.pending", this.pending)
-            if(this.pending == 'true') { 
-                let interval = setInterval(async function() {
-                    if(this.pending === 'true') {
-                        console.log("send")
-                        await this.showData()
-                    }
-                    else clearInterval(interval);
-                }, 1000)
-            }
         },
 
         handleCurrentChange(val) {

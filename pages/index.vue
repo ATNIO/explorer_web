@@ -81,23 +81,27 @@
                     <div class="typeface">Recent Blocks</div>
                     <el-card class="box-card blocks">
                         <el-table
-                            :data="blockTable"
-                            :header-cell-style="{ 
-                                background:'#51B3FA',
-                                padding:'0px', 
-                                textAlign:'center',   
-                                color: '#fff',                        
-                            }"
-                            :header-row-style="{
-                                height:'36px'
-                            }"
-                            :cell-style="{
-                                textAlign:'center',
-                                height:'60px', 
-                                color:'#788091',
-                                fontFamily: 'PingFangSC-Regular',
-                            }">
-
+                        v-loading="loading1"
+                        element-loading-text="Loading..."
+                        element-loading-spinner="el-icon-loading"
+                        :data="blockTable"
+                        empty-text="Loading..."
+                        :header-cell-style="{ 
+                            background:'#51B3FA',
+                            padding:'0px', 
+                            textAlign:'center',   
+                            color: '#fff',                        
+                        }"
+                        :header-row-style="{
+                            height:'36px'
+                        }"
+                        :cell-style="{
+                            textAlign:'center',
+                            height:'60px', 
+                            color:'#788091',
+                            fontFamily: 'PingFangSC-Regular',
+                        }"
+                        >
                             <el-table-column
                                 prop="number"
                                 label="Block"
@@ -151,7 +155,13 @@
                                 height:'60px',                                                               
                                 color:'#788091',
                                 fontFamily: 'PingFangSC-Regular',
-                            }">
+                            }"
+                            empty-text="Loading..."
+                            v-loading="loading2"
+                            element-loading-text="Loading..."
+                            element-loading-spinner="el-icon-loading"
+                            element-loading-customClass="loading"
+                            >
 
                             <el-table-column
                                 prop="txId"
@@ -323,6 +333,17 @@
 
 & /deep/ .el-main{
     padding: 0;
+}
+
+.loading {
+    width: 100%;
+    height: 518px;
+}
+
+& /deep/ .el-table__empty-block {
+    height: 518px;
+    background-color: #fff;
+    color: #fff;
 }
 
 .el-footer {
@@ -538,6 +559,9 @@ import { toDate, toDecimals } from '~/common/method.js'
             this.showData();
             // this.timer = setInterval(this.showBlocks, 5000)
         },
+        watch: {
+
+        },
         data() {
             return {
                 activeIndex: '1',
@@ -549,6 +573,8 @@ import { toDate, toDecimals } from '~/common/method.js'
                 atnPrice: 'loading...',
                 blockTable: [],
                 transactionTable: [],
+                loading1: true,
+                loading2: true,
                 // timer: '',
             };
         },
@@ -583,10 +609,11 @@ import { toDate, toDecimals } from '~/common/method.js'
             //     console.log(res);
             //     this.latestBlockNumber = res;
             // })
-
+            this.blockTable = [];
             this.$axios.$get("/web/list/8/0").then(res => {
+                
                 let blocks = res.blocks;
-                console.log("blocks", blocks);
+                // console.log("blocks", blocks);
                 var date = new Date(blocks[0].Timestamp*1000);
                 var hours = date.getHours();
                 var minutes = "0" + date.getMinutes();
@@ -606,6 +633,7 @@ import { toDate, toDecimals } from '~/common/method.js'
                     block.blockHash = r.Hash.toString().substr(0,9) + '...';
                     this.blockTable.push(block);
                 }
+                this.loading1 = false;
 
                 let transactions = res.transactions;
                 for( let r of transactions ) {
@@ -621,6 +649,7 @@ import { toDate, toDecimals } from '~/common/method.js'
                     // transaction.time = "2 years ago"
                     this.transactionTable.push(transaction);
                 }
+                this.loading2 = false;
             })
 
             // this.$axios.$get("/blocks/list/8").then(res => {
