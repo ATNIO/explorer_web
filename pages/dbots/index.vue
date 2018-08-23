@@ -425,8 +425,8 @@ const Web3 = require('web3')
             this.$axios.$get("/dbots/allList/" + this.pageSize + "/0").then(res => {
                 for( let r of res ) {
                     let dbot = {};
-                    dbot.name = Web3.utils.hexToAscii(r.Name).toString();
-                    dbot.domain = Web3.utils.hexToAscii(r.Domain).toString();
+                    dbot.name = Web3.utils.hexToUtf8(r.Name).toString();
+                    dbot.domain = Web3.utils.hexToUtf8(r.Domain).toString();
                     dbot.address = r.Address.toString().substr(0,20) + '...';
                     dbot.dbotAddress = r.Address.toString();
                     dbot.txId = r.TxHash.toString().substr(0,20) + '...';
@@ -444,8 +444,8 @@ const Web3 = require('web3')
                 this.dbotTable = [];
                 for( let r of res ) {
                     let dbot = {};
-                    dbot.name = Web3.utils.hexToAscii(r.Name).toString();
-                    dbot.domain = Web3.utils.hexToAscii(r.Domain).toString();
+                    dbot.name = Web3.utils.hexToUtf8(r.Name).toString();
+                    dbot.domain = Web3.utils.hexToUtf8(r.Domain).toString();
                     dbot.address = r.Address.toString().substr(0,20) + '...';
                     this.dbotTable.push(dbot);
                 }

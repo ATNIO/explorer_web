@@ -428,7 +428,7 @@ import axios from 'axios'
                     // console.log("accounts list res", res)
                     account.address = r.Address;
                     account.balance = parseInt(r.Balance) / 1e18 + " ATN";
-                    let temp = (parseInt(r.Balance) / 1e18 / 1e11).toFixed(11);
+                    let temp = (parseInt(r.Balance) / 1e18 / 1e56).toFixed(11);
                     var e = parseInt(temp.toString().split('e-')[1]);
                     // console.log("e",e)
                     if (e) {
@@ -455,7 +455,7 @@ import axios from 'axios'
                     // console.log("accounts list res", res)
                     account.address = r.Address;
                     account.balance = parseInt(r.Balance) / 1e18 + " ATN";
-                    let temp = (parseInt(r.Balance) / 1e18 / 1e11).toFixed(11);
+                    let temp = (parseInt(r.Balance) / 1e18 / 1e56).toFixed(11);
                     var e = parseInt(temp.toString().split('e-')[1]);
                     // console.log("e",e)
                     if (e) {

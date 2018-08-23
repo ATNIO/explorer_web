@@ -369,7 +369,14 @@
     .right-nav {
         display: none;
     }
-
+    .common-right-table {
+        display: flex;
+        width: 550px;
+    }
+    
+    .mobile-right-table {
+        display: none;
+    }
     @media screen and (max-width: 991px) {
         & /deep/ .el-card__body{
             padding: 0;
@@ -779,8 +786,8 @@ Vue.use(VueClipboard);
         },
         async showData() {
             this.$axios.$get("/dbots/address/" + this.dbotAddress).then(res => {
-                this.leftTable.push({attribute: "Name:", value: Web3.utils.hexToAscii(res.Name)});
-                this.rightTable.push({attribute: "Domain:", value: Web3.utils.hexToAscii(res.Domain)});
+                this.leftTable.push({attribute: "Name:", value: Web3.utils.hexToUtf8(res.Name)});
+                this.rightTable.push({attribute: "Domain:", value: Web3.utils.hexToUtf8(res.Domain)});
                 let keyToEndPoints = res.KeyToEndPoints;
                 for(let k of keyToEndPoints) {
                     let method = {};
