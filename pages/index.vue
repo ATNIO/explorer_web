@@ -569,7 +569,7 @@ import { toDate, toDecimals } from '~/common/method.js'
                 input: '',
                 latestBlockNumber: 'loading...',
                 lastBlockTime: 'loading...',
-                blockTime: '3.000',
+                blockTime: '10.000',
                 atnPrice: 'loading...',
                 blockTable: [],
                 transactionTable: [],
