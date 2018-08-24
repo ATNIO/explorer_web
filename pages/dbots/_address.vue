@@ -792,7 +792,7 @@ Vue.use(VueClipboard);
                 for(let k of keyToEndPoints) {
                     let method = {};
                     method.method = Web3.utils.hexToAscii(k.Endpoint.Method);
-                    method.price = Web3.utils.hexToNumber(k.Endpoint.Price);
+                    method.price = Web3.utils.hexToNumber(k.Endpoint.Price) / 1e18;
                     method.uri = Web3.utils.hexToAscii(k.Endpoint.Uri);
                     this.methodTable.push(method);
                 }
