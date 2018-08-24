@@ -1,98 +1,96 @@
 <template>
-<div>
+<div class="body">
     <Header/>
-      
-  <el-main class="main">
-      <div class="table">
-
-        <div class="network-status">
-            <div class="right-nav">
-                <div class="search">
-                    <el-input v-model="input" class="input" placeholder="Search" @keyup.enter.native="search"></el-input>
-                    <i class="search-icon" v-on:click="this.search"></i>
+    <el-main class="main">
+        <div class="table">
+            <div class="network-status">
+                <div class="right-nav">
+                    <div class="search">
+                        <el-input v-model="input" class="input" placeholder="Search" @keyup.enter.native="search"></el-input>
+                        <i class="search-icon" v-on:click="this.search"></i>
+                    </div>
+                </div><br><br>
+                <div class="description">
+                    <p>ATN Accounts</p>
                 </div>
-            </div><br><br>
-            <div class="description">
-                <p>ATN Accounts</p>
-            </div>
-            <el-card class="table-card">
-                <el-table
-                    :data="accountTable"
-                    :header-cell-style="{ 
-                        background:'#F4F6F9',
-                        padding:'0px',
-                        textAlign:'center'
-                    }"
-                    :header-row-style="{
-                        height:'36px',
-                    }"
-                    :cell-style="{
-                        textAlign:'center',
-                        height:'60px',                                                               
-                        color:'#788091'
-                    }"
-                    empty-text="Loading..."
-                    v-loading="loading"
-                    element-loading-text="Loading..."
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-customClass="loading"
-                    >
-
-                    <el-table-column
-                        prop="address"
-                        label="Address"
-                        min-width="400"
+                <el-card class="table-card">
+                    <el-table
+                        :data="accountTable"
+                        :header-cell-style="{ 
+                            background:'#F4F6F9',
+                            padding:'0px',
+                            textAlign:'center'
+                        }"
+                        :header-row-style="{
+                            height:'36px',
+                        }"
+                        :cell-style="{
+                            textAlign:'center',
+                            height:'60px',                                                               
+                            color:'#788091'
+                        }"
+                        empty-text="Loading..."
+                        v-loading="loading"
+                        element-loading-text="Loading..."
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-customClass="loading"
                         >
-                        <template slot-scope="scope">
-                            <nuxt-link :to="'/accounts/' + scope.row.address">{{ scope.row.address }}</nuxt-link>
-                        </template>
-                    </el-table-column>
 
-                    <el-table-column
-                        prop="balance"
-                        label="Balance"
-                        min-width="200"
-                    >
-                    </el-table-column>
+                        <el-table-column
+                            prop="address"
+                            label="Address"
+                            min-width="400"
+                            >
+                            <template slot-scope="scope">
+                                <nuxt-link :to="'/accounts/' + scope.row.address">{{ scope.row.address }}</nuxt-link>
+                            </template>
+                        </el-table-column>
 
-                    <el-table-column
-                        prop="percentage"
-                        label="Percentage"
-                        min-width="200"
-                    >
-                    </el-table-column>
-
-                    <el-table-column
-                        prop="txCount"
-                        label="TxCount"
-                        min-width="100"
-                    >
-                    </el-table-column>
-                </el-table>
-                <br>
-                <div class="page">
-                    <el-pagination
-                        small
-                        @current-change="handleCurrentChange"
-                        :current-page.sync="currentPage"
-                        :page-size=this.pageSize
-                        layout="total, prev, pager, next"
-                        :total=this.total>
-                    </el-pagination>
-                </div>
-                <div class="mobile-page">
-                    <el-pagination
-                        small
-                        @current-change="handleCurrentChange"
-                        :current-page.sync="currentPage"
-                        :page-size=this.pageSize
-                        layout="prev, pager,next"
-                        :total=this.total
-                        :pager-count=3
+                        <el-table-column
+                            prop="balance"
+                            label="Balance"
+                            min-width="200"
                         >
-                    </el-pagination>
-                </div>
-            </el-card>
+                        </el-table-column>
+
+                        <el-table-column
+                            prop="percentage"
+                            label="Percentage"
+                            min-width="200"
+                        >
+                        </el-table-column>
+
+                        <el-table-column
+                            prop="txCount"
+                            label="TxCount"
+                            min-width="100"
+                        >
+                        </el-table-column>
+                    </el-table>
+                    <br>
+                    <div class="page">
+                        <el-pagination
+                            small
+                            @current-change="handleCurrentChange"
+                            :current-page.sync="currentPage"
+                            :page-size=this.pageSize
+                            layout="total, prev, pager, next"
+                            :total=this.total>
+                        </el-pagination>
+                    </div>
+                    <div class="mobile-page">
+                        <el-pagination
+                            small
+                            @current-change="handleCurrentChange"
+                            :current-page.sync="currentPage"
+                            :page-size=this.pageSize
+                            layout="prev, pager,next"
+                            :total=this.total
+                            :pager-count=3
+                            >
+                        </el-pagination>
+                    </div>
+                </el-card>
             </div>
         </div>
     </el-main>
@@ -104,6 +102,11 @@
 </template>
 
 <style scoped lang="less">
+
+    .body {
+        background-color: #F5F7FA;
+        height: 1275px;
+    }
 
     a {
         color: #74B8FB;
@@ -125,6 +128,10 @@
         width: 1050px;
         height: 754px;
         flex: 1;
+    }
+
+    .el-card {
+        margin-top: -55px;
     }
 
     .network-status {
@@ -198,7 +205,7 @@
     }
     
     .el-main {
-        background-color: #FFF;
+        // background-color: #F5F7FA;
         color: #333;
         text-align: center;
     }

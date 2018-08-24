@@ -63,7 +63,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    width: 1100px;
+    width: 335px;
     
     // margin-right: 15%;
 }

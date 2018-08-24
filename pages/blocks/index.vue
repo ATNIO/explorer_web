@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="body">
     <Header/>
       
   <el-main class="main">
@@ -89,6 +89,11 @@
 
 <style scoped lang="less">
 
+    .body {
+        background-color: #F5F7FA;
+        height: 1275px;
+    }
+
     a {
         color: #74B8FB;
         text-decoration: none;
@@ -109,6 +114,10 @@
         width: 1050px;
         height: 754px;
         flex: 1;
+    }
+
+    .el-card {
+        margin-top: -55px;
     }
 
     .loading {
