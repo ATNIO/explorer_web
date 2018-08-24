@@ -1,3 +1,5 @@
+const BigNumber = require('bignumber.js');
+
 export const toDate = function(timestamp){
     let seconds = parseInt((Date.now() - timestamp * 1000) / 1000)
     let minutes = ~~(seconds / 60);
@@ -55,9 +57,10 @@ export const cutStr = function(str){
 export const toDecimals = function(temp) {
     var e = parseInt(temp.toString().split('e-')[1]);
     // console.log("e",e)
+    let bigTemp = new BigNumber(temp);
     if (e) {
-        temp *= Math.pow(10,e-1);
-        temp = '0.' + (new Array(e)).join('0') + temp.toString().substring(2);
+        bigTemp = bigTemp.times(Math.pow(10, e-1));
+        temp = '0.' + (new Array(e)).join('0') + bigTemp.toString().substring(2);
     }
     return temp;
 }

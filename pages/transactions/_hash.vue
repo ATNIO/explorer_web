@@ -816,6 +816,7 @@ const Web3 = require('web3')
 import VueClipboard from 'vue-clipboard2';
 import Vue from 'vue'
 import { setInterval, clearInterval } from 'timers';
+const bigInt = require("big-integer");
 
 Vue.use(VueClipboard);
 
@@ -865,8 +866,11 @@ Vue.use(VueClipboard);
             await this.$axios.$get("/transactions/hash/" + this.hash).then(res => {
                 console.log(res.BlockNumber)
                 this.blockHeight = res.BlockNumber;
+                let blockHeight = this.blockHeight;
                 this.$axios.$get("/blocks/count").then(res => {
-                    let confirmations = res.count - this.blockHeight;
+                    console.log("====", blockHeight, res.count)
+                    let confirmations = res.count - blockHeight;
+                    console.log("confirmations", confirmations)
                     if(confirmations > 1)
                         this.confirmations = "(" + confirmations + " block confirmations)";
                     else this.confirmations = "(" + confirmations + " block confirmation)";
@@ -882,7 +886,7 @@ Vue.use(VueClipboard);
                 this.gasLimit = res.Gas;
                 this.gasUsedByTxn = res.GasUsed;
                 this.gasPrice = toDecimals(res.GasPrice / 1e18) + " ATN";
-                this.actualTxCost = toDecimals((parseFloat(res.GasUsed) * parseFloat(res.GasPrice) / 1e18)) + " ATN";
+                this.actualTxCost = toDecimals((parseFloat(bigInt(res.GasUsed)) * parseFloat(bigInt(res.GasPrice)) / 1e18)) + " ATN";
                 this.nonce = res.Nonce;
                 this.inputData = res.Input;
                 // console.log("inputdata", Web3.utils.hexToUtf8(this.inputData))
@@ -906,7 +910,7 @@ Vue.use(VueClipboard);
                             else vm.status = "Failed";
                             clearInterval(interval);
                         }
-                    }, 2000)
+                    }, 5000)
                     
                 }
                 else {
