@@ -20,3 +20,7 @@ $ npm run generate
 ```
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
+
+<div align="center">
+  <img src="https://forthebadge.com/images/badges/built-with-love.svg" alt="built with love" />
+</div>
