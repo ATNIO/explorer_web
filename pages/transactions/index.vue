@@ -49,14 +49,12 @@
                     <el-table-column
                         prop="time"
                         label="Time"
-                        min-width="100"
                         >
                     </el-table-column>
 
                     <el-table-column
                         prop="txId"
                         label="hash"
-                        min-width="150"
                         >
                         <template slot-scope="scope">
                             <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
@@ -66,7 +64,6 @@
                     <el-table-column
                         prop="from"
                         label="From"
-                        min-width="150"
                         >
                         <template slot-scope="scope">
                             <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
@@ -76,7 +73,6 @@
                     <el-table-column
                         prop="to"
                         label="To"
-                        min-width="150"
                         >
                         <template slot-scope="scope">
                             <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
@@ -420,7 +416,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate } from '~/common/method.js'
+import { toDate, toDecimals } from '~/common/method.js'
 
   export default {
 
@@ -456,9 +452,8 @@ import { toDate } from '~/common/method.js'
                     transaction.to = r.To.toString().substr(0,10) + '...';
                     transaction.fromAddress = r.From.toString()
                     transaction.toAddress = r.To.toString()
-                    transaction.value = r.Value / 1e18 + ' ATN'
+                    transaction.value = toDecimals((r.Value / 1e18)) + ' ATN'
                     this.transactionTable.push(transaction);
-                    
                 }
                 this.loading = false;
             })
@@ -479,7 +474,12 @@ import { toDate } from '~/common/method.js'
                     transaction.to = r.To.toString().substr(0,10) + '...';
                     transaction.fromAddress = r.From.toString()
                     transaction.toAddress = r.To.toString()
-                    transaction.value = r.Value / 1e18 + ' ATN'
+                    let tempValue = Math.floor(r.Value / 1e18) + ' ATN';
+                    if(tempValue.includes('e')) {
+                        tempValue = tempValue.substr(0, 5) + tempValue.substr(tempValue.length - 10, tempValue.length);
+                        // console.log("tempValue", tempValue)
+                    }
+                    transaction.value = tempValue;
                     this.transactionTable.push(transaction);
                 }
             })

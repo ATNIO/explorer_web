@@ -156,7 +156,6 @@
                                 color:'#788091',
                                 fontFamily: 'PingFangSC-Regular',
                             }"
-                            empty-text="Loading..."
                             v-loading="loading2"
                             element-loading-text="Loading..."
                             element-loading-spinner="el-icon-loading"
@@ -610,33 +609,36 @@ import { toDate, toDecimals } from '~/common/method.js'
             //     this.latestBlockNumber = res;
             // })
             this.blockTable = [];
-            this.$axios.$get("/web/list/8/0").then(res => {
-                
-                let blocks = res.blocks;
-                // console.log("blocks", blocks);
-                var date = new Date(blocks[0].Timestamp*1000);
-                var hours = date.getHours();
-                var minutes = "0" + date.getMinutes();
-                var seconds = "0" + date.getSeconds();
-                var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+            this.$axios.$get("/blocks/count").then(res => {
+                this.total = res.count;
+                let vm = this;
+                this.$axios.$get("/blocks/list/" + this.total + "/8").then(res => {
+                    // console.log(res);
+                    // console.log("this", this)
+                    var date = new Date(res[0].Timestamp*1000);
+                    var hours = date.getHours();
+                    var minutes = "0" + date.getMinutes();
+                    var seconds = "0" + date.getSeconds();
+                    var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
-                this.latestBlockNumber = blocks[0].Number;
-                this.lastBlockTime = formattedTime;
-
-
-                for( let r of blocks ) {
-                    let block = {};
-                    block.number = r.Number;
-                    block.txns = r.Txns;
-                    block.time = toDate(r.Timestamp);
-                    // block.time = '2 days ago'
-                    block.blockHash = r.Hash.toString().substr(0,9) + '...';
-                    this.blockTable.push(block);
-                }
-                this.loading1 = false;
-
-                let transactions = res.transactions;
-                for( let r of transactions ) {
+                    this.latestBlockNumber = res[0].Number;
+                    this.lastBlockTime = formattedTime;
+                    for( let r of res ) {
+                        let block = {};
+                        block.number = r.Number;
+                        block.txns = r.Txns;
+                        block.time = toDate(r.Timestamp);
+                        // block.time = '2 days ago'
+                        block.blockHash = r.Hash.toString().substr(0,9) + '...';
+                        // console.log("block", block);
+                        this.blockTable.push(block);
+                    }
+                    this.loading1 = false;
+                })
+            })
+            
+            this.$axios.$get("/transactions/list/8").then(res => {
+                for( let r of res ) {
                     let transaction = {};
                     transaction.txId = r.Hash.toString().substr(0,9) + '...';
                     transaction.hash = r.Hash.toString();
@@ -650,46 +652,7 @@ import { toDate, toDecimals } from '~/common/method.js'
                     this.transactionTable.push(transaction);
                 }
                 this.loading2 = false;
-            })
-
-            // this.$axios.$get("/blocks/list/8").then(res => {
-            //     // console.log(res);
-
-            //     var date = new Date(res[0].Timestamp*1000);
-            //     var hours = date.getHours();
-            //     var minutes = "0" + date.getMinutes();
-            //     var seconds = "0" + date.getSeconds();
-            //     var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-
-            //     this.latestBlockNumber = res[0].Number;
-            //     this.lastBlockTime = formattedTime;
-
-
-            //     for( let r of res ) {
-            //         let block = {};
-            //         block.number = r.Number;
-            //         block.txns = r.Txns;
-            //         block.time = toDate(r.Timestamp);
-            //         // block.time = '2 days ago'
-            //         block.blockHash = r.Hash.toString().substr(0,9) + '...';
-            //         this.blockTable.push(block);
-            //     }
-            // })
-            // this.$axios.$get("/transactions/list/8").then(res => {
-            //     for( let r of res ) {
-            //         let transaction = {};
-            //         transaction.txId = r.Hash.toString().substr(0,9) + '...';
-            //         transaction.hash = r.Hash.toString();
-            //         transaction.from = r.From.toString().substr(0,9) + '...';
-            //         transaction.fromAddress = r.From.toString();
-            //         transaction.to = r.To.toString().substr(0,9) + '...';
-            //         transaction.toAddress = r.To.toString();
-            //         transaction.value = toDecimals(r.Value / 1e18) + " ATN";
-            //         transaction.time = toDate(r.Timestamp);
-            //         // transaction.time = "2 years ago"
-            //         this.transactionTable.push(transaction);
-            //     }
-            // }),
+            }),
             this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
                 this.atnPrice = parseFloat(res[0].price_usd).toFixed(5);
             })

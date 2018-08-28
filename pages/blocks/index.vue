@@ -400,21 +400,23 @@ import axios from 'axios'
         handleSelect(key, keyPath) {
         },
         showData() {
-            this.$axios.$get("/blocks/list/" + this.pageSize).then(res => {
-                for( let r of res ) {
-                    let block = {};
-                    block.number = r.Number;
-                    block.txns = r.Txns;
-                    this.blockTable.push(block);
-                }
-                this.loading = false;
-            })
+           
             this.$axios.$get("/blocks/count").then(res => {
                 this.total = res.count;
+                this.$axios.$get("/blocks/list/" + this.total + "/" + this.pageSize).then(res => {
+                    for( let r of res ) {
+                        let block = {};
+                        block.number = r.Number;
+                        block.txns = r.Txns;
+                        this.blockTable.push(block);
+                    }
+                    this.loading = false;
+                })
             })
         },
         handleCurrentChange(val) {
-            this.$axios.$get("/blocks/list/" + this.pageSize + "/" + ((parseInt(val) - 1) * this.pageSize)).then(res => {
+            console.log("val", val)
+            this.$axios.$get("/blocks/list/" + parseInt(this.total - ((parseInt(val) - 1) * this.pageSize)) + "/" + this.pageSize).then(res => {
                 this.blockTable = [];
                 for( let r of res ) {
                     let block = {};

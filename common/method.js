@@ -56,7 +56,9 @@ export const cutStr = function(str){
 
 export const toDecimals = function(temp) {
     var e = parseInt(temp.toString().split('e-')[1]);
+    // if(!e) e = parseInt(temp.toString().split('e+')[1]);
     // console.log("e",e)
+    BigNumber.config({ ERRORS: false });
     let bigTemp = new BigNumber(temp);
     if (e) {
         bigTemp = bigTemp.times(Math.pow(10, e-1));
