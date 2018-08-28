@@ -167,7 +167,7 @@
                                     <el-table-column
                                         prop="value"
                                         label="Value"
-                                        
+                                        min-width="100"
                                     >
                                     </el-table-column>
                                 </el-table>
