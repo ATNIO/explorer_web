@@ -256,6 +256,10 @@
         align-items: center;
     }
 
+    .el-card {
+        margin-top: -55px;
+    }
+
     .clearfix {
         display: flex;
         // content: "";

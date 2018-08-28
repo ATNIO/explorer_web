@@ -246,6 +246,11 @@
         flex: 1;
     }
 
+    .el-card {
+        margin-top: -55px;
+    }
+        
+
     & /deep/ .el-card__header {
         height: 93px;
         width: 1200px;
@@ -257,6 +262,7 @@
     & /deep/ .el-tabs__content {
         height: 576px;
     }
+
 
     .clearfix {
         display: flex;
@@ -556,7 +562,7 @@
             display: flex;
             align-items: center;
         }
-        
+
         .common-right-table {
             display: none;
         }

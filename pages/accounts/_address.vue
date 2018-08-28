@@ -296,6 +296,10 @@
         align-items: center;
     }
 
+    .el-card {
+        margin-top: -55px;
+    }
+
     & /deep/ .el-tabs__content {
         height: 576px;
     }
