@@ -646,7 +646,7 @@ import { toDate, toDecimals } from '~/common/method.js'
                     transaction.fromAddress = r.From.toString();
                     transaction.to = r.To.toString().substr(0,9) + '...';
                     transaction.toAddress = r.To.toString();
-                    transaction.value = toDecimals(r.Value / 1e18) + " ATN";
+                    transaction.value = Math.floor(toDecimals(r.Value / 1e18)) + " ATN";
                     transaction.time = toDate(r.Timestamp);
                     // transaction.time = "2 years ago"
                     this.transactionTable.push(transaction);
