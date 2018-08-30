@@ -456,6 +456,9 @@ const Web3 = require('web3')
                     dbot.name = Web3.utils.hexToUtf8(r.Name).toString();
                     dbot.domain = Web3.utils.hexToUtf8(r.Domain).toString();
                     dbot.address = r.Address.toString().substr(0,20) + '...';
+                    dbot.dbotAddress = r.Address.toString();
+                    dbot.txId = r.TxHash.toString().substr(0,20) + '...';
+                    dbot.txHash = r.TxHash.toString();
                     this.dbotTable.push(dbot);
                 }
             })
