@@ -452,7 +452,7 @@ import { toDate, toDecimals } from '~/common/method.js'
                     transaction.to = r.To.toString().substr(0,10) + '...';
                     transaction.fromAddress = r.From.toString()
                     transaction.toAddress = r.To.toString()
-                    transaction.value = toDecimals((r.Value / 1e18)) + ' ATN'
+                    transaction.value = Math.floor(toDecimals(r.Value / 1e18) * 100) / 100 + ' ATN'
                     this.transactionTable.push(transaction);
                 }
                 this.loading = false;
@@ -474,7 +474,7 @@ import { toDate, toDecimals } from '~/common/method.js'
                     transaction.to = r.To.toString().substr(0,10) + '...';
                     transaction.fromAddress = r.From.toString()
                     transaction.toAddress = r.To.toString()
-                    let tempValue = Math.floor(r.Value / 1e18) + ' ATN';
+                    let tempValue = Math.floor(r.Value / 1e18 * 100) / 100 + ' ATN';
                     if(tempValue.includes('e')) {
                         tempValue = tempValue.substr(0, 5) + tempValue.substr(tempValue.length - 10, tempValue.length);
                         // console.log("tempValue", tempValue)

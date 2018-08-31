@@ -886,7 +886,7 @@ Vue.use(VueClipboard);
                     // console.log("account details", res)
                     this.isContract = res.IsContract
                 })
-                this.value = res.Value / 1e18 + " ATN";
+                this.value = toDecimals(res.Value / 1e18) + " ATN";
                 this.gasLimit = res.Gas;
                 this.gasUsedByTxn = res.GasUsed;
                 this.gasPrice = toDecimals(res.GasPrice / 1e18) + " ATN";

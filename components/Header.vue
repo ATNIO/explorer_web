@@ -5,15 +5,16 @@
             <img src="~/assets/atn.png" class="image" >
             <div class="right" v-bind:class="searchShow ? 'space-between' : 'center'">
                 <el-menu
-                    :default-active="activeIndex2"
-                    class="el-menu-demo nav"
+                    :default-active="$route.path"
+                    class="el-menu-demo"
                     mode="horizontal"
                     @select="handleSelect"
                     text-color="#fff"
-                    active-text-color="#ffd04b"
-                    router
+                    active-text-color="#fff"
+                    background-color="transparent"
+                    router=true
                 >
-                    <el-menu-item index="/" class="font" >Home</el-menu-item>
+                    <el-menu-item index="/" class="font">Home</el-menu-item>
                     <el-menu-item index="/blocks" class="font">Blocks</el-menu-item>
                     <el-menu-item index="/transactions" class="font">Transactions</el-menu-item>
                     <el-menu-item index="/accounts" class="font">Accounts</el-menu-item>
@@ -77,13 +78,18 @@
         }
 
         & /deep/ .el-menu-item:not(.is-disabled):hover {
-            background: transparent;
+            background: #ffffff;
+        }
+
+        & /deep/ .el-menu--horizontal {
+            border-bottom: none;
         }
 
         .right {
             flex: 1;
             display: flex;
             align-items: center;
+            margin-left: 60px;
             .search{
                 width: 306px;
                 height: 36px;
@@ -171,8 +177,6 @@
   export default {
     data() {
         return {
-            activeIndex: '1',
-            activeIndex2: '1',
             input: ''
         };
     },
@@ -183,9 +187,16 @@
         searchShow () {
             return this.pageName !== 'index';
         },
+        activeIndex () {
+            //导航高亮显示的另一种方式
+            if(this.$route.matched[0].path.split('/')[1] == undefined)return '/'
+            return '/'+ this.$route.matched[0].path.split('/')[1]
+        }
     },
     methods: {
         handleSelect(key, keyPath) {
+            console.log(key, keyPath);
+            // this.activeIndex2 = key
         },
         search() {
             console.log(this.input)
