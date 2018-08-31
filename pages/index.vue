@@ -11,7 +11,7 @@
         <div class="table">
             <div class="network-status">
                 <div class="header" >
-                    <el-card shadow="hover">
+                    <el-card>
                         <div class="grid-content" >
                             <div>  
                                 <p class="last-block">
@@ -26,7 +26,7 @@
                             </div>
                         </div>
                     </el-card>
-                    <el-card shadow="hover">
+                    <el-card>
                     <div class="grid-content" >
                             <div>  
                                 <p class="last-block">
@@ -41,7 +41,7 @@
                             </div>
                         </div>
                     </el-card>
-                    <el-card shadow="hover">
+                    <el-card>
                         <div class="grid-content" >
                             <div>  
                                 <p class="last-block">
@@ -56,7 +56,8 @@
                             </div>
                         </div>
                     </el-card>
-                    <el-card shadow="hover">
+                    <!-- shadow="hover"-->
+                    <el-card>
                         <div class="grid-content" >
                             <div>  
                                 <p class="last-block">
@@ -259,6 +260,8 @@
             height: 106px;
             position: relative;
             box-shadow: 0 2px 6px 5px rgba(47,83,151,0.04);
+            background: #FFFFFF;
+            border-radius: 5px;
         }
 
         .last-block {

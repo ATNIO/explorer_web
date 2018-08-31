@@ -6,7 +6,7 @@
             <div class="right" v-bind:class="searchShow ? 'space-between' : 'center'">
                 <el-menu
                     :default-active="$route.path"
-                    class="el-menu-demo nav"
+                    class="el-menu-demo menu"
                     mode="horizontal"
                     @select="handleSelect"
                     text-color="#fff"
@@ -14,11 +14,11 @@
                     background-color="transparent"
                     router=true
                 >
-                    <el-menu-item index="/" class="font">Home</el-menu-item>
-                    <el-menu-item index="/blocks" class="font">Blocks</el-menu-item>
-                    <el-menu-item index="/transactions" class="font">Transactions</el-menu-item>
-                    <el-menu-item index="/accounts" class="font">Accounts</el-menu-item>
-                    <el-menu-item index="/dbots" class="font">Dbots</el-menu-item>
+                    <el-menu-item index="/" class="home">Home</el-menu-item>
+                    <el-menu-item index="/blocks" class="blocks">Blocks</el-menu-item>
+                    <el-menu-item index="/transactions" class="transactions">Transactions</el-menu-item>
+                    <el-menu-item index="/accounts" class="accounts">Accounts</el-menu-item>
+                    <el-menu-item index="/dbots" class="dbots">Dbots</el-menu-item>
                 </el-menu>
                 <div class="search" v-show="searchShow">
                     <el-input v-model="input" class="input" placeholder="Search" @keyup.enter.native="search"></el-input>
@@ -121,6 +121,46 @@
             justify-content: center;
         }
     }
+
+    .menu {
+        .home{
+            width: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .blocks {
+            margin-left: 20px;
+            width: 50px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .transactions {
+            margin-left: 20px;
+            width: 90px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .accounts {
+            margin-left: 20px;
+            width: 70px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .dbots {
+            margin-left: 20px;
+            width: 50px;
+            display: flex;
+            justify-content: center;
+        }
+
+
+    }
+
+    
 
     .wrapper-search{
        margin-top: 60px;
