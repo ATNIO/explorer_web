@@ -6,7 +6,7 @@
             <div class="right" v-bind:class="searchShow ? 'space-between' : 'center'">
                 <el-menu
                     :default-active="$route.path"
-                    class="el-menu-demo"
+                    class="el-menu-demo nav"
                     mode="horizontal"
                     @select="handleSelect"
                     text-color="#fff"
@@ -77,12 +77,16 @@
             border: 0;
         }
 
-        & /deep/ .el-menu-item:not(.is-disabled):hover {
-            background: #ffffff;
-        }
+        // & /deep/ .el-menu-item:not(.is-disabled):hover {
+        //     background: transparent;
+        // }
 
         & /deep/ .el-menu--horizontal {
             border-bottom: none;
+        }
+
+        & /deep/ .el-menu-item:hover {
+            background-color: transparent !important;
         }
 
         .right {
