@@ -71,6 +71,7 @@
             // margin-right: 256px;
             width: 44px;
             height: 41px;
+            margin-top: 15px;
         }
         .nav{
             background: transparent;
@@ -90,6 +91,7 @@
         }
 
         .right {
+            margin-top: 15px;
             flex: 1;
             display: flex;
             align-items: center;
@@ -152,7 +154,7 @@
 
         .dbots {
             margin-left: 20px;
-            width: 50px;
+            width: 40px;
             display: flex;
             justify-content: center;
         }
