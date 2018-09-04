@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.1",
+    "abi-decoder": "^1.2.0",
     "axios": "^0.18.0",
     "babel-eslint": "^8.2.1",
     "big-integer": "^1.6.34",

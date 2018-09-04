@@ -55,10 +55,21 @@
                                         <span class="name">
                                             Block Height:
                                         </span>
-                                        <span class="value">
+                                        <template v-if="this.pending == 'true'">
+                                            <span class="blockheight-pending-true" >
+                                                (Pending...)
+                                            </span><br/>
+                                        </template>
+                                        <template v-if="this.pending == 'false'">
+                                            <span class="value" >
+                                                <nuxt-link :to="'/blocks/' + this.blockHeight">{{ this.blockHeight }}</nuxt-link>
+                                                &nbsp;{{ this.confirmations }}
+                                            </span><br/>
+                                        </template>
+                                        <!-- <span class="value">
                                             <nuxt-link :to="'/blocks/' + this.blockHeight">{{ this.blockHeight }}</nuxt-link>
                                             &nbsp;{{ this.confirmations }}
-                                        </span>
+                                        </span> -->
                                     </p>
                                     <br/>
                                     <p>
@@ -159,23 +170,23 @@
                                             <div class="value">
                                                 <el-input
                                                     type="textarea"
-                                                    :rows="6"
+                                                    :rows="4"
                                                     placeholder="0x"
                                                     v-model="this.inputData"
                                                     :disabled="true"
                                                 >
                                                 </el-input>
                                             </div>
-                                                <!-- <el-dropdown>
+                                                <el-dropdown  @command="handleCommand">
                                                 <el-button plain type="info" class="viewButton">
                                                     View Input As<i class="el-icon-arrow-down el-icon--right"></i>
                                                 </el-button>
                                                     <el-dropdown-menu slot="dropdown">
-                                                        <el-dropdown-item>Default View</el-dropdown-item>
-                                                        <el-dropdown-item>UTF-8</el-dropdown-item>
-                                                        <el-dropdown-item>Original</el-dropdown-item>
+                                                        <el-dropdown-item command="default">Default View</el-dropdown-item>
+                                                        <!-- <el-dropdown-item>UTF-8</el-dropdown-item> -->
+                                                        <el-dropdown-item command="original">Original</el-dropdown-item>
                                                     </el-dropdown-menu>
-                                                </el-dropdown> -->
+                                                </el-dropdown>
                                            
                                         </div>
                                     </div>
@@ -257,6 +268,10 @@
         }
     }
 
+    & /deep/ .el-textarea.is-disabled .el-textarea__inner {
+        color:rgb(92, 92, 97);
+        font-family:Arial, Helvetica, sans-serif
+    }
 
     .inputData {
         display: flex;
@@ -334,6 +349,17 @@
         justify-content: flex-start;
         width: 1000px;
         font-size: 15px;
+    }
+
+    .blockheight-pending-true {
+        color:#000;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+        width: 1000px;
+        font-size: 15px;
+        font-weight:thin;
+        font-style:italic;
     }
 
     .tag {
@@ -821,6 +847,7 @@ import VueClipboard from 'vue-clipboard2';
 import Vue from 'vue'
 import { setInterval, clearInterval } from 'timers';
 const bigInt = require("big-integer");
+const abiDecoder = require('abi-decoder');
 
 Vue.use(VueClipboard);
 
@@ -853,12 +880,15 @@ Vue.use(VueClipboard);
             actualTxCost: '',
             nonce: '',
             inputData: '',
+            inputDataString: '',
+            inputTemp: '',
+            decodedData: '',
             activeName2: 'first',
             input: '',
             internalData: [],
             isContract: 'false',
             pending: 'false',
-            confirmations: ''
+            confirmations: '',
       };
     },
     methods: {
@@ -866,19 +896,20 @@ Vue.use(VueClipboard);
             // console.log(key, keyPath);
         },
         async showData() {
-            
             await this.$axios.$get("/transactions/hash/" + this.hash).then(res => {
                 console.log(res.BlockNumber)
+                this.pending = res.Pending;
                 this.blockHeight = res.BlockNumber;
                 let blockHeight = this.blockHeight;
                 this.$axios.$get("/blocks/count").then(res => {
-                    console.log("====", blockHeight, res.count)
+                    // console.log("====", blockHeight, res.count)
                     let confirmations = res.count - blockHeight;
-                    console.log("confirmations", confirmations)
+                    // console.log("confirmations", confirmations)
                     if(confirmations > 1)
                         this.confirmations = "(" + confirmations + " block confirmations)";
                     else this.confirmations = "(" + confirmations + " block confirmation)";
                 })
+                
                 this.timeStamp = toDate(res.Timestamp);
                 this.from = res.From;
                 this.to = res.To;
@@ -893,8 +924,44 @@ Vue.use(VueClipboard);
                 this.actualTxCost = toDecimals((parseFloat(bigInt(res.GasUsed)) * parseFloat(bigInt(res.GasPrice)) / 1e18)) + " ATN";
                 this.nonce = res.Nonce;
                 this.inputData = res.Input;
-                // console.log("inputdata", Web3.utils.hexToUtf8(this.inputData))
-                this.pending = res.Pending;
+
+                //inputdata to contract function
+                let dbotFactoryABI = [{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"idToAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_dbotAddress","type":"address"}],"name":"register","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"uint256"}],"name":"dbots","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"anonymous":false,"inputs":[{"indexed":false,"name":"id","type":"uint256"},{"indexed":false,"name":"dbotAddress","type":"address"}],"name":"Register","type":"event"}]
+                let transferChannelsABI = [{"constant":true,"inputs":[{"name":"_receiver_address","type":"address"},{"name":"_open_block_number","type":"uint32"},{"name":"_balance","type":"uint256"},{"name":"_balance_msg_sig","type":"bytes"}],"name":"extractBalanceProofSignature","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_sender_address","type":"address"},{"name":"_receiver_address","type":"address"},{"name":"_open_block_number","type":"uint32"}],"name":"getChannelInfo","outputs":[{"name":"","type":"bytes32"},{"name":"","type":"uint256"},{"name":"","type":"uint32"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_receiver_address","type":"address"},{"name":"_open_block_number","type":"uint32"},{"name":"_balance","type":"uint256"}],"name":"uncooperativeClose","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_trusted_contracts","type":"address[]"}],"name":"removeTrustedContracts","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"withdrawn_balances","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_sender_address","type":"address"},{"name":"_receiver_address","type":"address"}],"name":"createChannelDelegate","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":false,"inputs":[{"name":"_receiver_address","type":"address"},{"name":"_open_block_number","type":"uint32"},{"name":"_balance","type":"uint256"},{"name":"_balance_msg_sig","type":"bytes"},{"name":"_closing_sig","type":"bytes"}],"name":"cooperativeClose","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"_open_block_number","type":"uint32"},{"name":"_balance","type":"uint256"},{"name":"_balance_msg_sig","type":"bytes"}],"name":"withdraw","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"version","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_receiver_address","type":"address"},{"name":"_open_block_number","type":"uint32"}],"name":"settle","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"channel_deposit_bugbounty_limit","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_receiver_address","type":"address"}],"name":"createChannel","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"closing_requests","outputs":[{"name":"closing_balance","type":"uint256"},{"name":"settle_block_number","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"channels","outputs":[{"name":"deposit","type":"uint256"},{"name":"open_block_number","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_receiver_address","type":"address"},{"name":"_open_block_number","type":"uint32"}],"name":"topUp","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"_sender_address","type":"address"},{"name":"_receiver_address","type":"address"},{"name":"_open_block_number","type":"uint32"}],"name":"getKey","outputs":[{"name":"data","type":"bytes32"}],"payable":false,"stateMutability":"pure","type":"function"},{"constant":false,"inputs":[{"name":"_trusted_contracts","type":"address[]"}],"name":"addTrustedContracts","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"ownerAddress","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"trusted_contracts","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"_sender_address","type":"address"},{"name":"_open_block_number","type":"uint32"},{"name":"_balance","type":"uint256"},{"name":"_closing_sig","type":"bytes"}],"name":"extractClosingSignature","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"_sender_address","type":"address"},{"name":"_receiver_address","type":"address"},{"name":"_open_block_number","type":"uint32"}],"name":"topUpDelegate","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[],"name":"challengePeriod","outputs":[{"name":"","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_sender_address","type":"address"},{"indexed":true,"name":"_receiver_address","type":"address"},{"indexed":false,"name":"_deposit","type":"uint256"}],"name":"ChannelCreated","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_sender_address","type":"address"},{"indexed":true,"name":"_receiver_address","type":"address"},{"indexed":true,"name":"_open_block_number","type":"uint32"},{"indexed":false,"name":"_added_deposit","type":"uint256"}],"name":"ChannelToppedUp","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_sender_address","type":"address"},{"indexed":true,"name":"_receiver_address","type":"address"},{"indexed":true,"name":"_open_block_number","type":"uint32"},{"indexed":false,"name":"_balance","type":"uint256"}],"name":"ChannelCloseRequested","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_sender_address","type":"address"},{"indexed":true,"name":"_receiver_address","type":"address"},{"indexed":true,"name":"_open_block_number","type":"uint32"},{"indexed":false,"name":"_balance","type":"uint256"},{"indexed":false,"name":"_receiver_remaining_balance","type":"uint256"}],"name":"ChannelSettled","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_sender_address","type":"address"},{"indexed":true,"name":"_receiver_address","type":"address"},{"indexed":true,"name":"_open_block_number","type":"uint32"},{"indexed":false,"name":"_withdrawn_balance","type":"uint256"}],"name":"ChannelWithdraw","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"_trusted_contract_address","type":"address"},{"indexed":false,"name":"_trusted_status","type":"bool"}],"name":"TrustedContract","type":"event"}]
+                abiDecoder.addABI(dbotFactoryABI);
+                abiDecoder.addABI(transferChannelsABI);
+                const testData = this.inputData.toString();
+                const decodedData = abiDecoder.decodeMethod(testData);
+                console.log('decodedData', decodedData)
+                this.inputDataString = this.inputData;
+                if(decodedData != undefined) {
+                    let functionName = decodedData.name;
+                    let params = decodedData.params;
+                    let paramsName = [];
+                    let paramsValue = [];
+                    let paramsType = [];
+                    for(let p of params) {
+                        paramsName.push(p.name);
+                        paramsType.push(p.type);
+                        paramsValue.push(p.value);
+                    }
+                    // console.log(functionName, params)
+
+                    this.inputDataString = "Function: " + functionName + "("
+                    for(let i = 0; i < paramsName.length; i++) {
+                        this.inputDataString += paramsType[i] + "  " + paramsName[i] + ",";
+                    }
+                    this.inputDataString = this.inputDataString.substr(0, this.inputDataString.length - 1) + ") \n\n"
+                    console.log("inputdata", this.inputData)
+                    let methodId = this.inputData.substr(0, 10);
+                    this.inputDataString += "MethodID:  " + methodId;
+                    for(let i = 0; i < paramsValue.length; i++) {
+                        this.inputDataString += "\n[" + i + "]:     " + paramsValue[i] + "\n";
+                    }
+                    console.log("inputDataString", this.inputDataString)
+                }
+
+                console.log('res.Pending', res.Pending)
                 if(res.Pending === 'true') {
                     this.status = "Pending...";
                     console.log("pending this.pending", this.pending)
@@ -951,6 +1018,16 @@ Vue.use(VueClipboard);
         },
         handleClick(tab, event) {
             // console.log(tab, event);
+        },
+        handleCommand(command) {
+            // this.$message('click on item ' + command);
+            if(command === 'default') {
+                this.inputTemp = this.inputData;
+                this.inputData = this.inputDataString;
+            } 
+            else if(command === 'original') {
+                this.inputData = this.inputTemp;
+            }
         },
         search() {
             // this.$router.push('blocks/248703')
