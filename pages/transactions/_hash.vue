@@ -671,7 +671,7 @@
         & /deep/ .el-card__body{
             padding: 0;
             width: 375px;
-            height: 875px;
+            height: 910px;
             flex: 1;
         }
 
@@ -750,7 +750,7 @@
             width: 400px;
         }
         .search {
-            width: 250px;
+            width: 350px;
             height: 40px;
             margin: 0 auto;
             position: relative;
@@ -767,7 +767,7 @@
             }
             & /deep/ .el-input__inner{
                 border-radius: 20px;
-                width: 230px;
+                width: 330px;
                 text-align: center;
             }
         }
@@ -960,6 +960,8 @@ Vue.use(VueClipboard);
                     }
                     console.log("inputDataString", this.inputDataString)
                 }
+                this.inputTemp = this.inputData;
+                this.inputData = this.inputDataString;
 
                 console.log('res.Pending', res.Pending)
                 if(res.Pending === 'true') {
@@ -1022,7 +1024,7 @@ Vue.use(VueClipboard);
         handleCommand(command) {
             // this.$message('click on item ' + command);
             if(command === 'default') {
-                this.inputTemp = this.inputData;
+                // this.inputTemp = this.inputData;
                 this.inputData = this.inputDataString;
             } 
             else if(command === 'original') {
@@ -1052,7 +1054,11 @@ Vue.use(VueClipboard);
             })
         },
         onCopy() {
-            alert("复制成功！");
+            this.$notify({
+                title: 'success',
+                message: '复制成功！',
+                type: 'success'
+            });
         },
         onError() {
             // alert();

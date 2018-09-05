@@ -223,7 +223,7 @@
         & /deep/ .el-card__body{
             padding: 0;
             width: 450px;
-            height: 800px;
+            height: 880px;
             flex: 1;
         }
 
@@ -312,12 +312,12 @@
         }
         & /deep/ .el-card__body{
             padding: 0;
-            width: 300px;
-            height: 800px;
+            width: 400px;
+            height: 850px;
             flex: 1;
         }
         .search {
-            width: 250px;
+            width: 350px;
             height: 40px;
             margin: 0 auto;
             position: relative;
@@ -334,7 +334,7 @@
             }
             & /deep/ .el-input__inner{
                 border-radius: 20px;
-                width: 230px;
+                width: 330px;
                 text-align: center;
             }
         }

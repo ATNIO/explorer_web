@@ -648,7 +648,7 @@
             width: 400px;
         }
         .search {
-            width: 250px;
+            width: 350px;
             height: 40px;
             margin: 0 auto;
             position: relative;
@@ -665,7 +665,7 @@
             }
             & /deep/ .el-input__inner{
                 border-radius: 20px;
-                width: 230px;
+                width: 330px;
                 text-align: center;
             }
         }
@@ -828,7 +828,11 @@ Vue.use(VueClipboard);
             })
         },
         onCopy() {
-            alert("复制成功！");
+            this.$notify({
+                title: 'success',
+                message: '复制成功！',
+                type: 'success'
+            });
         },
         onError() {
             // alert();

@@ -230,7 +230,7 @@
     @media screen and (max-width: 991px) {
         & /deep/ .el-card__body{
             padding: 0;
-            width: 450px;
+            width: 750px;
             height: 800px;
             flex: 1;
         }
@@ -318,12 +318,12 @@
         }
         & /deep/ .el-card__body{
             padding: 0;
-            width: 200px;
-            height: 800px;
+            width: 400px;
+            height: 900px;
             flex: 1;
         }
         .search {
-            width: 250px;
+            width: 350px;
             height: 40px;
             margin: 0 auto;
             position: relative;
@@ -340,7 +340,7 @@
             }
             & /deep/ .el-input__inner{
                 border-radius: 20px;
-                width: 230px;
+                width: 330px;
                 text-align: center;
             }
         }
@@ -349,7 +349,7 @@
             // background-color: #00C8FF;
             text-align: center;
             line-height: 60px;
-            margin-top: 1000px;
+            margin-top: 1050px;
             width: 100%;
         }
         .status {
