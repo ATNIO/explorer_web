@@ -50,13 +50,13 @@
                     <el-table-column
                         prop="domain"
                         label="Domain"
-                        min-width="200">
+                        >
                     </el-table-column>
 
                     <el-table-column
                         prop="address"
                         label="Address"
-                        min-width="200">
+                        min-width="120">
                         <template slot-scope="scope">
                             <nuxt-link :to="'/dbots/' + scope.row.dbotAddress">{{ scope.row.address }}</nuxt-link>
                         </template>
@@ -64,7 +64,7 @@
                      <el-table-column
                         prop="txId"
                         label="TxHash"
-                        min-width="200">
+                        min-width="120">
                         <template slot-scope="scope">
                             <nuxt-link :to="'/transactions/' + scope.row.txHash">{{ scope.row.txId }}</nuxt-link>
                         </template>
