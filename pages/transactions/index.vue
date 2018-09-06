@@ -453,13 +453,13 @@ import { toDate, toDecimals } from '~/common/method.js'
                     transaction.fromAddress = r.From.toString()
                     transaction.toAddress = r.To.toString()
                     let number = (r.Value / 1e18).toString();
-                    console.log('number', r.Value / 1e18)
+                    // console.log('number', r.Value / 1e18)
                     if(number.includes("e+")) {
                         let array = number.split("e+");
                         array[0] = Math.floor(array[0] * 100) / 100;
                         number = array[0] + "e+" + array[1];
                     }
-                    console.log("number", number)
+                    // console.log("number", number)
                     transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATN";
                     this.transactionTable.push(transaction);
                 }
@@ -483,13 +483,13 @@ import { toDate, toDecimals } from '~/common/method.js'
                     transaction.fromAddress = r.From.toString()
                     transaction.toAddress = r.To.toString()
                     let number = (r.Value / 1e18).toString();
-                    console.log('number', r.Value / 1e18)
+                    // console.log('number', r.Value / 1e18)
                     if(number.includes("e+")) {
                         let array = number.split("e+");
                         array[0] = Math.floor(array[0] * 100) / 100;
                         number = array[0] + "e+" + array[1];
                     }
-                    console.log("number", number)
+                    // console.log("number", number)
                     transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATN";
                     // let tempValue = Math.floor(r.Value / 1e18 * 100) / 100 + ' ATN';
                     // if(tempValue.includes('e')) {
