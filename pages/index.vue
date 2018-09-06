@@ -571,7 +571,7 @@ import { toDate, toDecimals } from '~/common/method.js'
                 input: '',
                 latestBlockNumber: 'loading...',
                 lastBlockTime: 'loading...',
-                blockTime: '10.000',
+                blockTime: '5.000',
                 atnPrice: 'loading...',
                 blockTable: [],
                 transactionTable: [],
@@ -649,7 +649,15 @@ import { toDate, toDecimals } from '~/common/method.js'
                     transaction.fromAddress = r.From.toString();
                     transaction.to = r.To.toString().substr(0,9) + '...';
                     transaction.toAddress = r.To.toString();
-                    transaction.value = Math.floor(toDecimals(r.Value / 1e18) * 100) / 100 + " ATN";
+                    let number = (r.Value / 1e18).toString();
+                    console.log('number', r.Value / 1e18)
+                    if(number.includes("e+")) {
+                        let array = number.split("e+");
+                        array[0] = Math.floor(array[0] * 100) / 100;
+                        number = array[0] + "e+" + array[1];
+                    }
+                    console.log("number", number)
+                    transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATN";
                     transaction.time = toDate(r.Timestamp);
                     // transaction.time = "2 years ago"
                     this.transactionTable.push(transaction);
