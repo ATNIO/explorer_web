@@ -496,7 +496,7 @@ import { toDate, toDecimals } from '~/common/method.js'
                     //     tempValue = tempValue.substr(0, 5) + tempValue.substr(tempValue.length - 10, tempValue.length);
                     //     // console.log("tempValue", tempValue)
                     // }
-                    transaction.value = tempValue;
+                    // transaction.value = tempValue;
                     this.transactionTable.push(transaction);
                 }
             })
