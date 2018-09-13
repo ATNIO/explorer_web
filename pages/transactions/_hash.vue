@@ -960,6 +960,10 @@ Vue.use(VueClipboard);
                     }
                     console.log("inputDataString", this.inputDataString)
                 }
+                else {
+                    this.inputDataString = Web3.utils.hexToUtf8(this.inputData)
+                    // console.log("web3", Web3.utils.hexToUtf8(this.inputData))
+                }
                 this.inputTemp = this.inputData;
                 this.inputData = this.inputDataString;
 
