@@ -137,7 +137,9 @@
                             </el-table>
                         </div>
                         <br><br>
-                        <el-button type="primary" class="try-button" round>Try it out</el-button>
+                        <template v-if="this.isRegistered == 'true'" >
+                            <a :href="this.marketUrl" target="_blank"><el-button type="primary" class="try-button" round>Try it out</el-button></a>
+                        </template>
                 </div>
             </el-card>
         </div>
@@ -782,6 +784,8 @@ Vue.use(VueClipboard);
             activeName2: 'first',
             methodTable: [],
             input: '',
+            isRegistered: 'false',
+            marketUrl: 'https://market-test.atnio.net/detail/',
       };
     },
     methods: {
@@ -800,6 +804,8 @@ Vue.use(VueClipboard);
                     method.uri = Web3.utils.hexToAscii(k.Endpoint.Uri);
                     this.methodTable.push(method);
                 }
+                this.isRegistered = res.IsRegistered;
+                this.marketUrl += this.dbotAddress;
             })
         },
         handleClick(tab, event) {

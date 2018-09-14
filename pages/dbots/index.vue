@@ -69,6 +69,11 @@
                             <nuxt-link :to="'/transactions/' + scope.row.txHash">{{ scope.row.txId }}</nuxt-link>
                         </template>
                     </el-table-column>
+                    <el-table-column
+                        prop="isRegistered"
+                        label="IsRegistered"
+                        >
+                    </el-table-column>
                 </el-table>
                 <br>
                 <div class="page">
@@ -440,6 +445,7 @@ const Web3 = require('web3')
                     dbot.dbotAddress = r.Address.toString();
                     dbot.txId = r.TxHash.toString().substr(0,20) + '...';
                     dbot.txHash = r.TxHash.toString();
+                    dbot.isRegistered = r.IsRegistered;
                     this.dbotTable.push(dbot);
                 }
                 this.loading = false;
