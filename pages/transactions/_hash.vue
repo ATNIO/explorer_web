@@ -311,7 +311,7 @@
         align-items: center;
         justify-content: center;
         width: 100%;
-        // height: 100%;
+        height: 100%;
     }
     .content {
         display: flex;
@@ -668,6 +668,11 @@
     }
 
     @media screen and (max-width: 591px) {
+
+        & /deep/ .el-card {
+            height: 1010px;
+        }
+
         & /deep/ .el-card__body{
             padding: 0;
             width: 375px;

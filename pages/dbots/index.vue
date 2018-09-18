@@ -465,6 +465,7 @@ const Web3 = require('web3')
                     dbot.dbotAddress = r.Address.toString();
                     dbot.txId = r.TxHash.toString().substr(0,20) + '...';
                     dbot.txHash = r.TxHash.toString();
+                    dbot.isRegistered = r.IsRegistered;
                     this.dbotTable.push(dbot);
                 }
             })

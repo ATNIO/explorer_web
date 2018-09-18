@@ -806,6 +806,7 @@ Vue.use(VueClipboard);
                 }
                 this.isRegistered = res.IsRegistered;
                 this.marketUrl += this.dbotAddress;
+                console.log("this.isRegistered", res)
             })
         },
         handleClick(tab, event) {

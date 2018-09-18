@@ -1,7 +1,9 @@
 const BigNumber = require('bignumber.js');
 
 export const toDate = function(timestamp){
-    let seconds = Math.abs(parseInt((Date.now() - timestamp * 1000) / 1000))
+    // console.log("Date.now", Date.now())
+    let seconds = parseInt((Math.floor(Date.now() / 1000) - timestamp))
+
     let minutes = ~~(seconds / 60);
     seconds %= 60;
     let hours = ~~(minutes / 60);
