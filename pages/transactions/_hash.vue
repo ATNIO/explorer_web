@@ -320,6 +320,7 @@
         justify-content: flex-start;
         width: 100%;
         // height: 100%;
+        // height: 100vh;
         font-size: 15px;
 
     }
@@ -670,7 +671,7 @@
     @media screen and (max-width: 591px) {
 
         & /deep/ .el-card {
-            height: 1010px;
+            height: 1200px;
         }
 
         & /deep/ .el-card__body{
@@ -781,7 +782,7 @@
             // background-color: #00C8FF;
             text-align: center;
             line-height: 60px;
-            margin-top: 1100px;
+            margin-top: 1150px;
             width: 100%;
         }
         .status {
