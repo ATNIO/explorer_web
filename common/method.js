@@ -1,15 +1,25 @@
 const BigNumber = require('bignumber.js');
 
 export const toDate = function(timestamp){
-    // console.log("Date.now", Date.now())
-    let seconds = parseInt((Math.floor(Date.now() / 1000) - timestamp))
-
-    let minutes = ~~(seconds / 60);
-    seconds %= 60;
-    let hours = ~~(minutes / 60);
-    minutes %= 60;
-    let days = ~~(hours / 24);
-    hours %= 24;
+    console.log("Date.now", Date.now() / 1000, timestamp)
+    let now = new BigNumber(Date.now() / 1000)
+    let blockTime = new BigNumber(timestamp)
+    let seconds = parseInt(now.minus(blockTime))
+    // let seconds = parseInt((Math.floor(Date.now() / 1000) - timestamp))
+    console.log("seconds", seconds)
+    let minutes, hours, days;
+    minutes = ~~(seconds / 60);
+    if(minutes > 0) {
+        seconds %= 60;
+        hours = ~~(minutes / 60);
+        if(hours > 0) {
+            minutes %= 60;
+            days = ~~(hours / 24);
+            if(days > 0) {
+                hours %= 24;
+            }
+        }
+    }
     // console.log("hours", hours)
     // console.log("minutes", minutes)
     // console.log("seconds", seconds)
