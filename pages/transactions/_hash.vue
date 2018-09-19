@@ -925,7 +925,7 @@ Vue.use(VueClipboard);
                 let blockHeight = this.blockHeight;
                 this.$axios.$get("/blocks/count").then(res => {
                     // console.log("====", blockHeight, res.count)
-                    let confirmations = res.count - blockHeight;
+                    let confirmations = Math.abs(res.count - blockHeight);
                     // console.log("confirmations", confirmations)
                     if(confirmations > 1)
                         this.confirmations = "(" + confirmations + " block confirmations)";
