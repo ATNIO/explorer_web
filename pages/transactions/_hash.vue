@@ -676,7 +676,7 @@
     @media screen and (max-width: 591px) {
 
         & /deep/ .el-card {
-            height: 1200px;
+            height: 1250px;
         }
 
         & /deep/ .el-card__body{
@@ -687,7 +687,7 @@
         }
 
         & /deep/ .el-tabs__content {
-            height: 1200px;
+            height: 1250px;
         }
 
         .address_image {
@@ -792,7 +792,7 @@
             // background-color: #00C8FF;
             text-align: center;
             line-height: 60px;
-            margin-top: 1150px;
+            margin-top: 1180px;
             width: 100%;
         }
         .status {
