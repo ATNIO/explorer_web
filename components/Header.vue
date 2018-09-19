@@ -12,7 +12,7 @@
                     text-color="#fff"
                     active-text-color="#fff"
                     background-color="transparent"
-                    router=true
+                    :router="true"
                 >
                     <el-menu-item index="/" class="home">Home</el-menu-item>
                     <el-menu-item index="/blocks" class="blocks">Blocks</el-menu-item>
