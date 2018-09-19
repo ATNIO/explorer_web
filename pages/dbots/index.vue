@@ -214,6 +214,7 @@
         font-family: PingFangSC-Medium;
         font-size: 16px;
         color: #5E6062;
+        margin-top: -10px;
     }
 
     .right-nav {
