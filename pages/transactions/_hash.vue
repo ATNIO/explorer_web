@@ -676,7 +676,7 @@
     @media screen and (max-width: 591px) {
 
         & /deep/ .el-card {
-            height: 1250px;
+            height: 1200px;
         }
 
         & /deep/ .el-card__body{
@@ -687,7 +687,7 @@
         }
 
         & /deep/ .el-tabs__content {
-            height: 1250px;
+            height: 1200px;
         }
 
         .address_image {
@@ -772,6 +772,7 @@
             position: relative;
             display: flex;
             align-items: center;
+            margin-top: 20px;
 
             .search-icon{
                 width: 24px;
@@ -793,7 +794,7 @@
             // background-color: #00C8FF;
             text-align: center;
             line-height: 60px;
-            margin-top: 1180px;
+            margin-top: 1250px;
             width: 100%;
         }
         .status {
@@ -828,7 +829,7 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            height: 1200px;
+            height: 1300px;
             margin-top: -50px;
         }
         .main {
