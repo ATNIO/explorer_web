@@ -109,9 +109,15 @@
                                 <el-table
                                     :data="transactionTable"
                                     style="width: 100%; "
-                                    type="flex"
-                                    align="middle"
-                                    justify="center">
+                                    :header-cell-style="{ 
+                                        padding:'0px',
+                                        textAlign:'center'
+                                    }"
+                                    :cell-style="{
+                                        textAlign:'center',
+                                        color:'#788091'
+                                    }"
+                                    >
 
                                     <el-table-column
                                         prop="blockNumber"
@@ -831,7 +837,7 @@ Vue.use(VueClipboard);
                 this.total = res.count;
             })
 
-            this.$axios.$get("/transactions/list/9/0/account/" + this.address).then(res => {
+            this.$axios.$get("/transactions/list/" + this.pageSize + "/0/account/" + this.address).then(res => {
                 // console.log(res);
                 res.sort((a, b) => {
                     let keyA = parseInt(a.Timestamp),
@@ -869,7 +875,7 @@ Vue.use(VueClipboard);
         },
         handleCurrentChange(val) {
             // console.log(`当前页: ${val}`);
-            this.$axios.$get("/transactions/list/9/" + ((parseInt(val) - 1) * 10) + "/account/" + this.address).then(res => {
+            this.$axios.$get("/transactions/list/" + this.pageSize + "/" + ((parseInt(val) - 1) * this.pageSize) + "/account/" + this.address).then(res => {
                 // console.log(res);
                 this.transactionTable = [];
                 for(let r of res) {

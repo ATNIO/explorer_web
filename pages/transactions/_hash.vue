@@ -288,7 +288,7 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        width: 898px;
+        width: 100%;
     }
 
     .viewButton {
@@ -335,7 +335,7 @@
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
-        width: 1000px;
+        width: 100%;
         font-size: 15px;
     }
 
@@ -344,7 +344,7 @@
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
-        width: 1000px;
+        width: 100%;
         font-size: 15px;
     }
 
@@ -353,7 +353,7 @@
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
-        width: 1000px;
+        width: 100%;
         font-size: 15px;
     }
 
@@ -362,7 +362,7 @@
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
-        width: 1000px;
+        width: 100%;
         font-size: 15px;
         font-weight:thin;
         font-style:italic;
@@ -528,7 +528,7 @@
         & /deep/ .el-card__body{
             padding: 0;
             width: 675px;
-            height: 875px;
+            height: 975px;
             flex: 1;
         }
 
@@ -631,7 +631,7 @@
             // background-color: #00C8FF;
             text-align: center;
             line-height: 60px;
-            margin-top: 1100px;
+            margin-top: 1150px;
             width: 100%;
         }
         .status {
@@ -676,18 +676,18 @@
     @media screen and (max-width: 591px) {
 
         & /deep/ .el-card {
-            height: 1200px;
+            height: 1100px;
         }
 
         & /deep/ .el-card__body{
             padding: 0;
             width: 375px;
-            height: 1200px;
+            height: 1100px;
             flex: 1;
         }
 
         & /deep/ .el-tabs__content {
-            height: 1200px;
+            height: 1100px;
         }
 
         .address_image {
@@ -794,7 +794,7 @@
             // background-color: #00C8FF;
             text-align: center;
             line-height: 60px;
-            margin-top: 1250px;
+            margin-top: 1200px;
             width: 100%;
         }
         .status {

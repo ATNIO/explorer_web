@@ -103,9 +103,14 @@
                         <el-table
                             :data="transactionTable"
                             style="width: 100%; "
-                            type="flex"
-                            align="middle"
-                            justify="center">
+                            :header-cell-style="{ 
+                                padding:'0px',
+                                textAlign:'center'
+                            }"
+                            :cell-style="{
+                                textAlign:'center',
+                                color:'#788091'
+                            }">
 
                             <el-table-column
                                 prop="hash"
@@ -759,9 +764,10 @@ Vue.use(VueClipboard);
 
             this.$axios.$get("/transactions/count/blocknumber/" + this.blockNumber).then(res => {
                 this.total = res.count;
+                console.log("count", res.count)
             })
 
-            this.$axios.$get("/transactions/list/8/0/blocknumber/" + this.blockNumber).then(res => {
+            this.$axios.$get("/transactions/list/" + this.pageSize + "/0/blocknumber/" + this.blockNumber).then(res => {
                 for(let r of res) {
                     let tx = {};
                     tx.txId = r.Hash.toString().substr(0,10) + '...';
@@ -777,7 +783,7 @@ Vue.use(VueClipboard);
             })
         },
         handleCurrentChange(val) {
-            this.$axios.$get("/transactions/list/8/" + ((parseInt(val) - 1) * 10) + "/blocknumber/" + this.blockNumber).then(res => {
+            this.$axios.$get("/transactions/list/" + this.pageSize + "/" + ((parseInt(val) - 1) * this.pageSize) + "/blocknumber/" + this.blockNumber).then(res => {
                 for(let r of res) {
                     let tx = {};
                     tx.txId = r.Hash.toString().substr(0,10) + '...';
