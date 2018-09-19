@@ -191,7 +191,6 @@
                                         </div>
                                     </div>
                                     <br/>
-                                    <p></p><br/>
                                 </div>
                             </div>
                         </el-tab-pane>
@@ -557,7 +556,7 @@
         }
 
         & /deep/ .el-tabs__content {
-            height: 875px;
+            height: 1200px;
         }
 
         .inputData {
@@ -677,7 +676,7 @@
     @media screen and (max-width: 591px) {
 
         & /deep/ .el-card {
-            height: 1010px;
+            height: 1200px;
         }
 
         & /deep/ .el-card__body{
@@ -793,7 +792,7 @@
             // background-color: #00C8FF;
             text-align: center;
             line-height: 60px;
-            margin-top: 1100px;
+            margin-top: 1150px;
             width: 100%;
         }
         .status {
