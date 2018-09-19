@@ -682,7 +682,7 @@
         & /deep/ .el-card__body{
             padding: 0;
             width: 375px;
-            height: 910px;
+            height: 1200px;
             flex: 1;
         }
 
@@ -695,6 +695,7 @@
             height: 20px;
             margin-left: -10px;
         }
+        
         .address {
             font-family: PingFangSC-Medium;
             font-size: 16px;
