@@ -197,39 +197,41 @@
                         </el-tab-pane>
 
                         <el-tab-pane label="Internal Transactions" name="second">
-                            <el-table
-                                :data="internalData"
-                                style="width: 100%"
-                                type="flex"
-                                align="middle"
-                                justify="center"
-                                >
-                                <el-table-column
-                                    prop="type"
-                                    label="Type"
+                            <div class="internal_tx">
+                                <el-table
+                                    :data="internalData"
+                                    style="width: 100%"
+                                    type="flex"
+                                    align="middle"
+                                    justify="center"
                                     >
-                                </el-table-column>
-                                <el-table-column
-                                    prop="from"
-                                    label="From"
-                                    >
-                                    <template slot-scope="scope">
-                                        <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    prop="to"
-                                    label="To"
-                                    >
-                                    <template slot-scope="scope">
-                                        <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    prop="value"
-                                    label="Value">
-                                </el-table-column>
-                            </el-table>
+                                    <el-table-column
+                                        prop="type"
+                                        label="Type"
+                                        >
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="from"
+                                        label="From"
+                                        >
+                                        <template slot-scope="scope">
+                                            <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="to"
+                                        label="To"
+                                        >
+                                        <template slot-scope="scope">
+                                            <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="value"
+                                        label="Value">
+                                    </el-table-column>
+                                </el-table>
+                            </div>
                         </el-tab-pane>
                     </el-tabs>
                 </div>
@@ -259,13 +261,15 @@
         display: flex;
         flex-direction: row;
         justify-content: flex-start;
-        width: 1000px;
+        width: 100%;
         font-size: 15px;
         font-family: Helvetica Neue;
         span {
             font-size: 15px;
             font-family: Helvetica Neue;
         }
+        // word-wrap: break-word;
+        word-break: normal;
     }
 
     & /deep/ .el-textarea.is-disabled .el-textarea__inner {
@@ -322,6 +326,7 @@
         // height: 100%;
         // height: 100vh;
         font-size: 15px;
+        margin-left: 5px;
 
     }
 
@@ -671,7 +676,7 @@
     @media screen and (max-width: 591px) {
 
         & /deep/ .el-card {
-            height: 1200px;
+            height: 1010px;
         }
 
         & /deep/ .el-card__body{
@@ -679,6 +684,10 @@
             width: 375px;
             height: 910px;
             flex: 1;
+        }
+
+        & /deep/ .el-tabs__content {
+            height: 1200px;
         }
 
         .address_image {
@@ -775,6 +784,7 @@
                 border-radius: 20px;
                 width: 330px;
                 text-align: center;
+                margin-left: 10px;
             }
         }
 
@@ -782,7 +792,7 @@
             // background-color: #00C8FF;
             text-align: center;
             line-height: 60px;
-            margin-top: 1150px;
+            margin-top: 1100px;
             width: 100%;
         }
         .status {
@@ -826,6 +836,10 @@
             justify-content: center;
             flex-direction: column;
             width: 100%;
+        }
+
+        .internal_tx {
+            width: 350px;
         }
     }
     
