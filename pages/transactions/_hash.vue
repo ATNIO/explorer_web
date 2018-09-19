@@ -282,6 +282,7 @@
         flex-direction: row;
         align-items: flex-start;
         width: 100%;
+        height: 130px;
     }
 
     .decodeHex {
