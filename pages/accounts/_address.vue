@@ -813,7 +813,7 @@ Vue.use(VueClipboard);
                 this.atn = parseInt(res.Balance) / 1e18;
                 // console.log(this.atn)
                 this.isContract = res.IsContract;
-                this.leftTable.push({attribute: "Balance: ", value: cutStr(this.atn.toString()) + " ATN"});
+                this.leftTable.push({attribute: "Balance: ", value: (this.atn.toString()) + " ATN"});
                 // this.accountDetailsTable.push({attribute: "Balance: ", value: cutStr(this.atn.toString()) + " ATN"});
                 // this.atnValue = (this.atn * 0.233416).toFixed(2)
                 // this.accountDetailsTable.push({attribute: "ATN Value: ", value: "$" + cutStr(this.atnValue.toString()) });
@@ -861,14 +861,14 @@ Vue.use(VueClipboard);
                     tx.fromAddress = r.From.toString();
                     tx.toAddress = r.To.toString();
                     tx.value = r.Value / 1e18 + ' ATN';
-                    if(r.From.toString() == this.address) {
-                        tx.tag = "warning";
-                        tx.tagValue = "OUT"
-                    }
-                    else {
-                        tx.tag = "success"
-                        tx.tagValue = "IN"
-                    }
+                    // if(r.From.toString() == this.address) {
+                    //     tx.tag = "warning";
+                    //     tx.tagValue = "OUT"
+                    // }
+                    // else {
+                    //     tx.tag = "success"
+                    //     tx.tagValue = "IN"
+                    // }
                     this.transactionTable.push(tx);
                 }
                 // console.log(Date.now())

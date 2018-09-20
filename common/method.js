@@ -63,7 +63,8 @@ export const cutStr = function(str){
         { 
             newStr[i] = str[currentIndex--]; 
         } 
-    } 
+    }
+    console.log("newStr", newStr);
     return newStr.join("") + decimals
 } 
 
