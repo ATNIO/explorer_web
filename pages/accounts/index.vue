@@ -429,7 +429,8 @@ import axios from 'axios'
             // console.log(key, keyPath);
         },
         showData() {
-            this.$axios.$get("/accounts/list/" + this.pageSize).then(res => {
+            let vm = this;
+            this.$axios.$get("/accounts/list/" + this.pageSize).then(async function(res){
                 for( let r of res ) {
                     let account = {};
                     // console.log("accounts list res", res)
@@ -443,10 +444,14 @@ import axios from 'axios'
                         temp = '0.' + (new Array(e)).join('0') + temp.toString().substring(2);
                     }
                     account.percentage = temp + "%";
-                    account.txCount = (r.TransactionHashes.toString().match(new RegExp(",", "g")) || []).length
-                    this.accountTable.push(account);
+                    // account.txCount = (r.TransactionHashes.toString().match(new RegExp(",", "g")) || []).length
+                    await vm.$axios.$get("/transactions/count/account/" + account.address).then(res =>{
+                    // console.log(res)
+                        account.txCount = res.count;
+                    })
+                    vm.accountTable.push(account);
                 }
-                this.loading = false;
+                vm.loading = false;
             })
             this.$axios.$get("/accounts/count").then(res => {
                 // console.log(res)
@@ -455,8 +460,9 @@ import axios from 'axios'
         },
         handleCurrentChange(val) {
             // console.log(`当前页: ${val}`);
-            this.$axios.$get("/accounts/list/" + this.pageSize + "/" + ((parseInt(val) - 1) * this.pageSize)).then(res => {
-                this.accountTable = [];
+            let vm = this;
+            this.$axios.$get("/accounts/list/" + this.pageSize + "/" + ((parseInt(val) - 1) * this.pageSize)).then(async function(res){
+                vm.accountTable = [];
                 for( let r of res ) {
                     let account = {};
                     // console.log("accounts list res", res)
@@ -470,9 +476,14 @@ import axios from 'axios'
                         temp = '0.' + (new Array(e)).join('0') + temp.toString().substring(2);
                     }
                     account.percentage = temp + "%";
-                    account.txCount = (r.TransactionHashes.toString().match(new RegExp(",", "g")) || []).length
-                    this.accountTable.push(account);
+                    // account.txCount = (r.TransactionHashes.toString().match(new RegExp(",", "g")) || []).length
+                    await vm.$axios.$get("/transactions/count/account/" + account.address).then(res => {
+                    // console.log(res)
+                        account.txCount = res.count;
+                    })
+                    vm.accountTable.push(account);
                 }
+                vm.loading = false;
             })
         },
         search() {

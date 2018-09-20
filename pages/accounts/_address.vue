@@ -825,15 +825,17 @@ Vue.use(VueClipboard);
                 // })
             })
             
-            this.$axios.$get("/accounts/address/" + this.address).then(res => {
-                this.txns = res.TransactionHashes.match(new RegExp(",", "g")).length;
-                // console.log(this.txns)
-                this.rightTable.push({attribute: "Transactions: ", value: this.txns + " txns"});
-                // this.accountDetailsTable.push({attribute: "Transactions: ", value: this.txns + " txns"});
-            })
+            // this.$axios.$get("/accounts/address/" + this.address).then(res => {
+            //     this.txns = res.TransactionHashes.match(new RegExp(",", "g")).length;
+            //     // console.log(this.txns)
+            //     this.rightTable.push({attribute: "Transactions: ", value: this.txns + " txns"});
+            //     // this.accountDetailsTable.push({attribute: "Transactions: ", value: this.txns + " txns"});
+            // })
 
             this.$axios.$get("/transactions/count/account/" + this.address).then(res => {
                 // console.log(res)
+                this.txns = res.count;
+                this.rightTable.push({attribute: "Transactions: ", value: this.txns + " txns"});
                 this.total = res.count;
             })
 
