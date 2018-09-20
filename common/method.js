@@ -1,8 +1,9 @@
 const BigNumber = require('bignumber.js');
+const moment = require('moment');
 
 export const toDate = function(timestamp){
-    console.log("Date.now", Date.now() / 1000, timestamp)
-    let now = new BigNumber(Date.now() / 1000)
+    console.log("Date.now", moment().unix(), timestamp)
+    let now = new BigNumber(moment().unix())
     let blockTime = new BigNumber(timestamp)
     let seconds = parseInt(now.minus(blockTime))
     // let seconds = parseInt((Math.floor(Date.now() / 1000) - timestamp))
