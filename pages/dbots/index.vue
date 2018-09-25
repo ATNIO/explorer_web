@@ -50,6 +50,7 @@
                     <el-table-column
                         prop="domain"
                         label="Domain"
+                        min-width="120"
                         >
                     </el-table-column>
 
@@ -458,6 +459,7 @@ const Web3 = require('web3')
         handleCurrentChange(val) {
             this.$axios.$get("/dbots/allList/" + this.pageSize + "/" + ((parseInt(val) - 1) * this.pageSize)).then(res => {
                 this.dbotTable = [];
+                console.log("res",res)
                 for( let r of res ) {
                     let dbot = {};
                     dbot.name = Web3.utils.hexToUtf8(r.Name).toString();

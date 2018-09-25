@@ -60,12 +60,12 @@
                         >
                         </el-table-column>
 
-                        <el-table-column
+                        <!-- <el-table-column
                             prop="txCount"
                             label="TxCount"
                             min-width="100"
                         >
-                        </el-table-column>
+                        </el-table-column> -->
                     </el-table>
                     <br>
                     <div class="page">
@@ -445,10 +445,10 @@ import axios from 'axios'
                     }
                     account.percentage = temp + "%";
                     // account.txCount = (r.TransactionHashes.toString().match(new RegExp(",", "g")) || []).length
-                    await vm.$axios.$get("/transactions/count/account/" + account.address).then(res =>{
-                    // console.log(res)
-                        account.txCount = res.count;
-                    })
+                    // await vm.$axios.$get("/transactions/count/account/" + account.address).then(res =>{
+                    // // console.log(res)
+                    //     account.txCount = res.count;
+                    // })
                     vm.accountTable.push(account);
                 }
                 vm.loading = false;
@@ -477,10 +477,10 @@ import axios from 'axios'
                     }
                     account.percentage = temp + "%";
                     // account.txCount = (r.TransactionHashes.toString().match(new RegExp(",", "g")) || []).length
-                    await vm.$axios.$get("/transactions/count/account/" + account.address).then(res => {
-                    // console.log(res)
-                        account.txCount = res.count;
-                    })
+                    // await vm.$axios.$get("/transactions/count/account/" + account.address).then(res => {
+                    // // console.log(res)
+                    //     account.txCount = res.count;
+                    // })
                     vm.accountTable.push(account);
                 }
                 vm.loading = false;

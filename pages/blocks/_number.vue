@@ -712,7 +712,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate } from '~/common/method.js'
+import { toDate, toTime } from '~/common/method.js'
 import VueClipboard from 'vue-clipboard2';
 import Vue from 'vue'
 
@@ -757,7 +757,7 @@ Vue.use(VueClipboard);
             this.$axios.$get("/blocks/number/" + this.blockNumber).then(res => {
                 this.blockHash = res.Hash;
                 this.leftTable.push({attribute: "Block Number", value: res.Number});
-                this.leftTable.push({attribute: "Block Transactions", value: res.Txns});
+                this.leftTable.push({attribute: "Number of Transactions", value: res.Txns});
                 this.rightTable.push({attribute: "Miner", value: res.Miner});
                 this.rightTable.push({attribute: "Size", value: res.Size});
             })
@@ -772,7 +772,8 @@ Vue.use(VueClipboard);
                     let tx = {};
                     tx.txId = r.Hash.toString().substr(0,10) + '...';
                     tx.hash = r.Hash.toString();
-                    tx.time = toDate(r.Timestamp);
+                    console.log("r.Seconds", r.Seconds)
+                    tx.time = toTime(r.Seconds);
                     tx.from = r.From.toString().substr(0,10) + '...';
                     tx.fromAddress = r.From.toString()
                     tx.to = r.To.toString().substr(0,10) + '...';
@@ -788,7 +789,7 @@ Vue.use(VueClipboard);
                     let tx = {};
                     tx.txId = r.Hash.toString().substr(0,10) + '...';
                     tx.hash = r.Hash.toString();
-                    tx.time = toDate(r.Timestamp);
+                    tx.time = toTime(r.Seconds);
                     tx.from = r.From.toString().substr(0,10) + '...';
                     tx.fromAddress = r.From.toString()
                     tx.to = r.To.toString().substr(0,10) + '...';

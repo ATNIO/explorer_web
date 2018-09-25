@@ -1,218 +1,226 @@
 <template>
 <div>
-    <Header/>      
-    <el-main class="main">
-        <div class="right-nav">
-            <div class="search">
-                <el-input v-model="input" class="input" placeholder="Search"></el-input>
-                <i class="search-icon" v-on:click="this.search"></i>
-            </div>
-        </div><br><br>
-        <div class="table">
-            <div class="network-status">
-                <div class="header" >
-                    <el-card>
+    <div class="body">
+        <Header/>      
+        <el-main class="main">
+            <div class="right-nav">
+                <div class="search">
+                    <el-input v-model="input" class="input" placeholder="Search"></el-input>
+                    <i class="search-icon" v-on:click="this.search"></i>
+                </div>
+            </div><br><br>
+            <div class="table">
+                <div class="network-status">
+                    <div class="header" >
+                        <el-card>
+                            <div class="grid-content" >
+                                <div>  
+                                    <p class="last-block">
+                                    BLOCK
+                                    </p>
+                                    <p class="last-block1">
+                                    {{latestBlockNumber}}
+                                    </p>
+                                </div>
+                                <div>
+                                    <img src="~/assets/home-block-icon.png" class="icon">
+                                </div>
+                            </div>
+                        </el-card>
+                        <el-card>
                         <div class="grid-content" >
-                            <div>  
-                                <p class="last-block">
-                                BLOCK
-                                </p>
-                                <p class="last-block1">
-                                {{latestBlockNumber}}
-                                </p>
+                                <div>  
+                                    <p class="last-block">
+                                        LAST BLOCK
+                                    </p>
+                                    <p class="last-block1">
+                                    {{lastBlockTime}}
+                                    </p>
+                                </div>
+                                <div>
+                                    <img src="~/assets/home-last block-icon.png" class="icon">
+                                </div>
                             </div>
-                            <div>
-                                <img src="~/assets/home-block-icon.png" class="icon">
+                        </el-card>
+                        <el-card>
+                            <div class="grid-content" >
+                                <div>  
+                                    <p class="last-block">
+                                        BLOCK TIME
+                                    </p>
+                                    <p  class="last-block1">
+                                        {{blockTime}}S
+                                    </p>
+                                </div>
+                                <div>
+                                    <img src="~/assets/atn-icon.png" class="icon">
+                                </div>
                             </div>
-                        </div>
-                    </el-card>
-                    <el-card>
-                    <div class="grid-content" >
-                            <div>  
-                                <p class="last-block">
-                                    LAST BLOCK
-                                </p>
-                                <p class="last-block1">
-                                {{lastBlockTime}}
-                                </p>
+                        </el-card>
+                        <!-- shadow="hover"-->
+                        <el-card>
+                            <div class="grid-content" >
+                                <div>  
+                                    <p class="last-block">
+                                        USD/ATN
+                                    </p>
+                                    <p class="last-block1">
+                                        {{atnPrice}}
+                                    </p>
+                                </div>
+                                <div>
+                                    <img src="~/assets/home-block time-icon.png" class="icon">
+                                </div>
                             </div>
-                            <div>
-                                <img src="~/assets/home-last block-icon.png" class="icon">
-                            </div>
-                        </div>
-                    </el-card>
-                    <el-card>
-                        <div class="grid-content" >
-                            <div>  
-                                <p class="last-block">
-                                    BLOCK TIME
-                                </p>
-                                <p  class="last-block1">
-                                    {{blockTime}}S
-                                </p>
-                            </div>
-                            <div>
-                                <img src="~/assets/atn-icon.png" class="icon">
-                            </div>
-                        </div>
-                    </el-card>
-                    <!-- shadow="hover"-->
-                    <el-card>
-                        <div class="grid-content" >
-                            <div>  
-                                <p class="last-block">
-                                    USD/ATN
-                                </p>
-                                <p class="last-block1">
-                                    {{atnPrice}}
-                                </p>
-                            </div>
-                            <div>
-                                <img src="~/assets/home-block time-icon.png" class="icon">
-                            </div>
-                        </div>
-                    </el-card>
+                        </el-card>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="table2">
-            <div class="wrapper-blocks">
-                <div class="left-wrapper">
-                    <div class="typeface">Recent Blocks</div>
-                    <el-card class="box-card blocks">
-                        <el-table
-                        v-loading="loading1"
-                        element-loading-text="Loading..."
-                        element-loading-spinner="el-icon-loading"
-                        :data="blockTable"
-                        empty-text="Loading..."
-                        :header-cell-style="{ 
-                            background:'#51B3FA',
-                            padding:'0px', 
-                            textAlign:'center',   
-                            color: '#fff',                        
-                        }"
-                        :header-row-style="{
-                            height:'36px'
-                        }"
-                        :cell-style="{
-                            textAlign:'center',
-                            height:'60px', 
-                            color:'#788091',
-                            fontFamily: 'PingFangSC-Regular',
-                        }"
-                        >
-                            <el-table-column
-                                prop="number"
-                                label="Block"
-                                class="home-left-table"
-                                >
-                                <template slot-scope="scope">
-                                    <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
-                                </template>
-                            </el-table-column>
-                            <el-table-column
-                                prop="time"
-                                label="Time"
-                                class="home-left-table"
-                                width="110"
-                                >
-                            </el-table-column>
-                            <el-table-column
-                                prop="txns"
-                                label="Txns"
-                                class="home-left-table">
-                            </el-table-column>
-                            <el-table-column
-                                prop="blockHash"
-                                label="BlockHash"
-                                class="home-left-table"
-                                width="120px">
-                                <template slot-scope="scope">
-                                    <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.blockHash }}</nuxt-link>
-                                </template>
-                            </el-table-column>
-                        </el-table>
-                    </el-card>
-                </div>
-
-                <div class="right-wrapper">
-                    <div class="typeface">Recent Transactions</div>
-                    <el-card class="box-card transactions">
-                        <el-table
-                            :data="transactionTable"
+            <div class="table2">
+                <div class="wrapper-blocks">
+                    <div class="left-wrapper">
+                        <div class="typeface">Recent Blocks</div>
+                        <el-card class="box-card blocks">
+                            <el-table
+                            v-loading="loading1"
+                            element-loading-text="Loading..."
+                            element-loading-spinner="el-icon-loading"
+                            :data="blockTable"
+                            empty-text="Loading..."
                             :header-cell-style="{ 
-                                 background:'#51B3FA',
-                                padding:'0px',
-                                textAlign:'center',
-                                color: '#fff',
+                                background:'#51B3FA',
+                                padding:'0px', 
+                                textAlign:'center',   
+                                color: '#fff',                        
                             }"
                             :header-row-style="{
-                                height:'36px',
+                                height:'36px'
                             }"
                             :cell-style="{
                                 textAlign:'center',
-                                height:'60px',                                                               
+                                height:'60px', 
                                 color:'#788091',
                                 fontFamily: 'PingFangSC-Regular',
                             }"
-                            v-loading="loading2"
-                            element-loading-text="Loading..."
-                            element-loading-spinner="el-icon-loading"
-                            element-loading-customClass="loading"
                             >
+                                <el-table-column
+                                    prop="number"
+                                    label="Block"
+                                    class="home-left-table"
+                                    >
+                                    <template slot-scope="scope">
+                                        <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    prop="time"
+                                    label="Time"
+                                    class="home-left-table"
+                                    width="110"
+                                    >
+                                </el-table-column>
+                                <el-table-column
+                                    prop="txns"
+                                    label="Txns"
+                                    class="home-left-table">
+                                </el-table-column>
+                                <el-table-column
+                                    prop="blockHash"
+                                    label="BlockHash"
+                                    class="home-left-table"
+                                    width="120px">
+                                    <template slot-scope="scope">
+                                        <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.blockHash }}</nuxt-link>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-card>
+                    </div>
 
-                            <el-table-column
-                                prop="txId"
-                                label="TxHash">
-                                <template slot-scope="scope">
-                                    <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
-                                </template>
-                            </el-table-column>
-                            <el-table-column
-                                prop="time"
-                                label="Time"
-                                width="110">
-                            </el-table-column>    
-                            <el-table-column
-                                prop="from"
-                                label="From">
-                                <template slot-scope="scope">
-                                    <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
-                                </template>
-                            </el-table-column>
-                            <el-table-column
-                                prop="to"
-                                label="To"
+                    <div class="right-wrapper">
+                        <div class="typeface">Recent Transactions</div>
+                        <el-card class="box-card transactions">
+                            <el-table
+                                :data="transactionTable"
+                                :header-cell-style="{ 
+                                    background:'#51B3FA',
+                                    padding:'0px',
+                                    textAlign:'center',
+                                    color: '#fff',
+                                }"
+                                :header-row-style="{
+                                    height:'36px',
+                                }"
+                                :cell-style="{
+                                    textAlign:'center',
+                                    height:'60px',                                                               
+                                    color:'#788091',
+                                    fontFamily: 'PingFangSC-Regular',
+                                }"
+                                v-loading="loading2"
+                                element-loading-text="Loading..."
+                                element-loading-spinner="el-icon-loading"
+                                element-loading-customClass="loading"
                                 >
-                                <template slot-scope="scope">
-                                    <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
-                                </template>
-                            </el-table-column>
-                            <el-table-column
-                                prop="value"
-                                label="Value"
-                                >
-                            </el-table-column>
-                        </el-table>
-                    </el-card>
+
+                                <el-table-column
+                                    prop="txId"
+                                    label="TxHash">
+                                    <template slot-scope="scope">
+                                        <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    prop="time"
+                                    label="Time"
+                                    width="110">
+                                </el-table-column>    
+                                <el-table-column
+                                    prop="from"
+                                    label="From">
+                                    <template slot-scope="scope">
+                                        <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    prop="to"
+                                    label="To"
+                                    >
+                                    <template slot-scope="scope">
+                                        <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column
+                                    prop="value"
+                                    label="Value"
+                                    >
+                                </el-table-column>
+                            </el-table>
+                        </el-card>
+                    </div>
+                    
+
+                    
+
                 </div>
-                
-
-                
-
             </div>
-        </div>
-    </el-main>
+        </el-main>
 
-    <el-footer>
-        <Footer/>
-    </el-footer>
+        <el-footer>
+            <Footer/>
+        </el-footer>
+    </div>
 </div>
 </template>
 
 <style scoped lang="less">
+
+.body {
+    background-color: #F5F7FA;
+    height: 1275px;
+}
+
 .main {
   display: flex;
   align-items: center;
@@ -533,7 +541,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate, toDecimals } from '~/common/method.js'
+import { toDate, toDecimals, toTime } from '~/common/method.js'
 // import * as axios from '../static/js/axios.js'
 // import api from '../static/js/api.js'
 
@@ -615,7 +623,7 @@ import { toDate, toDecimals } from '~/common/method.js'
             this.$axios.$get("/blocks/count").then(res => {
                 this.total = res.count;
                 let vm = this;
-                this.$axios.$get("/blocks/list/" + this.total + "/8").then(res => {
+                this.$axios.$get("/blocks/list/8/" + this.total).then(res => {
                     // console.log(res);
                     // console.log("this", this)
                     var date = new Date(res[0].Timestamp*1000);
@@ -630,7 +638,8 @@ import { toDate, toDecimals } from '~/common/method.js'
                         let block = {};
                         block.number = r.Number;
                         block.txns = r.Txns;
-                        block.time = toDate(r.Timestamp);
+                        console.log("lalala", r.Timestamp)
+                        block.time = toTime(r.Seconds);
                         // block.time = '2 days ago'
                         block.blockHash = r.Hash.toString().substr(0,9) + '...';
                         // console.log("block", block);
@@ -658,7 +667,7 @@ import { toDate, toDecimals } from '~/common/method.js'
                     }
                     // console.log("number", number)
                     transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATN";
-                    transaction.time = toDate(r.Timestamp);
+                    transaction.time = toTime(r.Seconds);
                     // transaction.time = "2 years ago"
                     this.transactionTable.push(transaction);
                 }

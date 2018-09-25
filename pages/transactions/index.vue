@@ -416,7 +416,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate, toDecimals } from '~/common/method.js'
+import { toDate, toDecimals, toTime } from '~/common/method.js'
 
   export default {
 
@@ -445,7 +445,7 @@ import { toDate, toDecimals } from '~/common/method.js'
                 for( let r of res ) {
                     let transaction = {};
                     transaction.number = r.BlockNumber;
-                    transaction.time = toDate(r.Timestamp);
+                    transaction.time = toTime(r.Seconds);
                     transaction.txId = r.Hash.toString().substr(0,10) + '...';
                     transaction.hash = r.Hash.toString();
                     transaction.from = r.From.toString().substr(0,10) + '...';
@@ -475,7 +475,7 @@ import { toDate, toDecimals } from '~/common/method.js'
                 for( let r of res ) {
                     let transaction = {};
                     transaction.number = r.BlockNumber;
-                    transaction.time = toDate(r.Timestamp);
+                    transaction.time = toTime(r.Seconds);
                     transaction.txId = r.Hash.toString().substr(0,10) + '...';
                     transaction.hash = r.Hash.toString();
                     transaction.from = r.From.toString().substr(0,10) + '...';

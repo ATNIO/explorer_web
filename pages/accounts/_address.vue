@@ -764,7 +764,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate, cutStr } from '~/common/method.js'
+import { toDate, cutStr, toTime } from '~/common/method.js'
 import VueClipboard from 'vue-clipboard2';
 import Vue from 'vue'
 
@@ -841,19 +841,19 @@ Vue.use(VueClipboard);
 
             this.$axios.$get("/transactions/list/" + this.pageSize + "/0/account/" + this.address).then(res => {
                 // console.log(res);
-                res.sort((a, b) => {
-                    let keyA = parseInt(a.Timestamp),
-                        keyB = parseInt(b.Timestamp);
-                    // console.log(keyA, keyB);
-                    if(keyA < keyB) return 1;
-                    if(keyA > keyB) return -1;
-                    return 0;
-                })
+                // res.sort((a, b) => {
+                //     let keyA = parseInt(a.Timestamp),
+                //         keyB = parseInt(b.Timestamp);
+                //     // console.log(keyA, keyB);
+                //     if(keyA < keyB) return 1;
+                //     if(keyA > keyB) return -1;
+                //     return 0;
+                // })
                 // console.log("res", res);
                 for(let r of res) {
                     let tx = {};
                     tx.blockNumber = r.BlockNumber;
-                    tx.time = toDate(r.Timestamp);
+                    tx.time = toTime(r.Seconds);
                     tx.from = r.From.toString().substr(0,10) + '...';
                     tx.txId = r.Hash.toString().substr(0,10) + '...'
                     tx.hash = r.Hash.toString();
@@ -883,7 +883,7 @@ Vue.use(VueClipboard);
                 for(let r of res) {
                     let tx = {};
                     tx.blockNumber = r.BlockNumber;
-                    tx.time = toDate(r.Timestamp);
+                    tx.time = toTime(r.Seconds);
                     tx.from = r.From.toString().substr(0,10) + '...';
                     tx.txId = r.Hash.toString().substr(0,10) + '...'
                     tx.hash = r.Hash.toString();

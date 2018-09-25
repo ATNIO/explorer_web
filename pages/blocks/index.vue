@@ -403,7 +403,7 @@ import axios from 'axios'
            
             this.$axios.$get("/blocks/count").then(res => {
                 this.total = res.count;
-                this.$axios.$get("/blocks/list/" + this.total + "/" + this.pageSize).then(res => {
+                this.$axios.$get("/blocks/list/" + this.pageSize + "/" + this.total  ).then(res => {
                     for( let r of res ) {
                         let block = {};
                         block.number = r.Number;
@@ -416,7 +416,7 @@ import axios from 'axios'
         },
         handleCurrentChange(val) {
             console.log("val", val)
-            this.$axios.$get("/blocks/list/" + parseInt(this.total - ((parseInt(val) - 1) * this.pageSize)) + "/" + this.pageSize).then(res => {
+            this.$axios.$get("/blocks/list/" + this.pageSize + "/" + parseInt(this.total - ((parseInt(val) - 1) * this.pageSize))  ).then(res => {
                 this.blockTable = [];
                 for( let r of res ) {
                     let block = {};
