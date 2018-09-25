@@ -43,6 +43,7 @@
                                 prop="value"
                                 label=""
                                 align="right"
+                                min-width="200"
                                 >
                             </el-table-column>
                             

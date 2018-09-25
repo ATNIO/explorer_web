@@ -41,7 +41,7 @@
                     <el-table-column
                         prop="name"
                         label="Name"
-                        min-width="100">
+                        min-width="120">
                         <template slot-scope="scope">
                             <nuxt-link :to="'/dbots/' + scope.row.dbotAddress">{{ scope.row.name }}</nuxt-link>
                         </template>
