@@ -162,6 +162,7 @@
                                 element-loading-text="Loading..."
                                 element-loading-spinner="el-icon-loading"
                                 element-loading-customClass="loading"
+                                empty-text="Loading..."
                                 >
 
                                 <el-table-column

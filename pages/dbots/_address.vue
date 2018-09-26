@@ -778,16 +778,16 @@ Vue.use(VueClipboard);
         this.showData();
     },
     data() {
-      return {
-            dbotAddress: '',
-            leftTable: [],
-            rightTable: [],
-            activeName2: 'first',
-            methodTable: [],
-            input: '',
-            isRegistered: 'false',
-            marketUrl: 'https://market-test.atnio.net/detail/',
-      };
+        return {
+                dbotAddress: '',
+                leftTable: [],
+                rightTable: [],
+                activeName2: 'first',
+                methodTable: [],
+                input: '', 
+                isRegistered: 'false',
+                marketUrl: 'https://market-test.atnio.net/detail/',
+        };
     },
     methods: {
         handleSelect(key, keyPath) {
