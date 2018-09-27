@@ -203,6 +203,14 @@
                                     type="flex"
                                     align="middle"
                                     justify="center"
+                                    :header-cell-style="{ 
+                                        padding:'0px',
+                                        textAlign:'center'
+                                    }"
+                                    :cell-style="{
+                                        textAlign:'center',
+                                        color:'#788091'
+                                    }"
                                     >
                                     <el-table-column
                                         prop="type"
@@ -1049,7 +1057,8 @@ Vue.use(VueClipboard);
                     data.to = t.To.toString().substr(0,10) + '...';
                     data.toAddress = t.To;
                     data.input = t.Input;
-                    data.value = t.Value;
+                    console.log("a",t.Value / 1e18)
+                    data.value = toDecimals(t.Value / 1e18) + " ATN";;
                     data.type = t.Op;
                     this.internalData.push(data);
                 }
