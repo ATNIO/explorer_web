@@ -1,4 +1,5 @@
 const pkg = require('./package')
+// const axios = require('axios')
 
 module.exports = {
   mode: 'universal',
@@ -56,12 +57,21 @@ module.exports = {
 
   proxy: {
     '/api': {
-      // target: 'http://119.3.57.66:4066',
-      target: 'http://localhost:4066',
-      // changeOrigin: true,
+      target: 'http://119.3.57.66:4066',
+      // target: 'http://localhost:4066',
+      changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
   },
+
+  // generate: {
+  //   routes: function () {
+  //     return axios.get('http://119.3.57.66:4066/blocks/number/2')
+  //       .then((res) => {
+  //         return ['/blocks/' + res.data.Number]
+  //       }) 
+  //   },
+  // },
 
   /*
   ** Build configuration
