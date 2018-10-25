@@ -206,7 +206,6 @@
     }
     
     .el-main {
-        background-color: #FFF;
         color: #333;
         text-align: center;
     }

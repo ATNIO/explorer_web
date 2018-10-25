@@ -945,7 +945,7 @@ Vue.use(VueClipboard);
         },
         async showData() {
             await this.$axios.$get("/transactions/hash/" + this.hash).then(res => {
-                console.log(res.BlockNumber)
+                // console.log(res.BlockNumber)
                 this.pending = res.Pending;
                 this.blockHeight = res.BlockNumber;
                 let blockHeight = this.blockHeight;
@@ -980,7 +980,7 @@ Vue.use(VueClipboard);
                 abiDecoder.addABI(transferChannelsABI);
                 const testData = this.inputData.toString();
                 const decodedData = abiDecoder.decodeMethod(testData);
-                console.log('decodedData', decodedData)
+                // console.log('decodedData', decodedData)
                 this.inputDataString = this.inputData;
                 if(decodedData != undefined) {
                     let functionName = decodedData.name;
@@ -1000,13 +1000,13 @@ Vue.use(VueClipboard);
                         this.inputDataString += paramsType[i] + "  " + paramsName[i] + ",";
                     }
                     this.inputDataString = this.inputDataString.substr(0, this.inputDataString.length - 1) + ") \n\n"
-                    console.log("inputdata", this.inputData)
+                    // console.log("inputdata", this.inputData)
                     let methodId = this.inputData.substr(0, 10);
                     this.inputDataString += "MethodID:  " + methodId;
                     for(let i = 0; i < paramsValue.length; i++) {
                         this.inputDataString += "\n[" + i + "]:     " + paramsValue[i] + "\n";
                     }
-                    console.log("inputDataString", this.inputDataString)
+                    // console.log("inputDataString", this.inputDataString)
                 }
                 else {
                     this.inputDataString = Web3.utils.hexToUtf8(this.inputData)
@@ -1015,20 +1015,20 @@ Vue.use(VueClipboard);
                 this.inputTemp = this.inputData;
                 this.inputData = this.inputDataString;
 
-                console.log('res.Pending', res.Pending)
+                // console.log('res.Pending', res.Pending)
                 if(res.Pending === 'true') {
                     this.status = "Pending...";
-                    console.log("pending this.pending", this.pending)
+                    // console.log("pending this.pending", this.pending)
                     let vm = this;
                     let interval = setInterval(async function() {
-                        console.log("send vm.pending", vm.pending)
+                        // console.log("send vm.pending", vm.pending)
                         if(vm.pending == 'true') {
                             await vm.$axios.$get("/transactions/hash/" + vm.hash).then(res => {
                                 vm.pending = res.Pending;
                             })
                         }
                         else {
-                            console.log("res.Status", res.Status)
+                            // console.log("res.Status", res.Status)
                             if(res.Status == "1") {
                                 vm.status = "Success";
                             }
