@@ -21,7 +21,6 @@
                   <span class="title-small green-circle">Top 21</span>
                   <span class="title-small orange-circle">Standby</span>
                   <span class="title-small total">总计:</span><span class="title-small">467 个</span>
-               
                 
               </div>
                 <el-table
@@ -49,43 +48,61 @@
                     <el-table-column
                         prop="number"
                         label="排名"
+                        width="80"
                         >
                         <template slot-scope="scope">
-                            <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
+                            <div class="rank">
+                                <div slot="reference" >
+                                    <el-tag size="medium">{{ scope.row.number }}</el-tag>
+                                </div>
+                            </div>
                         </template>
                     </el-table-column>
+
+                    <el-table-column
+                        prop="rankChange"
+                        label=""
+                        width="50"
+                        >
+                        
+                        <template slot-scope="scope">
+                            <template v-if="scope.row.rankIncrease == false" >
+                                <i class="el-icon-upload2 green-icon" ></i>
+                                <span class="green-rank-change">{{ scope.row.rankChange }}</span>
+                            </template>
+                            <template v-if="scope.row.rankIncrease == true" >
+                                <i class="el-icon-download red-icon" ></i>
+                                <span class="red-rank-change">{{ scope.row.rankChange }}</span>
+                            </template>
+                        </template>
+                    </el-table-column >
 
                     <el-table-column
                         prop="time"
                         label="名称"
                         >
+                        <template slot-scope="scope" class="name-template">
+                            <svg width="25" height="25" data-jdenticon-value="icon value"></svg>
+                            <nuxt-link :to="'/votes/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
+                        </template>
                     </el-table-column>
 
                     <el-table-column
                         prop="txId"
                         label="得票率"
                         >
-                        <template slot-scope="scope">
-                            <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
-                        </template>
                     </el-table-column>
 
                     <el-table-column
                         prop="from"
                         label="投票账户数"
                         >
-                        <template slot-scope="scope">
-                            <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
-                        </template>
                     </el-table-column>
 
                     <el-table-column
                         prop="to"
                         label="已生产区块数"
                         >
-                        <template slot-scope="scope">
-                            <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
-                        </template>
                     </el-table-column>
 
                     
@@ -145,7 +162,7 @@
                         label="见证人"
                         >
                         <template slot-scope="scope">
-                            <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
+                            <nuxt-link :to="'/accounts/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
                         </template>
                     </el-table-column>
 
@@ -159,27 +176,18 @@
                         prop="txId"
                         label="当前周期出块数量"
                         >
-                        <template slot-scope="scope">
-                            <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
-                        </template>
                     </el-table-column>
 
                     <el-table-column
                         prop="from"
                         label="总票数"
                         >
-                        <template slot-scope="scope">
-                            <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
-                        </template>
                     </el-table-column>
 
                     <el-table-column
                         prop="to"
                         label="时间"
                         >
-                        <template slot-scope="scope">
-                            <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
-                        </template>
                     </el-table-column>
 
                     
@@ -193,17 +201,6 @@
                         :page-size=this.pageSize
                         layout="total, prev, pager, next"
                         :total=this.total>
-                    </el-pagination>
-                </div>
-                <div class="mobile-page">
-                    <el-pagination
-                        small
-                        @current-change="handleCurrentChange"
-                        :current-page.sync="currentPage"
-                        :page-size=this.pageSize
-                        layout="prev, pager,next"
-                        :total=this.total
-                        >
                     </el-pagination>
                 </div>
             </el-card>
@@ -259,7 +256,7 @@
         margin-top: -55px;
         margin-bottom: 85px;
     }
-    .title{
+    .title {
       width:100px;
       height:28px;
       font-size:20px;
@@ -269,7 +266,51 @@
     }
 
 
-      .title-small{
+    & /deep/ .el-tag--medium {
+        width: 36px;
+        // height: 20px;
+        background: #EEF9F4;
+        border-radius: 9.5px;
+        opacity: 1;
+        display: inline-block;
+        border: none;
+        color: #44C58E;
+        font-size: 13px;
+    }
+
+    .name-template {
+        display: flex;
+        flex-direction: row;
+        align-items: space-around;
+    }
+
+    .green-icon {
+        margin-left: -20px;
+        color: #00D555;
+        width: 6.2px;
+        height: 8.2px;
+    }
+
+    .red-icon {
+        margin-left: -20px;
+        color: #F13A30;
+        width: 6.2px;
+        height: 8.2px;
+    }
+
+    .green-rank-change {
+        color: #00D555;
+        font-size: 1px;
+        margin-left: 15px;
+    }
+
+    .red-rank-change {
+        color: #F13A30;
+        font-size: 1px;
+        margin-left: 15px;
+    }
+
+    .title-small{
         width:53px;
         height:20px;
         font-size:14px;
@@ -277,12 +318,12 @@
         color:rgba(120,128,145,1);
         line-height:20px;
         margin-right: 30px;
-      }
-      .total{
+    }
+    .total{
         margin-right: 5px !important;
-      }
-      
-      .green-circle:before {
+    }
+    
+    .green-circle:before {
         content: "";
         display: inline-block;
         width:8px;
@@ -290,8 +331,8 @@
         background:rgba(68,197,142,1);
         border-radius: 100%;
         margin-right: 10px;
-      }
-      .orange-circle:before{
+    }
+    .orange-circle:before{
         content: "";
         display: inline-block;
         width:8px;
@@ -299,7 +340,7 @@
         background:rgba(255,149,0,1);
         border-radius: 100%;
         margin-right: 10px;
-      }
+    }
 
     
 
@@ -583,6 +624,14 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
         Header,
         Footer
     },
+    head: {
+        script: [
+            { src: "https://cdn.jsdelivr.net/npm/jdenticon@2.1.0" },
+        ],
+        link: [
+            { rel: 'sylesheet', href: '~assets/icon/iconfont.css' },
+        ]
+    },
     created() {
         this.showData();
     },
@@ -601,9 +650,19 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
         },
         showData() {
             this.$axios.$get("/transactions/list/" + this.pageSize).then(res => {
+                let i = 1;
                 for( let r of res ) {
                     let transaction = {};
-                    transaction.number = r.BlockNumber;
+                    transaction.number = i;
+                    i++;
+                    if(i % 3 == 0) {
+                        transaction.rankIncrease = true;
+                        transaction.rankChange = 2;
+                    }
+                    else if(i % 4 == 0) {
+                        transaction.rankIncrease = false;
+                        transaction.rankChange = 1;
+                    }
                     transaction.time = toTime(r.Seconds);
                     transaction.txId = r.Hash.toString().substr(0,10) + '...';
                     transaction.hash = r.Hash.toString();
