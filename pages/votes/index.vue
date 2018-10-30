@@ -67,11 +67,11 @@
                         
                         <template slot-scope="scope">
                             <template v-if="scope.row.rankIncrease == false" >
-                                <i class="el-icon-upload2 green-icon" ></i>
+                                <i class="green-icon up" ></i>
                                 <span class="green-rank-change">{{ scope.row.rankChange }}</span>
                             </template>
                             <template v-if="scope.row.rankIncrease == true" >
-                                <i class="el-icon-download red-icon" ></i>
+                                <i class="red-icon down" ></i>
                                 <span class="red-rank-change">{{ scope.row.rankChange }}</span>
                             </template>
                         </template>
@@ -296,6 +296,20 @@
         color: #F13A30;
         width: 6.2px;
         height: 8.2px;
+    }
+    .up{
+        background:url("../../assets/up.png") no-repeat center center / contain;
+        width: 10px;
+        height: 10px;
+        display: inline-block;
+        margin-right: -10px;
+    }
+    .down{
+       background:url("../../assets/down.png") no-repeat center center / contain;
+        width: 10px;
+        height: 10px;
+        display: inline-block;
+        margin-right: -10px; 
     }
 
     .green-rank-change {
