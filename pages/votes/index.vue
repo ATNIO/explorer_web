@@ -83,6 +83,7 @@
                         >
                         <template slot-scope="scope" class="name-template">
                             <svg width="25" height="25" data-jdenticon-value="icon value"></svg>
+                            <!-- <canvas width="25" height="25" data-jdenticon-value="icon value"></canvas> -->
                             <nuxt-link :to="'/votes/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
                         </template>
                     </el-table-column>
@@ -626,11 +627,13 @@
 
 </style>
 
+
 <script>
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
 import { toDate, toDecimals, toTime } from '~/common/method.js'
+// import "../../assets/jdenticon.min.js"
 
   export default {
 
@@ -640,11 +643,11 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
     },
     head: {
         script: [
-            { src: "https://cdn.jsdelivr.net/npm/jdenticon@2.1.0" },
+            { src: "../../assets/jdenticon.min.js"},
         ],
-        link: [
-            { rel: 'sylesheet', href: '~assets/icon/iconfont.css' },
-        ]
+    //     // link: [
+    //     //     { rel: 'sylesheet', href: '~assets/icon/iconfont.css' },
+    //     // ]
     },
     created() {
         this.showData();

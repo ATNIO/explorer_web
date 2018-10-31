@@ -30,6 +30,7 @@
     "eslint": "^5.0.1",
     "eslint-loader": "^2.0.0",
     "eslint-plugin-vue": "^4.0.0",
+    "jdenticon": "^2.1.0",
     "less": "^3.8.0",
     "less-loader": "^4.1.0",
     "moment": "^2.22.2",
