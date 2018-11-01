@@ -82,7 +82,7 @@
                         label="名称"
                         >
                         <template slot-scope="scope" class="name-template">
-							<AccountIcon class="name-icon" :value="scope.row.hash" size="15"/>
+							<AccountIcon class="name-icon" :value="scope.row.hash" size="10"/>
                             <nuxt-link :to="'/votes/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
                         </template>
                     </el-table-column>
@@ -282,6 +282,10 @@
         display: flex;
         flex-direction: row;
         align-items: space-around;
+    }
+    .name-icon{
+        margin-right: 10px;
+        margin-bottom: -5px;
     }
 
     .green-icon {
@@ -626,11 +630,13 @@
 
 </style>
 
+
 <script>
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
 import { toDate, toDecimals, toTime } from '~/common/method.js'
+// import "../../assets/jdenticon.min.js"
 
   export default {
 
