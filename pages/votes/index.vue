@@ -647,9 +647,9 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
     head: {
         script: [
         ],
-    //     // link: [
-    //     //     { rel: 'sylesheet', href: '~assets/icon/iconfont.css' },
-    //     // ]
+        link: [
+            { rel: 'sylesheet', href: '~assets/icon/iconfont.css' },
+        ]
     },
     created() {
         this.showData();
