@@ -82,8 +82,7 @@
                         label="名称"
                         >
                         <template slot-scope="scope" class="name-template">
-                            <svg width="25" height="25" data-jdenticon-value="icon value"></svg>
-                            <!-- <canvas width="25" height="25" data-jdenticon-value="icon value"></canvas> -->
+							<AccountIcon class="name-icon" :value="scope.row.hash" size="10"/>
                             <nuxt-link :to="'/votes/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
                         </template>
                     </el-table-column>
@@ -283,6 +282,10 @@
         display: flex;
         flex-direction: row;
         align-items: space-around;
+    }
+    .name-icon{
+        margin-right: 10px;
+        margin-bottom: -5px;
     }
 
     .green-icon {
@@ -643,7 +646,6 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
     },
     head: {
         script: [
-            { src: "../../assets/jdenticon.min.js"},
         ],
     //     // link: [
     //     //     { rel: 'sylesheet', href: '~assets/icon/iconfont.css' },
