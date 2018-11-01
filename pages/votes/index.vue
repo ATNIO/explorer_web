@@ -162,6 +162,7 @@
                         label="见证人"
                         >
                         <template slot-scope="scope">
+                            <AccountIcon class="name-icon" :value="scope.row.hash" size="10"/>
                             <nuxt-link :to="'/accounts/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
                         </template>
                     </el-table-column>

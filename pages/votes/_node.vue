@@ -38,9 +38,7 @@
             <br/>
 
             <el-card class="second-card">
-              <div>
                 <p class="title">投票人</p>
-              </div>
                 <el-table
                     :data="transactionTable"
                     :header-cell-style="{ 
@@ -209,11 +207,7 @@
         font-size:20px;
         font-family:PingFangSC-Regular;
         color:rgba(13,33,56,1);
-        margin: 30px auto 0px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
+        margin: auto auto 10px auto;
     }
 
     .title-small{
