@@ -82,7 +82,7 @@
                         label="名称"
                         >
                         <template slot-scope="scope" class="name-template">
-                            <svg width="25" height="25" data-jdenticon-value="icon value"></svg>
+							<AccountIcon class="name-icon" :value="scope.row.hash" size="15"/>
                             <nuxt-link :to="'/votes/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
                         </template>
                     </el-table-column>
@@ -640,7 +640,6 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
     },
     head: {
         script: [
-            { src: "https://cdn.jsdelivr.net/npm/jdenticon@2.1.0" },
         ],
         link: [
             { rel: 'sylesheet', href: '~assets/icon/iconfont.css' },
