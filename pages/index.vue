@@ -108,6 +108,7 @@
                                     prop="number"
                                     label="Block"
                                     class="home-left-table"
+                                    width="90px"
                                     >
                                     <template slot-scope="scope">
                                         <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
@@ -543,8 +544,16 @@ import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
 import { toDate, toDecimals, toTime } from '~/common/method.js'
+// import { newSocket } from '~/common/socket.js'
 // import * as axios from '../static/js/axios.js'
 // import api from '../static/js/api.js'
+
+// let socket = newSocket();
+// socket.on('connect', () => {
+    // console.log("socket connect !");
+    // const name = username ||'匿名';
+    // socket.emit('join',name);
+// })
 
     export default {
 
