@@ -108,6 +108,7 @@
                                     prop="number"
                                     label="Block"
                                     class="home-left-table"
+			            width="90px"
                                     >
                                     <template slot-scope="scope">
                                         <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
