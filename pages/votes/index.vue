@@ -669,7 +669,7 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
         handleSelect(key, keyPath) {
         },
         showData() {
-            this.$axios.$get("/transactions/list/" + this.pageSize).then(res => {
+            this.$axios.$get("/transactions/list?limit=" + this.pageSize).then(res => {
                 let i = 1;
                 for( let r of res ) {
                     let transaction = {};
@@ -708,7 +708,7 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
             })
         },
         handleCurrentChange(val) {
-            this.$axios.$get("/transactions/list/" + this.pageSize + "/" + ((parseInt(val) - 1) * this.pageSize)).then(res => {
+            this.$axios.$get("/transactions/list?limit=" + this.pageSize + "&offset=" + ((parseInt(val) - 1) * this.pageSize)).then(res => {
                 this.transactionTable = [];
                 for( let r of res ) {
                     let transaction = {};

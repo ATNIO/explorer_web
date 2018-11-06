@@ -18,9 +18,11 @@
                                     <p class="last-block">
                                     BLOCK
                                     </p>
-                                    <p class="last-block1">
-                                    {{latestBlockNumber}}
-                                    </p>
+                                    <transition name="fade">
+                                        <p v-show="show" class="last-block1">
+                                        {{latestBlockNumber}}
+                                        </p>
+                                    </transition>
                                 </div>
                                 <div>
                                     <img src="~/assets/home-block-icon.png" class="icon">
@@ -33,9 +35,11 @@
                                     <p class="last-block">
                                         LAST BLOCK
                                     </p>
-                                    <p class="last-block1">
-                                    {{lastBlockTime}}
-                                    </p>
+                                    <transition name="fade">
+                                        <p v-show="show" class="last-block1">
+                                            {{lastBlockTime}}
+                                        </p>
+                                    </transition>
                                 </div>
                                 <div>
                                     <img src="~/assets/home-last block-icon.png" class="icon">
@@ -124,7 +128,8 @@
                                 <el-table-column
                                     prop="txns"
                                     label="Txns"
-                                    class="home-left-table">
+                                    class="home-left-table"
+                                    >
                                 </el-table-column>
                                 <el-table-column
                                     prop="blockHash"
@@ -142,63 +147,65 @@
                     <div class="right-wrapper">
                         <div class="typeface">Recent Transactions</div>
                         <el-card class="box-card transactions">
-                            <el-table
-                                :data="transactionTable"
-                                :header-cell-style="{ 
-                                    background:'#51B3FA',
-                                    padding:'0px',
-                                    textAlign:'center',
-                                    color: '#fff',
-                                }"
-                                :header-row-style="{
-                                    height:'36px',
-                                }"
-                                :cell-style="{
-                                    textAlign:'center',
-                                    height:'60px',                                                               
-                                    color:'#788091',
-                                    fontFamily: 'PingFangSC-Regular',
-                                }"
-                                v-loading="loading2"
-                                element-loading-text="Loading..."
-                                element-loading-spinner="el-icon-loading"
-                                element-loading-customClass="loading"
-                                empty-text="Loading..."
-                                >
+                            <!-- <transition-group name="list" tag="p"> -->
+                                <el-table
+                                    :data="transactionTable"
+                                    :header-cell-style="{ 
+                                        background:'#51B3FA',
+                                        padding:'0px',
+                                        textAlign:'center',
+                                        color: '#fff',
+                                    }"
+                                    :header-row-style="{
+                                        height:'36px',
+                                    }"
+                                    :cell-style="{
+                                        textAlign:'center',
+                                        height:'60px',                                                               
+                                        color:'#788091',
+                                        fontFamily: 'PingFangSC-Regular',
+                                    }"
+                                    v-loading="loading2"
+                                    element-loading-text="Loading..."
+                                    element-loading-spinner="el-icon-loading"
+                                    element-loading-customClass="loading"
+                                    empty-text="Loading..."
+                                    >
 
-                                <el-table-column
-                                    prop="txId"
-                                    label="TxHash">
-                                    <template slot-scope="scope">
-                                        <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    prop="time"
-                                    label="Time"
-                                    width="110">
-                                </el-table-column>    
-                                <el-table-column
-                                    prop="from"
-                                    label="From">
-                                    <template slot-scope="scope">
-                                        <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    prop="to"
-                                    label="To"
-                                    >
-                                    <template slot-scope="scope">
-                                        <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
-                                    </template>
-                                </el-table-column>
-                                <el-table-column
-                                    prop="value"
-                                    label="Value"
-                                    >
-                                </el-table-column>
-                            </el-table>
+                                    <el-table-column
+                                        prop="txId"
+                                        label="TxHash">
+                                        <template slot-scope="scope">
+                                            <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="time"
+                                        label="Time"
+                                        width="110">
+                                    </el-table-column>    
+                                    <el-table-column
+                                        prop="from"
+                                        label="From">
+                                        <template slot-scope="scope">
+                                            <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="to"
+                                        label="To"
+                                        >
+                                        <template slot-scope="scope">
+                                            <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="value"
+                                        label="Value"
+                                        >
+                                    </el-table-column>
+                                </el-table>
+                            <!-- </transition-group> -->
                         </el-card>
                     </div>
                     
@@ -292,9 +299,40 @@
             float: left;
             position: absolute;
             top: 44px;
-            left: 19px;    
+            left: 19px; 
         }
-       
+
+        .fade-enter {
+            opacity: 0.5;
+        }
+        .fade-enter-active {
+            transition: opacity .1s;
+        }
+        .fade-enter-to {
+            opacity: 0.5;
+        }
+        .fade-leave {
+            opacity: 0.2;
+        }
+        .fade-leave-active {
+            transition: opacity .1s;
+        }
+        .fade-leave-to {
+            opacity: 0.5;
+        }
+
+        .list-item {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .list-enter-active, .list-leave-active {
+            transition: all 1s;
+        }
+        .list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+            
         .icon {
             width: 74px;
             height: 78px;
@@ -544,33 +582,9 @@ import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
 import { toDate, toDecimals, toTime } from '~/common/method.js'
-// import { newSocket } from '~/common/socket.js'
-// import * as axios from '../static/js/axios.js'
-// import api from '../static/js/api.js'
-
-// let socket = newSocket();
-// socket.on('connect', () => {
-    // console.log("socket connect !");
-    // const name = username ||'匿名';
-    // socket.emit('join',name);
-// })
 
     export default {
 
-        // async asyncData({ app }) {
-        // let data = await app.$axios.get('/block/getBlocks')
-        // console.log(data)
-        // let blocks = await api.getBlocks();
-        // let blockTable = [];
-        // for(let block of blocks) {
-        //   let temp = {}
-        //   temp.blockNumber = block.Number;
-        //   temp.txns = block.Txns;
-        //   temp.hash = block.Hash;
-        //   blockTable.push(temp);
-        // }
-        // this.blockTable = blockTable
-        // },
         components: {
             Header,
             Footer
@@ -578,9 +592,12 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
         created() {
             this.showData();
             // this.timer = setInterval(this.showBlocks, 5000)
+            this.refresh();
         },
-        watch: {
-
+        computed: {
+            show() {
+                return this.update;
+            }
         },
         data() {
             return {
@@ -595,52 +612,107 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                 transactionTable: [],
                 loading1: true,
                 loading2: true,
-                // timer: '',
+                update: true,
             };
         },
         methods: {
-        handleSelect(key, keyPath) {
-        },
-        search() {
-            // this.$router.push('blocks/248703')
-            this.$axios.$get("/search/" + this.input).then(res => {
-                let type = res.type;
-                if(type == "block") {
-                    let value = res.value;
-                    let number = value.Number;
-                    this.$router.push('/blocks/' + number);
-                }
-                else if(type == "transaction") {
-                    this.$router.push('/transactions/' + this.input);
-                }
-                else if(type == "dbot") {
-                    this.$router.push('/dbots/' + this.input);
-                }
-                else if(type == "account") {
-                    this.$router.push('/accounts/' + this.input);
-                }
-            }).catch(error => {
-                    this.$router.push('/error');
-            })
-        },
-        async showData() {
+            handleSelect(key, keyPath) {
+            },
+            search() {
+                // this.$router.push('blocks/248703')
+                this.$axios.$get("/search/" + this.input).then(res => {
+                    let type = res.type;
+                    if(type == "block") {
+                        let value = res.value;
+                        let number = value.Number;
+                        this.$router.push('/blocks/' + number);
+                    }
+                    else if(type == "transaction") {
+                        this.$router.push('/transactions/' + this.input);
+                    }
+                    else if(type == "dbot") {
+                        this.$router.push('/dbots/' + this.input);
+                    }
+                    else if(type == "account") {
+                        this.$router.push('/accounts/' + this.input);
+                    }
+                }).catch(error => {
+                        this.$router.push('/error');
+                })
+            },
 
-            // this.$axios.$get("/blocks/maxBlockNumber").then(res => {
-            //     console.log(res);
-            //     this.latestBlockNumber = res;
-            // })
-            this.blockTable = [];
-            this.$axios.$get("/blocks/count").then(res => {
-                this.total = res.count;
+            refresh() {
                 let vm = this;
-                this.$axios.$get("/blocks/list/8/" + this.total).then(res => {
-                    // console.log(res);
-                    // console.log("this", this)
-                    var date = new Date(res[0].Timestamp*1000);
-                    var hours = date.getHours();
-                    var minutes = "0" + date.getMinutes();
-                    var seconds = "0" + date.getSeconds();
-                    var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+                // let count = 0;
+                let interval = setInterval(async function() {
+                    // vm.update = !vm.update;
+                    vm.update = false;
+                    // console.log("vm.update", vm.update);
+                    await vm.$axios.$get("/blocks/list?limit=" + 8).then(async function(res){
+                        // console.log("res", res)
+                        // console.log(new Date())
+                        let date = new Date(res[0].Timestamp*1000);
+                        let hours = date.getHours();
+                        let minutes = "0" + date.getMinutes();
+                        let seconds = "0" + date.getSeconds();
+                        let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+                        vm.latestBlockNumber = res[0].Number;
+                        vm.lastBlockTime = formattedTime;
+                        vm.blockTable = [];
+                        for( let r of res ) {
+                            let block = {};
+                            block.number = r.Number;
+                            block.txns = r.Txns;
+                            block.time = toTime(r.Seconds);
+                            block.blockHash = r.Hash.toString().substr(0,9) + '...';
+                            // console.log("block", block);
+                            vm.blockTable.push(block);
+                        }
+                        vm.loading1 = false;
+                    })
+                    await vm.$axios.$get("/transactions/list?limit=8").then(res => {
+                        vm.transactionTable = [];
+                        for( let r of res ) {
+                            let transaction = {};
+                            transaction.txId = r.Hash.toString().substr(0,9) + '...';
+                            transaction.hash = r.Hash.toString();
+                            transaction.from = r.From.toString().substr(0,9) + '...';
+                            transaction.fromAddress = r.From.toString();
+                            transaction.to = r.To.toString().substr(0,9) + '...';
+                            transaction.toAddress = r.To.toString();
+                            let number = (r.Value / 1e18).toString();
+                            // console.log('number', r.Value / 1e18)
+                            if(number.includes("e+")) {
+                                let array = number.split("e+");
+                                array[0] = Math.floor(array[0] * 100) / 100;
+                                number = array[0] + "e+" + array[1];
+                            }
+                            // console.log("number", number)
+                            transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATN";
+                            transaction.time = toTime(r.Seconds);
+                            // transaction.time = "2 years ago"
+                            vm.transactionTable.push(transaction);
+                        }
+                        vm.loading2 = false;
+                    }),
+
+                    vm.update = true;
+                    // count++;
+                    // if(count == 5)clearInterval(interval);
+                }, 5000)
+            },
+
+            async showData() {
+
+                this.blockTable = [];
+
+                this.$axios.$get("/blocks/list?limit=8").then(res => {
+                    let date = new Date(res[0].Timestamp*1000);
+                    let hours = date.getHours();
+                    let minutes = "0" + date.getMinutes();
+                    let seconds = "0" + date.getSeconds();
+                    let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
                     this.latestBlockNumber = res[0].Number;
                     this.lastBlockTime = formattedTime;
@@ -648,7 +720,6 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                         let block = {};
                         block.number = r.Number;
                         block.txns = r.Txns;
-                        console.log("lalala", r.Timestamp)
                         block.time = toTime(r.Seconds);
                         // block.time = '2 days ago'
                         block.blockHash = r.Hash.toString().substr(0,9) + '...';
@@ -657,43 +728,43 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                     }
                     this.loading1 = false;
                 })
-            })
-            
-            this.$axios.$get("/transactions/list/8").then(res => {
-                for( let r of res ) {
-                    let transaction = {};
-                    transaction.txId = r.Hash.toString().substr(0,9) + '...';
-                    transaction.hash = r.Hash.toString();
-                    transaction.from = r.From.toString().substr(0,9) + '...';
-                    transaction.fromAddress = r.From.toString();
-                    transaction.to = r.To.toString().substr(0,9) + '...';
-                    transaction.toAddress = r.To.toString();
-                    let number = (r.Value / 1e18).toString();
-                    // console.log('number', r.Value / 1e18)
-                    if(number.includes("e+")) {
-                        let array = number.split("e+");
-                        array[0] = Math.floor(array[0] * 100) / 100;
-                        number = array[0] + "e+" + array[1];
+                
+                this.$axios.$get("/transactions/list?limit=8").then(res => {
+                    for( let r of res ) {
+                        let transaction = {};
+                        transaction.txId = r.Hash.toString().substr(0,9) + '...';
+                        transaction.hash = r.Hash.toString();
+                        transaction.from = r.From.toString().substr(0,9) + '...';
+                        transaction.fromAddress = r.From.toString();
+                        transaction.to = r.To.toString().substr(0,9) + '...';
+                        transaction.toAddress = r.To.toString();
+                        let number = (r.Value / 1e18).toString();
+                        // console.log('number', r.Value / 1e18)
+                        if(number.includes("e+")) {
+                            let array = number.split("e+");
+                            array[0] = Math.floor(array[0] * 100) / 100;
+                            number = array[0] + "e+" + array[1];
+                        }
+                        // console.log("number", number)
+                        transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATN";
+                        transaction.time = toTime(r.Seconds);
+                        // transaction.time = "2 years ago"
+                        this.transactionTable.push(transaction);
                     }
-                    // console.log("number", number)
-                    transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATN";
-                    transaction.time = toTime(r.Seconds);
-                    // transaction.time = "2 years ago"
-                    this.transactionTable.push(transaction);
-                }
-                this.loading2 = false;
-            }),
-            this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
-                this.atnPrice = parseFloat(res[0].price_usd).toFixed(5);
-            })
-            // this.atnPrice = 0.233416
-        },
-        // cancelAutoUpdate: function() { clearInterval(this.timer) },
-        
-        },
-        // beforeDestroy() {
-        //   clearInterval(this.timer)
-        // }
+                    this.loading2 = false;
+                }),
 
-    }
+                this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
+                    this.atnPrice = parseFloat(res[0].price_usd).toFixed(5);
+                })
+                // this.atnPrice = 0.233416
+            },
+            // cancelAutoUpdate: function() { clearInterval(this.timer) },
+            
+            },
+            // beforeDestroy() {
+            //   clearInterval(this.timer)
+            // }
+
+        }
 </script>

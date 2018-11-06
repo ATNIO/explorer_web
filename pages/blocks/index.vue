@@ -68,7 +68,7 @@
                         @current-change="handleCurrentChange"
                         :current-page.sync="currentPage"
                         :page-size=this.pageSize
-                        :pager-count=3
+                        :pager-count="3"
                         layout="prev, pager,next"
                         :total=this.total
                         >
@@ -403,7 +403,7 @@ import axios from 'axios'
            
             this.$axios.$get("/blocks/count").then(res => {
                 this.total = res.count;
-                this.$axios.$get("/blocks/list/" + this.pageSize + "/" + this.total  ).then(res => {
+                this.$axios.$get("/blocks/list?limit=" + this.pageSize + "&offset=" + this.total  ).then(res => {
                     for( let r of res ) {
                         let block = {};
                         block.number = r.Number;
@@ -416,14 +416,17 @@ import axios from 'axios'
         },
         handleCurrentChange(val) {
             console.log("val", val)
-            this.$axios.$get("/blocks/list/" + this.pageSize + "/" + parseInt(this.total - ((parseInt(val) - 1) * this.pageSize))  ).then(res => {
-                this.blockTable = [];
-                for( let r of res ) {
-                    let block = {};
-                    block.number = r.Number;
-                    block.txns = r.Txns;
-                    this.blockTable.push(block);
-                }
+            this.$axios.$get("/blocks/count").then(res => {
+                this.total = res.count;
+                this.$axios.$get("/blocks/list?limit=" + this.pageSize + "&offset=" + parseInt(this.total - ((parseInt(val) - 1) * this.pageSize))  ).then(res => {
+                    this.blockTable = [];
+                    for( let r of res ) {
+                        let block = {};
+                        block.number = r.Number;
+                        block.txns = r.Txns;
+                        this.blockTable.push(block);
+                    }
+                })
             })
         },
         search() {

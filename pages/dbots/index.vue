@@ -95,7 +95,7 @@
                         :page-size=this.pageSize
                         layout="prev, pager,next"
                         :total=this.total
-                        :pager-count=3
+                        :pager-count="3"
                         >
                     </el-pagination>
                 </div>
@@ -437,7 +437,7 @@ const Web3 = require('web3')
         handleSelect(key, keyPath) {
         },
         showData() {
-            this.$axios.$get("/dbots/allList/" + this.pageSize + "/0").then(res => {
+            this.$axios.$get("/dbots/allList?limit=" + this.pageSize).then(res => {
                 for( let r of res ) {
                     let dbot = {};
                     dbot.name = Web3.utils.hexToUtf8(r.Name).toString();
@@ -456,9 +456,9 @@ const Web3 = require('web3')
             })
         },
         handleCurrentChange(val) {
-            this.$axios.$get("/dbots/allList/" + this.pageSize + "/" + ((parseInt(val) - 1) * this.pageSize)).then(res => {
+            this.$axios.$get("/dbots/allList?limit=" + this.pageSize + "&offset=" + ((parseInt(val) - 1) * this.pageSize)).then(res => {
                 this.dbotTable = [];
-                console.log("res",res)
+                // console.log("res",res)
                 for( let r of res ) {
                     let dbot = {};
                     dbot.name = Web3.utils.hexToUtf8(r.Name).toString();

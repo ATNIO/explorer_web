@@ -86,7 +86,7 @@
                             :page-size=this.pageSize
                             layout="prev, pager,next"
                             :total=this.total
-                            :pager-count=3
+                            :pager-count="3"
                             >
                         </el-pagination>
                     </div>
@@ -430,7 +430,7 @@ import axios from 'axios'
         },
         showData() {
             let vm = this;
-            this.$axios.$get("/accounts/list/" + this.pageSize).then(async function(res){
+            this.$axios.$get("/accounts/list?limit=" + this.pageSize).then(async function(res){
                 for( let r of res ) {
                     let account = {};
                     // console.log("accounts list res", res)
@@ -461,7 +461,7 @@ import axios from 'axios'
         handleCurrentChange(val) {
             // console.log(`当前页: ${val}`);
             let vm = this;
-            this.$axios.$get("/accounts/list/" + this.pageSize + "/" + ((parseInt(val) - 1) * this.pageSize)).then(async function(res){
+            this.$axios.$get("/accounts/list?limit=" + this.pageSize + "&offset=" + ((parseInt(val) - 1) * this.pageSize)).then(async function(res){
                 vm.accountTable = [];
                 for( let r of res ) {
                     let account = {};
