@@ -19,7 +19,7 @@
                                     BLOCK
                                     </p>
                                     <transition name="fade">
-                                        <p v-show="show" class="last-block1">
+                                        <p v-show="update" class="last-block1">
                                         {{latestBlockNumber}}
                                         </p>
                                     </transition>
@@ -36,7 +36,7 @@
                                         LAST BLOCK
                                     </p>
                                     <transition name="fade">
-                                        <p v-show="show" class="last-block1">
+                                        <p v-show="update" class="last-block1">
                                             {{lastBlockTime}}
                                         </p>
                                     </transition>
@@ -592,12 +592,15 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
         created() {
             this.showData();
             // this.timer = setInterval(this.showBlocks, 5000)
-            this.refresh();
+            if(this.pageName === 'index') {
+                this.refresh();
+            }
+            
         },
         computed: {
-            show() {
-                return this.update;
-            }
+            pageName () {
+                return this.$route.name;
+            },
         },
         data() {
             return {
@@ -622,18 +625,18 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                 // this.$router.push('blocks/248703')
                 this.$axios.$get("/search/" + this.input).then(res => {
                     let type = res.type;
-                    if(type == "block") {
+                    if(type === "block") {
                         let value = res.value;
                         let number = value.Number;
                         this.$router.push('/blocks/' + number);
                     }
-                    else if(type == "transaction") {
+                    else if(type === "transaction") {
                         this.$router.push('/transactions/' + this.input);
                     }
-                    else if(type == "dbot") {
+                    else if(type === "dbot") {
                         this.$router.push('/dbots/' + this.input);
                     }
-                    else if(type == "account") {
+                    else if(type === "account") {
                         this.$router.push('/accounts/' + this.input);
                     }
                 }).catch(error => {
@@ -699,7 +702,8 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
 
                     vm.update = true;
                     // count++;
-                    // if(count == 5)clearInterval(interval);
+                    // if(count === 5)clearInterval(interval);
+                    if(this.pageName !== 'index')clearInterval(interval);
                 }, 5000)
             },
 
