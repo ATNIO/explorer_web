@@ -19,7 +19,6 @@
                     <el-menu-item index="/transactions" class="transactions">Transactions</el-menu-item>
                     <el-menu-item index="/accounts" class="accounts">Accounts</el-menu-item>
                     <el-menu-item index="/dbots" class="dbots">Dbots</el-menu-item>
-                    <el-menu-item index="/votes" class="dbots">Votes</el-menu-item>
                 </el-menu>
                 <div class="search" v-show="searchShow">
                     <el-input v-model="input" class="input" placeholder="Search" @keyup.enter.native="search"></el-input>
