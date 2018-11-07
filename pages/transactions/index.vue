@@ -425,6 +425,8 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
         Footer
     },
     created() {
+    },
+    mounted() {
         this.showData();
     },
     data() {

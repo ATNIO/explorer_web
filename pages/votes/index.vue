@@ -653,6 +653,8 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
         ]
     },
     created() {
+    },
+    mounted() {
         this.showData();
     },
     data() {

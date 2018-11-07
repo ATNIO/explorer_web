@@ -782,6 +782,8 @@ Vue.use(VueClipboard);
     },
 
     created() {
+    },
+    mounted() {
         this.showData();
     },
     data() {
