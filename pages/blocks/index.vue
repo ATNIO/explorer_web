@@ -384,6 +384,8 @@ import axios from 'axios'
         Footer
     },
     created() {
+    },
+    mounted() {
         this.showData();
     },
     data() {

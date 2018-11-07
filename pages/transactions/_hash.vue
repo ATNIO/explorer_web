@@ -911,6 +911,8 @@ Vue.use(VueClipboard);
     },
 
     created() {
+    },
+    mounted() {
         this.showData();
     },
     data() {
@@ -1049,7 +1051,7 @@ Vue.use(VueClipboard);
             })
             this.$axios.$get("/traces/hash/" + this.hash).then(res => {
                 let trace = res.Trace;
-                console.log(res)
+                // console.log(res)
                 for(let t of trace) {
                     let data = {};
                     data.from = t.From.toString().substr(0,10) + '...';
@@ -1057,7 +1059,7 @@ Vue.use(VueClipboard);
                     data.to = t.To.toString().substr(0,10) + '...';
                     data.toAddress = t.To;
                     data.input = t.Input;
-                    console.log("a",t.Value / 1e18)
+                    // console.log("a",t.Value / 1e18)
                     data.value = toDecimals(t.Value / 1e18) + " ATN";;
                     data.type = t.Op;
                     this.internalData.push(data);

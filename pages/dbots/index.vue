@@ -421,6 +421,8 @@ const Web3 = require('web3')
         Footer
     },
     created() {
+    },
+    mounted() {
         this.showData();
     },
     data() {

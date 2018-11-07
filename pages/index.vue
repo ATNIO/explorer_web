@@ -107,6 +107,7 @@
                                 color:'#788091',
                                 fontFamily: 'PingFangSC-Regular',
                             }"
+                            :row-class-name="tableRowClassName"
                             >
                                 <el-table-column
                                     prop="number"
@@ -263,12 +264,14 @@
         width: 1050px;
         justify-content: space-between;
 
-         & /deep/ .el-card__body{
+         & /deep/ .el-card__body {
             padding: 0;
             width: 244px;
             height: 106px;
             flex: 1;
         }
+
+
         .grid-content {
             border-radius: 5px;
             display: flex;
@@ -321,18 +324,6 @@
             opacity: 0.5;
         }
 
-        .list-item {
-            display: inline-block;
-            margin-right: 10px;
-        }
-        .list-enter-active, .list-leave-active {
-            transition: all 1s;
-        }
-        .list-enter, .list-leave-to /* .list-leave-active below version 2.1.8 */ {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-            
         .icon {
             width: 74px;
             height: 78px;
@@ -342,6 +333,7 @@
         }
     }
 }
+
 
 .wrapper-blocks{
     width: 1050px;
@@ -366,6 +358,7 @@
     & /deep/ .el-card__body{
         padding: 0;
     }
+
     .left-wrapper{
         .blocks{
             width: 396px;
@@ -390,11 +383,11 @@
     height: 518px;
 }
 
-& /deep/ .el-table__empty-block {
-    height: 518px;
-    background-color: #fff;
-    color: #fff;
-}
+// & /deep/ .el-table__empty-block {
+//     height: 518px;
+//     background-color: #fff;
+//     color: #fff;
+// }
 
 .el-footer {
   text-align: center;
@@ -577,6 +570,17 @@
 }
 </style>
 
+<style lang="less">
+    .el-table .warning-row {
+        animation:  1s rainbow 3;
+    }
+
+    @keyframes rainbow {
+        0% { color: #000; }
+        100% { color: #fff }
+    }
+</style>
+
 <script>
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
@@ -590,13 +594,13 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
             Footer
         },
         created() {
-            this.showData();
-            // this.timer = setInterval(this.showBlocks, 5000)
-            if(this.pageName === 'index') {
-                this.refresh();
-            }
-            
         },
+
+        mounted() {
+            this.showData();
+            this.refresh();
+        },
+
         computed: {
             pageName () {
                 return this.$route.name;
@@ -621,6 +625,13 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
         methods: {
             handleSelect(key, keyPath) {
             },
+
+            tableRowClassName({row, rowIndex}) {
+                // if(rowIndex === 0) {
+                //     return 'warning-row';
+                // } 
+            },
+
             search() {
                 // this.$router.push('blocks/248703')
                 this.$axios.$get("/search/" + this.input).then(res => {
@@ -646,7 +657,7 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
 
             refresh() {
                 let vm = this;
-                // let count = 0;
+                let count = 0;
                 let interval = setInterval(async function() {
                     // vm.update = !vm.update;
                     vm.update = false;
@@ -702,8 +713,12 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
 
                     vm.update = true;
                     // count++;
-                    // if(count === 5)clearInterval(interval);
-                    if(this.pageName !== 'index')clearInterval(interval);
+                    // if(count === 2)clearInterval(interval);
+                    // console.log("this.pageName", vm.$route.name)
+                    if(vm.$route.name !== 'index') {
+                        console.log("clear interval...")
+                        clearInterval(interval);
+                    }
                 }, 5000)
             },
 
