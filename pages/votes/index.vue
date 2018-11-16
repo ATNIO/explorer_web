@@ -1,7 +1,7 @@
 <template>
 <div class="body">
     <Header/>
-      
+    
   <el-main class="main">
       <div class="table">
         <div class="network-status">
@@ -15,16 +15,17 @@
                 <p>Vote</p>
             </div>
             <el-card class="table-card">
-              <div>
-                <p class="title">超级节点</p>
+                <div>
+                    <p class="title">超级节点</p>
 
-                  <span class="title-small green-circle">Top 21</span>
-                  <span class="title-small orange-circle">Standby</span>
-                  <span class="title-small total">总计:</span><span class="title-small">467 个</span>
-                
-              </div>
+                    <span class="title-small green-circle">Top 31</span>
+                    <span class="title-small orange-circle">Standby</span>
+                    <span class="title-small total">总计:</span><span class="title-small">{{this.total}} 个</span>
+                    
+                </div>
                 <el-table
-                    :data="transactionTable"
+                    ref="candidates"
+                    :data="candidatesTable"
                     :header-cell-style="{ 
                         background:'#F4F6F9',
                         padding:'0px',
@@ -43,19 +44,21 @@
                     element-loading-text="Loading..."
                     element-loading-spinner="el-icon-loading"
                     element-loading-customClass="loading"
+                    highlight-current-row
                     >
 
                     <el-table-column
-                        prop="number"
+                        prop="rank"
                         label="排名"
                         width="80"
                         >
                         <template slot-scope="scope">
-                            <div class="rank">
-                                <div slot="reference" >
-                                    <el-tag size="medium">{{ scope.row.number }}</el-tag>
-                                </div>
-                            </div>
+                            <template v-if="scope.row.rank <= 31"> 
+                                <el-tag size="success">{{ scope.row.rank }}</el-tag>
+                            </template>
+                            <template v-else> 
+                                <el-tag size="warning">{{ scope.row.rank }}</el-tag>
+                            </template>
                         </template>
                     </el-table-column>
 
@@ -66,11 +69,11 @@
                         >
                         
                         <template slot-scope="scope">
-                            <template v-if="scope.row.rankIncrease == false" >
+                            <template v-if="scope.row.rankIncrease == true" >
                                 <i class="green-icon up" ></i>
                                 <span class="green-rank-change">{{ scope.row.rankChange }}</span>
                             </template>
-                            <template v-if="scope.row.rankIncrease == true" >
+                            <template v-if="scope.row.rankDecrease == true" >
                                 <i class="red-icon down" ></i>
                                 <span class="red-rank-change">{{ scope.row.rankChange }}</span>
                             </template>
@@ -78,29 +81,30 @@
                     </el-table-column >
 
                     <el-table-column
-                        prop="time"
+                        prop="name"
                         label="名称"
+                        width="300"
                         >
                         <template slot-scope="scope" class="name-template">
-							<AccountIcon class="name-icon" :value="scope.row.hash" size="10"/>
-                            <nuxt-link :to="'/votes/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
+							<AccountIcon class="name-icon" :value="scope.row.address" size="10"/>
+                            <nuxt-link :to="'/votes/' + scope.row.address">{{ scope.row.name }}</nuxt-link>
                         </template>
                     </el-table-column>
 
                     <el-table-column
-                        prop="txId"
+                        prop="pVotes"
                         label="得票率"
                         >
                     </el-table-column>
 
                     <el-table-column
-                        prop="from"
+                        prop="voters"
                         label="投票账户数"
                         >
                     </el-table-column>
 
                     <el-table-column
-                        prop="to"
+                        prop="seal"
                         label="已生产区块数"
                         >
                     </el-table-column>
@@ -111,7 +115,7 @@
                 <div class="page">
                     <el-pagination
                         small
-                        @current-change="handleCurrentChange"
+                        @current-change="handleCurrentChange1"
                         :current-page.sync="currentPage"
                         :page-size=this.pageSize
                         layout="total, prev, pager, next"
@@ -121,7 +125,7 @@
                 <div class="mobile-page">
                     <el-pagination
                         small
-                        @current-change="handleCurrentChange"
+                        @current-change="handleCurrentChange1"
                         :current-page.sync="currentPage"
                         :page-size=this.pageSize
                         layout="prev, pager,next"
@@ -136,7 +140,7 @@
                 <p class="title">活跃见证人</p> 
               </div>
                 <el-table
-                    :data="transactionTable"
+                    :data="delegatersTable"
                     :header-cell-style="{ 
                         background:'#F4F6F9',
                         padding:'0px',
@@ -160,33 +164,34 @@
                     <el-table-column
                         prop="number"
                         label="见证人"
+                        width="300"
                         >
                         <template slot-scope="scope">
-                            <AccountIcon class="name-icon" :value="scope.row.hash" size="10"/>
-                            <nuxt-link :to="'/accounts/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
+                            <AccountIcon class="name-icon" :value="scope.row.address" size="10"/>
+                            <nuxt-link :to="'/accounts/' + scope.row.address">{{ scope.row.name }}</nuxt-link>
                         </template>
                     </el-table-column>
 
                     <el-table-column
-                        prop="time"
-                        label="最近确认"
-                        >
-                    </el-table-column>
-
-                    <el-table-column
-                        prop="txId"
-                        label="当前周期出块数量"
-                        >
-                    </el-table-column>
-
-                    <el-table-column
-                        prop="from"
+                        prop="votes"
                         label="总票数"
                         >
                     </el-table-column>
 
                     <el-table-column
-                        prop="to"
+                        prop="lastSeal"
+                        label="最近确认"
+                        >
+                    </el-table-column>
+
+                    <el-table-column
+                        prop="sealInEpoch"
+                        label="当前周期出块数量"
+                        >
+                    </el-table-column>
+
+                    <el-table-column
+                        prop="lastSealTime"
                         label="时间"
                         >
                     </el-table-column>
@@ -197,7 +202,7 @@
                 <div class="page">
                     <el-pagination
                         small
-                        @current-change="handleCurrentChange"
+                        @current-change="handleCurrentChange2"
                         :current-page.sync="currentPage"
                         :page-size=this.pageSize
                         layout="total, prev, pager, next"
@@ -210,7 +215,7 @@
     </el-main>
     <br> <br>
   <el-footer>
-    <Footer/>
+    <!-- <Footer/> -->
   </el-footer>
 </div>
 </template>
@@ -241,7 +246,7 @@
     & /deep/ .el-card__body{
         padding: 0;
         width: 950px;
-        height: 1508px;
+        height: 2108px;
         flex: 1;
         margin: 20px 50px;
     }
@@ -266,8 +271,7 @@
       margin: 30px auto 0px;
     }
 
-
-    & /deep/ .el-tag--medium {
+    & /deep/ .el-tag--success {
         width: 36px;
         // height: 20px;
         background: #EEF9F4;
@@ -278,6 +282,33 @@
         color: #44C58E;
         font-size: 13px;
     }
+
+    & /deep/ .el-tag--warning {
+        width: 36px;
+        // height: 20px;
+        background: #FFF5EA;
+        border-radius: 9.5px;
+        opacity: 1;
+        display: inline-block;
+        border: none;
+        color: #FF9500;
+        font-size: 13px;
+    }
+
+    .orange-rag {
+        & /deep/ .el-tag--medium {
+            width: 36px;
+            // height: 20px;
+            background: #EEF9F4;
+            border-radius: 9.5px;
+            opacity: 1;
+            display: inline-block;
+            border: none;
+            color: #44C58E;
+            font-size: 13px;
+        }
+    }
+    
 
     .name-template {
         display: flex;
@@ -636,14 +667,13 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate, toDecimals, toTime } from '~/common/method.js'
-// import "../../assets/jdenticon.min.js"
+import { toDecimals, toTime } from '~/common/method.js'
 
   export default {
 
     components: {
         Header,
-        Footer
+        Footer,
     },
     head: {
         script: [
@@ -656,89 +686,232 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
     },
     mounted() {
         this.showData();
+        this.refresh();
     },
     data() {
       return {
-            transactionTable: [],
-            total: 0,
+            candidatesTable: [],
+            delegatersTable:[],
+            total: 40,
             currentPage: 1,
-            pageSize: 11,
-            input: '',
+            pageSize: 32,
             loading: true,
+            input: '',
+            lastCandidatesTable: [],
+            candidatesPage: 1,
+            delegatersPage: 1,
+            currentRow: 0,
       };
     },
     methods: {
         handleSelect(key, keyPath) {
         },
+        
         showData() {
-            this.$axios.$get("/transactions/list?limit=" + this.pageSize).then(res => {
+
+            this.$axios.$get("/votes/candidatesStatus?page_size=" + this.pageSize + "&page_number=1").then(res => {
                 let i = 1;
-                for( let r of res ) {
-                    let transaction = {};
-                    transaction.number = i;
+                let candidates = res;
+                for(let j = 0; j < candidates.length && j < this.pageSize; j++) {
+                    let candidate = {};
+                    candidate.rank = i;
+                    candidate.address = candidates[j].address;
+                    candidate.name = candidates[j].address.toString().substr(0,25) + '...';
+                    candidate.pVotes = candidates[j].pVotes.toFixed(3) + "%";
+                    candidate.voters = parseInt(candidates[j].voters).toLocaleString('en-US');
+                    candidate.seal = parseInt(candidates[j].seal).toLocaleString('en-US');
+                    this.candidatesTable.push(candidate);
+                    this.lastCandidatesTable.push(candidate);
                     i++;
-                    if(i % 3 == 0) {
-                        transaction.rankIncrease = true;
-                        transaction.rankChange = 2;
-                    }
-                    else if(i % 4 == 0) {
-                        transaction.rankIncrease = false;
-                        transaction.rankChange = 1;
-                    }
-                    transaction.time = toTime(r.Seconds);
-                    transaction.txId = r.Hash.toString().substr(0,10) + '...';
-                    transaction.hash = r.Hash.toString();
-                    transaction.from = r.From.toString().substr(0,10) + '...';
-                    transaction.to = r.To.toString().substr(0,10) + '...';
-                    transaction.fromAddress = r.From.toString()
-                    transaction.toAddress = r.To.toString()
-                    let number = (r.Value / 1e18).toString();
-                    // console.log('number', r.Value / 1e18)
-                    if(number.includes("e+")) {
-                        let array = number.split("e+");
-                        array[0] = Math.floor(array[0] * 100) / 100;
-                        number = array[0] + "e+" + array[1];
-                    }
-                    // console.log("number", number)
-                    transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATN";
-                    this.transactionTable.push(transaction);
                 }
                 this.loading = false;
             })
-            this.$axios.$get("/transactions/count").then(res => {
-                this.total = res.count;
+
+            this.$axios.$get("/votes/delegatersStatus?page_size=" + this.pageSize + "&page_number=1").then(res => {
+                // console.log(res)
+                for( let r of res ) {
+                    let delegater = {};
+                    delegater.address = r.address;
+                    delegater.name = r.address.toString().substr(0,25) + '...';
+                    delegater.lastSeal = r.lastSeal;
+                    delegater.sealInEpoch = r.sealInEpoch;
+                    delegater.votes = parseInt(r.votes).toLocaleString('en-US');
+
+                    let date = new Date(parseInt(r.lastSealTime));
+                    let hours = date.getHours();
+                    let minutes = "0" + date.getMinutes();
+                    let seconds = "0" + date.getSeconds();
+                    let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+                    delegater.lastSealTime = formattedTime;
+                    this.delegatersTable.push(delegater)
+                }
+                this.loading = false;
             })
         },
-        handleCurrentChange(val) {
-            this.$axios.$get("/transactions/list?limit=" + this.pageSize + "&offset=" + ((parseInt(val) - 1) * this.pageSize)).then(res => {
-                this.transactionTable = [];
-                for( let r of res ) {
-                    let transaction = {};
-                    transaction.number = r.BlockNumber;
-                    transaction.time = toTime(r.Seconds);
-                    transaction.txId = r.Hash.toString().substr(0,10) + '...';
-                    transaction.hash = r.Hash.toString();
-                    transaction.from = r.From.toString().substr(0,10) + '...';
-                    transaction.to = r.To.toString().substr(0,10) + '...';
-                    transaction.fromAddress = r.From.toString()
-                    transaction.toAddress = r.To.toString()
-                    let number = (r.Value / 1e18).toString();
-                    // console.log('number', r.Value / 1e18)
-                    if(number.includes("e+")) {
-                        let array = number.split("e+");
-                        array[0] = Math.floor(array[0] * 100) / 100;
-                        number = array[0] + "e+" + array[1];
+
+        refresh() {
+            let self = this;
+            this.setCurrent();
+            let count = 0;
+            let interval = setInterval(async function() {
+                self.getCandidatesStatus(self);
+
+                self.$axios.$get("/votes/delegatersStatus?page_size=" + self.pageSize + "&page_number=" + self.delegatersPage).then(res => {
+                    // console.log(res)
+                    // console.log("delegatersPage", self.delegatersPage);
+                    self.delegatersTable = [];
+                    for( let r of res ) {
+                        let delegater = {};
+                        delegater.address = r.address;
+                        delegater.name = r.address.toString().substr(0,25) + '...';
+                        delegater.lastSeal = r.lastSeal;
+                        delegater.sealInEpoch = r.sealInEpoch;
+                        delegater.votes = parseInt(r.votes).toLocaleString('en-US');
+
+                        let date = new Date(parseInt(r.lastSealTime));
+                        let hours = date.getHours();
+                        let minutes = "0" + date.getMinutes();
+                        let seconds = "0" + date.getSeconds();
+                        let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+                        delegater.lastSealTime = formattedTime;
+
+                        // for(let m = 0; m < self.delegatersTable.length; m++) {
+                        //     if(self.delegatersTable[m].address === delegater.address) {
+                        //         self.delegatersTable[m] = delegater;
+                        //     }
+                        // }
+                        self.delegatersTable.push(delegater)
                     }
-                    // console.log("number", number)
-                    transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATN";
-                    // let tempValue = Math.floor(r.Value / 1e18 * 100) / 100 + ' ATN';
-                    // if(tempValue.includes('e')) {
-                    //     tempValue = tempValue.substr(0, 5) + tempValue.substr(tempValue.length - 10, tempValue.length);
-                    //     // console.log("tempValue", tempValue)
-                    // }
-                    // transaction.value = tempValue;
-                    this.transactionTable.push(transaction);
+                    self.loading = false;
+                })
+                // count++;
+                // if(count === 2)clearInterval(interval);
+                // console.log("this.pageName", self.$route.name)
+                if(self.$route.name !== 'votes') {
+                    console.log("clear interval...")
+                    clearInterval(interval);
                 }
+
+
+            }, 5000)
+        },
+
+        async getCandidatesStatus(self) {
+            await self.$axios.$get("/votes/candidatesStatus?page_size=" + self.pageSize + "&page_number=" + self.candidatesPage).then(async function(res){
+                // console.log(res)
+                // console.log("candidatesPage", self.candidatesPage);
+                let i = self.pageSize * (self.candidatesPage - 1) + 1;
+                // self.candidatesTable = [];
+                let tempCandidatesTable = [];
+                let candidates = res;
+                let currentRow, test;
+                for(let j = 0; j < candidates.length && j < self.pageSize; j++) {
+                    let candidate = {};
+                    candidate.rank = i;
+                    candidate.address = candidates[j].address;
+                    candidate.name = candidates[j].address.toString().substr(0,25) + '...';
+                    candidate.pVotes = candidates[j].pVotes.toFixed(3) + "%";
+                    candidate.voters = parseInt(candidates[j].voters).toLocaleString('en-US');
+                    candidate.seal = parseInt(candidates[j].seal).toLocaleString('en-US');
+
+                    // console.log("candidate.address", candidate.address);
+                    // console.log("lastCAndidatesTable", self.lastCandidatesTable)
+                    for(let k = 0; k < self.lastCandidatesTable.length; k++) {
+                        if(candidates[j].address === self.lastCandidatesTable[k].address) {
+                            if(j < k) {
+                                candidate.rankIncrease = true;
+                                candidate.rankChange = k - j;
+                            }
+                            else if(j > k) {
+                                candidate.rankDecrease = true;
+                                candidate.rankChange = j - k;
+                            }
+                            if(candidates[j].seal > self.lastCandidatesTable[k].seal) {
+                                currentRow = j;
+                                test = k;
+                                
+                            }
+                            break;
+                        }
+                    }
+                    tempCandidatesTable.push(candidate);
+                    i++;
+                }
+                self.setCurrent(self.candidatesTable[test]);
+                await self.sleep(1000);
+                self.candidatesTable = tempCandidatesTable;
+                self.setCurrent(self.candidatesTable[currentRow]);
+                self.lastCandidatesTable = self.candidatesTable;
+            })
+        },
+
+        sleep(ms) {
+	        return new Promise(resolve => setTimeout(resolve, ms))
+        },
+        setCurrent(row) {
+            console.log("row", row);
+            this.$refs.candidates.setCurrentRow(row);
+        },
+        timeStamp2String (time){
+             var datetime = new Date();
+             datetime.setTime(time);
+             var year = datetime.getFullYear();
+             var month = datetime.getMonth() + 1;
+             var date = datetime.getDate();
+             var hour = datetime.getHours();
+             var minute = datetime.getMinutes();
+             var second = datetime.getSeconds();
+             var mseconds = datetime.getMilliseconds();
+             return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second+"."+mseconds;
+        },
+        handleCurrentChange1(val) {
+            // console.log("val", val)
+            this.candidatesPage = val;
+            this.$axios.$get("/votes/candidatesStatus?page_size=" + this.pageSize + "&page_number="+val).then(res => {
+                // console.log("****", res)
+                let i = this.pageSize * (val - 1) + 1;
+                this.candidatesTable = [];
+                res = res.candidates;
+                for( let r of res ) {
+                    let candidate = {};
+                    candidate.rank = i;
+                    candidate.address = r.address;
+                    candidate.name = r.address.toString().substr(0,25) + '...';
+                    candidate.pVotes = r.pVotes.toFixed(3) + "%";
+                    candidate.voters = parseInt(r.voters).toLocaleString('en-US');
+                    candidate.seal = parseInt(r.seal).toLocaleString('en-US');
+                    this.candidatesTable.push(candidate)
+                    i++;
+                }
+                this.loading = false;
+            })
+        },
+        handleCurrentChange2(val) {
+            // console.log("val", val)
+            this.delegatersPage = val;
+            this.$axios.$get("/votes/delegatersStatus?page_size=" + this.pageSize + "&page_number=" + this.delegatersPage).then(res => {
+                // console.log(res)
+                this.delegatersTable = [];
+                for( let r of res ) {
+                    let delegater = {};
+                    delegater.address = r.address;
+                    delegater.name = r.address.toString().substr(0,25) + '...';
+                    delegater.lastSeal = r.lastSeal;
+                    delegater.sealInEpoch = r.sealInEpoch;
+                    delegater.votes = parseInt(r.votes).toLocaleString('en-US');
+
+                    let date = new Date(parseInt(r.lastSealTime));
+                    let hours = date.getHours();
+                    let minutes = "0" + date.getMinutes();
+                    let seconds = "0" + date.getSeconds();
+                    let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+                    delegater.lastSealTime = formattedTime;
+                    this.delegatersTable.push(delegater)
+                }
+                this.loading = false;
             })
         },
         search() {

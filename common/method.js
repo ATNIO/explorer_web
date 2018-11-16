@@ -86,28 +86,6 @@ export const toDate = function(timestamp){
     return time;
 }
 
-export const cutStr = function(str){
-    if(str.length <= 3) return str;
-    let decimals = str.substr(str.indexOf('.'), str.length);
-    str = str.substr(0, str.indexOf('.'))
-    let newStr= new Array(str.length + parseInt(str.length / 3)); 
-    newStr[newStr.length - 1]=str[str.length - 1]; 
-    let currentIndex=str.length-1; 
-    for(let i = newStr.length - 1; i >= 0; i--) 
-    { 
-        if((newStr.length - i) % 4 == 0 && i != 0) 
-        { 
-            newStr[i] = ","; 
-        }
-        else
-        { 
-            newStr[i] = str[currentIndex--]; 
-        } 
-    }
-    console.log("newStr", newStr);
-    return newStr.join("") + decimals
-} 
-
 export const toDecimals = function(temp) {
     var e = parseInt(temp.toString().split('e-')[1]);
     // if(!e) e = parseInt(temp.toString().split('e+')[1]);

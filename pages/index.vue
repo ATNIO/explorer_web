@@ -68,9 +68,11 @@
                                     <p class="last-block">
                                         USD/ATN
                                     </p>
-                                    <p class="last-block1">
+                                    <transition name="fade">
+                                        <p v-show="update" class="last-block1">
                                         {{atnPrice}}
-                                    </p>
+                                        </p>
+                                    </transition>
                                 </div>
                                 <div>
                                     <img src="~/assets/home-block time-icon.png" class="icon">
@@ -80,7 +82,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="table2">
                 <div class="wrapper-blocks">
                     <div class="left-wrapper">
@@ -209,10 +210,6 @@
                             <!-- </transition-group> -->
                         </el-card>
                     </div>
-                    
-
-                    
-
                 </div>
             </div>
         </el-main>
@@ -584,6 +581,7 @@
 <script>
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
+import TabCard from '~/components/TabCard.vue'
 import axios from 'axios'
 import { toDate, toDecimals, toTime } from '~/common/method.js'
 
@@ -591,7 +589,8 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
 
         components: {
             Header,
-            Footer
+            Footer,
+            TabCard
         },
         created() {
         },
@@ -620,6 +619,8 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                 loading1: true,
                 loading2: true,
                 update: true,
+                time1: [],
+                time2: [],
             };
         },
         methods: {
@@ -674,6 +675,15 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                         vm.latestBlockNumber = res[0].Number;
                         vm.lastBlockTime = formattedTime;
                         vm.blockTable = [];
+                        // vm.blockTable.splice(vm.blockTable.length - 1, 1);
+                        // console.log("===", vm.blockTable)
+                        // let block = {};
+                        // block.number = res[0].Number;
+                        // block.txns = res[0].Txns;
+                        // block.time = toTime(res[0].Seconds);
+                        // block.blockHash = res[0].Hash.toString().substr(0,9) + '...';
+                        // vm.blockTable.splice(0, 0, block);
+                        
                         for( let r of res ) {
                             let block = {};
                             block.number = r.Number;
@@ -711,10 +721,14 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                         vm.loading2 = false;
                     }),
 
+                    vm.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
+                        vm.atnPrice = parseFloat(res[0].price_usd).toFixed(5);
+                    })
+
                     vm.update = true;
                     // count++;
                     // if(count === 2)clearInterval(interval);
-                    console.log("this.pageName", vm.$route.name)
+                    // console.log("this.pageName", vm.$route.name)
                     if(vm.$route.name !== 'index') {
                         console.log("clear interval...")
                         clearInterval(interval);
@@ -735,18 +749,48 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
 
                     this.latestBlockNumber = res[0].Number;
                     this.lastBlockTime = formattedTime;
-                    for( let r of res ) {
+                    let flag = false;
+                    for( let i = 0; i < res.length; i++ ) {
                         let block = {};
-                        block.number = r.Number;
-                        block.txns = r.Txns;
-                        block.time = toTime(r.Seconds);
-                        // block.time = '2 days ago'
-                        block.blockHash = r.Hash.toString().substr(0,9) + '...';
+                        block.number = res[i].Number;
+                        block.txns = res[i].Txns;
+                        block.time = toTime(res[i].Seconds);
+
+                        // console.log((block.time.toString().split(' ')));
+                        // this.time1[i] = parseInt(block.time.split(' ')[0]);
+                        // this.time2[i] = block.time.split(' ')[1] + " " + block.time.split(' ')[2];
+                        // let interval = setInterval(() => {
+                        //     this.time1[i] += 1;
+                        //     console.log("this.time1", this.time1[i])
+                        // }, 1000)
+                        // this.timedCount(block.time1);
+                        // console.log(this.time1[i], this.time2[i]);
+                        // block.time = this.time1[i] + " " + this.time2[i];
+
+                        block.blockHash = res[i].Hash.toString().substr(0,9) + '...';
+                        
+                        //可能出现-5 secs ago的情况
+                        if(block.time[0] === '-') {
+                            flag = true;
+                        }
+                        if(flag) {
+                            if(block.time[0] === '-') {
+                                block.time = (parseInt(block.time[1]) + 5).toString() + block.time.substr(2);
+                            }
+                            else {
+                                block.time = (parseInt(block.time[0]) + 5).toString() + block.time.substr(1);
+                            }
+                            console.log("block time", block.time)
+                        }
+                        
                         // console.log("block", block);
                         this.blockTable.push(block);
+
                     }
                     this.loading1 = false;
                 })
+
+                let vm = this;
                 
                 this.$axios.$get("/transactions/list?limit=8").then(res => {
                     for( let r of res ) {

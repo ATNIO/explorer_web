@@ -16,23 +16,23 @@
             </div>
             <el-card class="first-card">
                     <div slot="header" class="clearfix">
-                        <span class="address">超级节点: <span class="node_address">{{ this.nodeAddress }}</span></span>
+                        <span class="address">超级节点: <span class="node_address">{{ this.address }}</span></span>
                         <a href="#"><img src="~/assets/copy.png" class="copy_image"
-                            v-clipboard:copy="this.nodeAddress"
+                            v-clipboard:copy="this.address"
                             v-clipboard:success="onCopy"
                             v-clipboard:error="onError"/></a>
                     </div>
                     <div class="details_tag">
-                      得分：<span class="details_value"> {{this.votes}}</span>
+                      得票数：<span class="details_value"> {{this.scores}}</span>
                     </div>
                     <div class="details_tag">
-                      投票账户：<span class="details_value"> {{this.votingAccounts}}</span>
+                      投票账户：<span class="details_value"> {{this.voters}}</span>
                     </div>
                     <div class="details_tag">
-                      票数排名：<span class="details_value"> {{this.votingRank}}</span>
+                      票数排名：<span class="details_value"> {{this.rank}}</span>
                     </div>
                     <div class="details_tag">
-                      首次出块时间：<span class="details_value"> {{this.scores}}</span>
+                      最近出块时间：<span class="details_value"> {{this.lastSealTime}}</span>
                     </div>
             </el-card>
             <br/>
@@ -40,7 +40,7 @@
             <el-card class="second-card">
                 <p class="title">投票人</p>
                 <el-table
-                    :data="transactionTable"
+                    :data="votersTable"
                     :header-cell-style="{ 
                         background:'#F4F6F9',
                         padding:'0px',
@@ -66,12 +66,12 @@
                         label="见证人"
                         >
                         <template slot-scope="scope">
-                            <nuxt-link :to="'/accounts/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
+                            <nuxt-link :to="'/accounts/' + scope.row.address">{{ scope.row.name }}</nuxt-link>
                         </template>
                     </el-table-column>
 
                     <el-table-column
-                        prop="time"
+                        prop="votes"
                         label="投票数"
                         >
                     </el-table-column>
@@ -732,8 +732,8 @@ Vue.use(VueClipboard);
         Footer
     },
     asyncData({ params }) {
-        console.log("params node", params.node)
-        return { nodeAddress: params.node }
+        console.log("params address", params.address)
+        return { address: params.address }
     },
 
     created() {
@@ -743,20 +743,20 @@ Vue.use(VueClipboard);
     },
     data() {
         return {
-                nodeAddress: "0xbea000b3b0ee446bb03d3ca223d552b88096f977",
-                votes: "510,486,696,748,407,872.00 (2.204%)",
-                votingAccounts: "10,186",
-                votingRank: 1,
-                scores: "2018-06-15 01:42:36",
-                leftTable: [],
-                rightTable: [],
-                activeName2: 'first',
-                methodTable: [],
-                input: '', 
-                isRegistered: 'false',
-                marketUrl: 'https://market-test.atnio.net/detail/',
+                address: "",
+                votes: "",
+                voters: "",
+                scores: "",
+                rank: 1,
+                pVotes: 0,
+                lastSealTime: "",
                 transactionTable: [],
+                total: 25,
+                currentPage: 1,
                 pageSize: 21,
+                loading: true,
+                votersTable: [],
+                input: '',
         };
     },
     methods: {
@@ -764,38 +764,50 @@ Vue.use(VueClipboard);
             // console.log(key, keyPath);
         },
         async showData() {
-            this.$axios.$get("/transactions/list/" + this.pageSize).then(res => {
+            await this.$axios.$get("/votes/candidatesStatus?page_size=" + this.pageSize + "&page_number=1").then(res => {
                 let i = 1;
-                for( let r of res ) {
-                    let transaction = {};
-                    transaction.number = r.BlockNumber;
-                    transaction.time = toTime(r.Seconds);
-                    transaction.txId = r.Hash.toString().substr(0,10) + '...';
-                    transaction.hash = r.Hash.toString();
-                    transaction.from = r.From.toString().substr(0,10) + '...';
-                    transaction.to = r.To.toString().substr(0,10) + '...';
-                    transaction.fromAddress = r.From.toString()
-                    transaction.toAddress = r.To.toString()
-                    let number = (r.Value / 1e18).toString();
-                    // console.log('number', r.Value / 1e18)
-                    if(number.includes("e+")) {
-                        let array = number.split("e+");
-                        array[0] = Math.floor(array[0] * 100) / 100;
-                        number = array[0] + "e+" + array[1];
-                    }
-                    // console.log("number", number)
-                    transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATN";
-                    this.transactionTable.push(transaction);
+                console.log(res)
+                for(let r of res) {
+                    if(r.address === this.address) {
+                        this.rank = i;
+                        this.pVotes = r.pVotes.toFixed(3) + "%";
+                    } 
+                    i++;
+                }
+            })
+
+            this.$axios.$get("/votes/candidateStatus/" + this.address).then(res => {
+                console.log(res)
+                this.votes = parseInt(res.votes).toLocaleString('en-US');
+                this.scores = this.votes + " (" + this.pVotes + ")";
+                this.voters = parseInt(res.voters).toLocaleString('en-US');
+                let date = new Date(parseInt(res.lastSealTime));
+                let hours = date.getHours();
+                let minutes = "0" + date.getMinutes();
+                let seconds = "0" + date.getSeconds();
+                let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+                this.lastSealTime = formattedTime;
+            })
+
+            this.$axios.$get("/votes/cacheVotes/" + this.address + "?page_size=" + this.pageSize + "&page_number=1").then(res => {
+                for(let r of res) {
+                    let voters = {};
+                    voters.name = r.address.toString().substr(0,20) + '...';
+                    voters.address = r.address;
+                    voters.votes = r.votes;
+                    this.votersTable.push(voters);
                 }
                 this.loading = false;
             })
-            this.$axios.$get("/transactions/count").then(res => {
-                this.total = res.count;
-            })
+
         },
         handleClick(tab, event) {
             // console.log(tab, event);
         },
+
+        handleCurrentChange(val) {
+        },
+
         search() {
             // this.$router.push('blocks/248703')
             this.$axios.$get("/search/" + this.input).then(res => {
