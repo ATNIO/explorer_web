@@ -984,6 +984,7 @@ Vue.use(VueClipboard);
                 const decodedData = abiDecoder.decodeMethod(testData);
                 // console.log('decodedData', decodedData)
                 this.inputDataString = this.inputData;
+                //可以通过abiDecoder解码出来，说明是dbot和channel合约内的方法
                 if(decodedData != undefined) {
                     let functionName = decodedData.name;
                     let params = decodedData.params;
@@ -1008,11 +1009,10 @@ Vue.use(VueClipboard);
                     for(let i = 0; i < paramsValue.length; i++) {
                         this.inputDataString += "\n[" + i + "]:     " + paramsValue[i] + "\n";
                     }
-                    // console.log("inputDataString", this.inputDataString)
                 }
+                //否则通过web3方法解析出来
                 else {
                     this.inputDataString = Web3.utils.hexToUtf8(this.inputData)
-                    // console.log("web3", Web3.utils.hexToUtf8(this.inputData))
                 }
                 this.inputTemp = this.inputData;
                 this.inputData = this.inputDataString;
