@@ -706,7 +706,7 @@ Vue.use(VueClipboard);
     },
     asyncData({ params }) {
         // console.log("params address", params.address)
-        // return { serialNum: params.id }
+        return { garageId: params.id }
     },
 
     created() {
@@ -717,15 +717,11 @@ Vue.use(VueClipboard);
     data() {
       return {
             garageId: 1,
-            blockNumber: 1231248,
             leftTable: [],
             rightTable: [],
             total: 0,
             currentPage: 1,
             pageSize: 8,
-            atn: '',
-            atnValue: '',
-            txns: '',
             activeName2: 'first',
             transactionTable: [],
             input: '',
@@ -736,27 +732,14 @@ Vue.use(VueClipboard);
             // console.log(key, keyPath);
         },
         async showData() {
-            this.$axios.$get("/blocks/number/" + this.blockNumber).then(res => {
-                this.blockHash = res.Hash;
-                this.leftTable.push({attribute: "车库名称", value: '绿地车库'});
-                this.leftTable.push({attribute: "物业管理方", value: '绿地物业'});
-                this.rightTable.push({attribute: "车库地址", value: '绿地'});
-                this.rightTable.push({attribute: "车库面积", value: 20});
+            this.$axios.$get("/garages/id/" + this.garageId).then(res => {
+                console.log(res);
+                this.leftTable.push({attribute: "车库名称", value: res.Name});
+                this.leftTable.push({attribute: "物业管理方", value: res.PropertyName});
+                this.rightTable.push({attribute: "车库地址", value: res.Location});
+                this.rightTable.push({attribute: "车库面积", value: res.Area});
             })
 
-            this.$axios.$get("/transactions/count/blocknumber/" + this.blockNumber).then(res => {
-                this.total = res.count;
-                console.log("count", res.count)
-            })
-
-            this.$axios.$get("/transactions/list/" + this.pageSize + "/0/blocknumber/" + this.blockNumber).then(res => {
-                for(let r of res) {
-                    let tx = {};
-                    tx.actor = '车位1';
-                    tx.address = r.Hash.toString().substr(0,20) + '...';
-                    this.transactionTable.push(tx);
-                }
-            })
         },
         handleCurrentChange(val) {
             this.$axios.$get("/transactions/list/" + this.pageSize + "/" + ((parseInt(val) - 1) * this.pageSize) + "/blocknumber/" + this.blockNumber).then(res => {

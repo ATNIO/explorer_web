@@ -716,7 +716,7 @@ Vue.use(VueClipboard);
     },
     asyncData({ params }) {
         // console.log("params address", params.address)
-        // return { stallId: params.id }
+        return { stallId: params.id }
     },
 
     created() {
@@ -727,17 +727,12 @@ Vue.use(VueClipboard);
     data() {
         return {
             stallId: 1,
-            serialNum: '0x1234567890',
-            blockHash: '',
-            blockNumber: 1231248,
+            confirmorsTable: [],
             leftTable: [],
             rightTable: [],
             total: 0,
             currentPage: 1,
             pageSize: 8,
-            atn: '',
-            atnValue: '',
-            txns: '',
             activeName2: 'first',
             transactionTable: [],
             input: '',
@@ -748,33 +743,21 @@ Vue.use(VueClipboard);
             // console.log(key, keyPath);
         },
         async showData() {
-            this.$axios.$get("/blocks/number/" + this.blockNumber).then(res => {
-                this.blockHash = res.Hash;
-                this.leftTable.push({attribute: "车库ID", value: res.Number});
-                this.leftTable.push({attribute: "车位配置", value: '设施齐全'});
-                this.leftTable.push({attribute: "租金标准", value: '20RMB'});
-                this.leftTable.push({attribute: "有效期", value: '2018/12/30'});
-                this.leftTable.push({attribute: "证书图书哈希", value: '0x1234567890'});
-                this.rightTable.push({attribute: "车位编号", value: '123'});
-                this.rightTable.push({attribute: "所属资产包", value: 10});
-                this.rightTable.push({attribute: "是否被抵押", value: '否'});
-                this.rightTable.push({attribute: "车位面积", value: '30'});
-                this.rightTable.push({attribute: "备注描述", value: '备注'});
+            this.$axios.$get("/stalls/id/" + this.stallId).then(res => {
+                // this.blockHash = res.Hash;
+                console.log(res)
+                this.leftTable.push({attribute: "车库ID", value: res.StallId});
+                this.leftTable.push({attribute: "车位配置", value: res.Facility});
+                this.leftTable.push({attribute: "租金标准", value: res.PriceInfo});
+                this.leftTable.push({attribute: "有效期", value: res.EndTime});
+                this.leftTable.push({attribute: "证书图书哈希", value: res.Certification});
+                this.rightTable.push({attribute: "车位编号", value: res.SerialNum});
+                this.rightTable.push({attribute: "所属资产包", value: res.AssetId});
+                this.rightTable.push({attribute: "是否被抵押", value: res.IsPledge});
+                this.rightTable.push({attribute: "车位面积", value: res.Area});
+                this.rightTable.push({attribute: "备注描述", value: res.Remark});
             })
 
-            this.$axios.$get("/transactions/count/blocknumber/" + this.blockNumber).then(res => {
-                this.total = res.count;
-                console.log("count", res.count)
-            })
-
-            this.$axios.$get("/transactions/list/" + this.pageSize + "/0/blocknumber/" + this.blockNumber).then(res => {
-                for(let r of res) {
-                    let tx = {};
-                    tx.actor = '角色1';
-                    tx.address = r.Hash.toString().substr(0,20) + '...';
-                    this.transactionTable.push(tx);
-                }
-            })
         },
         handleCurrentChange(val) {
             this.$axios.$get("/transactions/list/" + this.pageSize + "/" + ((parseInt(val) - 1) * this.pageSize) + "/blocknumber/" + this.blockNumber).then(res => {
