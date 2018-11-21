@@ -38,7 +38,6 @@
                     <nuxt-link to="/transactions"><el-dropdown-item>Transactions</el-dropdown-item></nuxt-link>
                     <nuxt-link to="/accounts"><el-dropdown-item>Accounts</el-dropdown-item></nuxt-link>
                     <nuxt-link to="/dbots"><el-dropdown-item>Dbots</el-dropdown-item></nuxt-link>
-                    <nuxt-link to="/votes"><el-dropdown-item>Votes</el-dropdown-item></nuxt-link>
 
                 </el-dropdown-menu>
             </el-dropdown>
