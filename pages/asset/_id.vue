@@ -100,9 +100,9 @@
                         </div>
                     <br><br><br>
                     <el-tabs v-model="activeName2"  type="border-card" @tab-click="handleClick" style="width: 100%;">
-                        <el-tab-pane label="车位列表" name="first">
+                        <el-tab-pane label="资产包各方信息" name="first">
                         <el-table
-                            :data="transactionTable"
+                            :data="stallsTable"
                             style="width: 100%; "
                             :header-cell-style="{ 
                                 padding:'0px',
@@ -115,16 +115,16 @@
 
                             <el-table-column
                                 prop="actor"
-                                label="车位ID"
+                                label="参与方角色"
                                 >
                             </el-table-column>
                                 
                             <el-table-column
-                                prop="address"
-                                label="地址"
+                                prop="name"
+                                label="参与方名称"
                                 >
                                 <template slot-scope="scope">
-                                    <nuxt-link :to="'/transactions/' + scope.row.address">{{ scope.row.address }}</nuxt-link>
+                                    <nuxt-link :to="'/stall/' + scope.row.StallId">{{ scope.row.StallId }}</nuxt-link>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -692,7 +692,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate, toTime } from '~/common/method.js'
+import { toLocalTime, toTime, toDate } from '~/common/method.js'
 import VueClipboard from 'vue-clipboard2';
 import Vue from 'vue'
 
@@ -725,7 +725,7 @@ Vue.use(VueClipboard);
             activeName2: 'first',
             transactionTable: [],
             input: '',
-            participantsTable: [],
+            stallsTable: [],
       };
     },
     methods: {
@@ -734,11 +734,12 @@ Vue.use(VueClipboard);
         },
         async showData() {
             this.$axios.$get("/assets/id/" + this.assetId).then(res => {
-                this.leftTable.push({attribute: "资产包名称", value: res.Name});
-                this.leftTable.push({attribute: "购买时间", value: res.BuyTime});
-                this.rightTable.push({attribute: "成交价格", value: res.Price});
-                this.rightTable.push({attribute: "到期时间", value: res.EndTime});
-                let participants = res.participants;
+                let asset = res;
+                this.stallsTable = res.stalls;
+                this.leftTable.push({attribute: "资产包名称", value: asset.Name});
+                this.leftTable.push({attribute: "购买时间", value: toLocalTime(asset.BuyTime)});
+                this.rightTable.push({attribute: "成交价格", value: asset.Price});
+                this.rightTable.push({attribute: "到期时间", value: toLocalTime(asset.EndTime)});
             })
 
         },

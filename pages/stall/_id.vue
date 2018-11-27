@@ -70,6 +70,14 @@
                                             align="right"
                                             min-width="400"
                                             >
+                                            <template slot-scope="scope">
+                                                <template v-if="scope.row.attribute == '车库ID'"> 
+                                                    <nuxt-link :to="'/garage/' + scope.row.value">{{ scope.row.value }}</nuxt-link>
+                                                </template>
+                                                <template v-else> 
+                                                    {{ scope.row.value }}
+                                                </template>
+                                            </template>
                                         </el-table-column>
                                 </el-table>
                             </div>
@@ -102,7 +110,7 @@
                     <el-tabs v-model="activeName2"  type="border-card" @tab-click="handleClick" style="width: 100%;">
                         <el-tab-pane label="确权人清单" name="first">
                         <el-table
-                            :data="transactionTable"
+                            :data="confirmorsTable"
                             style="width: 100%; "
                             :header-cell-style="{ 
                                 padding:'0px',
@@ -116,7 +124,6 @@
                             <el-table-column
                                 prop="actor"
                                 label="角色"
-                                width="300"
                                 >
                             </el-table-column>
                                 
@@ -125,16 +132,16 @@
                                 label="地址"
                                 >
                                 <template slot-scope="scope">
-                                    <nuxt-link :to="'/transactions/' + scope.row.address">{{ scope.row.address }}</nuxt-link>
+                                    <nuxt-link :to="'/accounts/' + scope.row.account">{{ scope.row.address }}</nuxt-link>
                                 </template>
                             </el-table-column>
 
                             <el-table-column
-                                prop="address"
+                                prop="txhash"
                                 label="确权交易"
                                 >
                                 <template slot-scope="scope">
-                                    <nuxt-link :to="'/transactions/' + scope.row.address">{{ scope.row.address }}</nuxt-link>
+                                    <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txhash }}</nuxt-link>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -702,9 +709,10 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate, toTime } from '~/common/method.js'
+import { toLocalTime } from '~/common/method.js'
 import VueClipboard from 'vue-clipboard2';
 import Vue from 'vue'
+const Web3 = require('web3');
 
 Vue.use(VueClipboard);
 
@@ -728,6 +736,8 @@ Vue.use(VueClipboard);
         return {
             stallId: 1,
             confirmorsTable: [],
+            confirmors: '',
+            confirms: [],
             leftTable: [],
             rightTable: [],
             total: 0,
@@ -746,16 +756,42 @@ Vue.use(VueClipboard);
             this.$axios.$get("/stalls/id/" + this.stallId).then(res => {
                 // this.blockHash = res.Hash;
                 console.log(res)
-                this.leftTable.push({attribute: "车库ID", value: res.StallId});
-                this.leftTable.push({attribute: "车位配置", value: res.Facility});
-                this.leftTable.push({attribute: "租金标准", value: res.PriceInfo});
-                this.leftTable.push({attribute: "有效期", value: res.EndTime});
-                this.leftTable.push({attribute: "证书图书哈希", value: res.Certification});
-                this.rightTable.push({attribute: "车位编号", value: res.SerialNum});
-                this.rightTable.push({attribute: "所属资产包", value: res.AssetId});
-                this.rightTable.push({attribute: "是否被抵押", value: res.IsPledge});
-                this.rightTable.push({attribute: "车位面积", value: res.Area});
-                this.rightTable.push({attribute: "备注描述", value: res.Remark});
+                let stall = res.stall;
+                this.confirms = res.confirms;
+                this.leftTable.push({attribute: "车位号", value: Web3.utils.hexToUtf8(stall.Serial)});
+                this.leftTable.push({attribute: "车位位置", value: Web3.utils.hexToUtf8(stall.Loc)});
+                this.leftTable.push({attribute: "车位面积", value: stall.Area});
+                this.rightTable.push({attribute: "车库ID", value: stall.GarageId});
+                this.rightTable.push({attribute: "使用期限", value:  Web3.utils.hexToUtf8(stall.Period)});
+                this.rightTable.push({attribute: "确权状态", value: stall.StallState});
+                this.confirmors = JSON.parse(stall.Confirmors);
+                console.log("this.confirmors", this.confirmors)
+                console.log("this.confirms", this.confirms);
+
+                for(let i = 0; i < res.confirms.length; i++) {
+                    let confirmor = {};
+                    let j = i + 1;
+                    confirmor.actor = "角色" + j;
+                    confirmor.address = res.confirms[i].Sender.substr(0, 20) + '...';
+                    confirmor.account = res.confirms[i].Sender.toString();
+                    confirmor.txhash = res.confirms[i].Txhash.substr(0, 20) + '...';
+                    confirmor.hash = res.confirms[i].Txhash.toString();
+                    console.log("confirmor", confirmor)
+                    this.confirmorsTable.push(confirmor);
+                }
+                console.log("this.confirmorsTable", this.confirmorsTable)
+                // for (var key of this.confirms[0].keys()) {
+                //     console.log(key);
+                //     }
+
+                // this.confirmors.forEach(function(value, key) {
+                //     console.log(key + " = " + value);
+                // }, this.confirmors)
+
+                // for(let c of confirmors) {
+                //     let confirmor = [];
+                //     confirmor.actor = c.S
+                // }
             })
 
         },

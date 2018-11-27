@@ -120,3 +120,17 @@ export const toDecimals = function(temp) {
     }
     return temp;
 }
+
+export const toLocalTime = (timestamp) => {
+    if(timestamp.toString().length === 10) {
+        timestamp = timestamp * 1000;
+    }
+    let date = new Date(timestamp);
+    let year = date.getFullYear();
+    let month = date.getMonth();
+    let day = date.getDay();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let seconds = date.getSeconds();
+    return year + "/" + month + "/" + day + " " + hours + ":" + minutes + ":" + seconds;
+}

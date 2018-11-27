@@ -918,7 +918,7 @@ Vue.use(VueClipboard);
     data() {
       return {
             hash: '',
-            status: '',
+            status: 'Success',
             blockHeight: '',
             timeStamp: '',
             from: '',

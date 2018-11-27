@@ -102,7 +102,7 @@
                     <el-tabs v-model="activeName2"  type="border-card" @tab-click="handleClick" style="width: 100%;">
                         <el-tab-pane label="车位列表" name="first">
                         <el-table
-                            :data="transactionTable"
+                            :data="stallsStable"
                             style="width: 100%; "
                             :header-cell-style="{ 
                                 padding:'0px',
@@ -114,17 +114,17 @@
                             }">
 
                             <el-table-column
-                                prop="actor"
-                                label="车位ID"
+                                prop="Serial"
+                                label="车位编号"
                                 >
                             </el-table-column>
                                 
                             <el-table-column
-                                prop="address"
-                                label="地址"
+                                prop="StallId"
+                                label="车位ID"
                                 >
                                 <template slot-scope="scope">
-                                    <nuxt-link :to="'/transactions/' + scope.row.address">{{ scope.row.address }}</nuxt-link>
+                                    <nuxt-link :to="'/stall/' + scope.row.StallId">{{ scope.row.StallId }}</nuxt-link>
                                 </template>
                             </el-table-column>
                         </el-table>
@@ -725,6 +725,7 @@ Vue.use(VueClipboard);
             activeName2: 'first',
             transactionTable: [],
             input: '',
+            stallsStable:[],
       };
     },
     methods: {
@@ -734,11 +735,12 @@ Vue.use(VueClipboard);
         async showData() {
             this.$axios.$get("/garages/id/" + this.garageId).then(res => {
                 console.log(res);
-                this.leftTable.push({attribute: "车库名称", value: res.Name});
-                this.leftTable.push({attribute: "物业管理方", value: res.PropertyName});
-                this.rightTable.push({attribute: "车库地址", value: res.Location});
-                this.rightTable.push({attribute: "车库面积", value: res.Area});
+                let garage = res.garage;
+                this.stallsStable = res.stalls;
+                this.leftTable.push({attribute: "车库名称", value: garage.Name});
+                this.rightTable.push({attribute: "车库地址", value: garage.Addr});
             })
+
 
         },
         handleCurrentChange(val) {
