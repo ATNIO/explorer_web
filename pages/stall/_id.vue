@@ -758,12 +758,14 @@ Vue.use(VueClipboard);
                 console.log(res)
                 let stall = res.stall;
                 this.confirms = res.confirms;
-                this.leftTable.push({attribute: "车位号", value: Web3.utils.hexToUtf8(stall.Serial)});
-                this.leftTable.push({attribute: "车位位置", value: Web3.utils.hexToUtf8(stall.Loc)});
+                this.leftTable.push({attribute: "车位编号", value: stall.Serial});
+                this.leftTable.push({attribute: "车位位置", value: stall.Loc});
                 this.leftTable.push({attribute: "车位面积", value: stall.Area});
+                this.leftTable.push({attribute: "车位证书", value: stall.Cert});
                 this.rightTable.push({attribute: "车库ID", value: stall.GarageId});
-                this.rightTable.push({attribute: "使用期限", value:  Web3.utils.hexToUtf8(stall.Period)});
+                this.rightTable.push({attribute: "使用期限", value: stall.Period});
                 this.rightTable.push({attribute: "确权状态", value: stall.StallState});
+                this.rightTable.push({attribute: "车位描述", value: stall.Desc});
                 this.confirmors = JSON.parse(stall.Confirmors);
                 console.log("this.confirmors", this.confirmors)
                 console.log("this.confirms", this.confirms);
