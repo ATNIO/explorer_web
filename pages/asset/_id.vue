@@ -738,7 +738,7 @@ Vue.use(VueClipboard);
                 this.stallsTable = res.stalls;
                 this.leftTable.push({attribute: "资产包名称", value: asset.Name});
                 this.leftTable.push({attribute: "购买时间", value: toLocalTime(asset.BuyTime)});
-                this.rightTable.push({attribute: "成交价格", value: asset.Price});
+                this.rightTable.push({attribute: "成交价格", value: asset.Price + " RMB"});
                 this.rightTable.push({attribute: "到期时间", value: toLocalTime(asset.EndTime)});
             })
 

@@ -760,7 +760,7 @@ Vue.use(VueClipboard);
                 this.confirms = res.confirms;
                 this.leftTable.push({attribute: "车位编号", value: stall.Serial});
                 this.leftTable.push({attribute: "车位位置", value: stall.Loc});
-                this.leftTable.push({attribute: "车位面积", value: stall.Area});
+                this.leftTable.push({attribute: "车位面积", value: stall.Area + " 平方米"});
                 this.leftTable.push({attribute: "车位证书", value: stall.Cert});
                 this.rightTable.push({attribute: "车库ID", value: stall.GarageId});
                 this.rightTable.push({attribute: "使用期限", value: stall.Period});
