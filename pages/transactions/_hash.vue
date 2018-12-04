@@ -1011,7 +1011,10 @@ Vue.use(VueClipboard);
                     // console.log("inputDataString", this.inputDataString)
                 }
                 else {
-                    this.inputDataString = Web3.utils.hexToUtf8(this.inputData)
+                    if(Web3.utils.isAddress(this.inputData)) {
+                        this.inputDataString = this.inputData;
+                    }
+                    else this.inputDataString = Web3.utils.hexToUtf8(this.inputData)
                     // console.log("web3", Web3.utils.hexToUtf8(this.inputData))
                 }
                 this.inputTemp = this.inputData;
