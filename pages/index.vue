@@ -735,6 +735,7 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
 
                     this.latestBlockNumber = res[0].Number;
                     this.lastBlockTime = formattedTime;
+                    let flag = false;
                     for( let r of res ) {
                         let block = {};
                         block.number = r.Number;
@@ -743,6 +744,21 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                         // block.time = '2 days ago'
                         block.blockHash = r.Hash.toString().substr(0,9) + '...';
                         // console.log("block", block);
+
+                        if(block.time[0] === '-') {
+                            flag = true;
+                        }
+                        if(flag) {
+                            console.log("flag", flag);
+                            if(block.time[0] === '-') {
+                                block.time = (parseInt(block.time[1]) + 5).toString() + block.time.substr(2);
+                            }
+                            else {
+                                block.time = (parseInt(block.time[0]) + 5).toString() + block.time.substr(1);
+                            }
+                            console.log("block time", block.time)
+                        }
+
                         this.blockTable.push(block);
                     }
                     this.loading1 = false;

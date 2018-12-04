@@ -918,7 +918,7 @@ Vue.use(VueClipboard);
     data() {
       return {
             hash: '',
-            status: 'Success',
+            status: 'Pending...',
             blockHeight: '',
             timeStamp: '',
             from: '',
@@ -947,6 +947,7 @@ Vue.use(VueClipboard);
         },
         async showData() {
             await this.$axios.$get("/transactions/hash/" + this.hash).then(res => {
+                console.log(res);
                 // console.log(res.BlockNumber)
                 this.pending = res.Pending;
                 this.blockHeight = res.BlockNumber;
@@ -1017,7 +1018,7 @@ Vue.use(VueClipboard);
                 this.inputTemp = this.inputData;
                 this.inputData = this.inputDataString;
 
-                // console.log('res.Pending', res.Pending)
+                console.log('res.Pending', res.Pending)
                 if(res.Pending === 'true') {
                     this.status = "Pending...";
                     // console.log("pending this.pending", this.pending)
