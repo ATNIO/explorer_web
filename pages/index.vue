@@ -583,7 +583,7 @@ import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import TabCard from '~/components/TabCard.vue'
 import axios from 'axios'
-import { toDate, toDecimals, toTime } from '~/common/method.js'
+import { toDate, toDecimals, toTime, timeToDate } from '~/common/method.js'
 
     export default {
 
@@ -664,13 +664,7 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                     vm.update = false;
                     // console.log("vm.update", vm.update);
                     await vm.$axios.$get("/blocks/list?limit=" + 8).then(async function(res){
-                        // console.log("res", res)
-                        // console.log(new Date())
-                        let date = new Date(res[0].Timestamp*1000);
-                        let hours = date.getHours();
-                        let minutes = "0" + date.getMinutes();
-                        let seconds = "0" + date.getSeconds();
-                        let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+                        let formattedTime = timeToDate(res[0].Timestamp);
 
                         vm.latestBlockNumber = res[0].Number;
                         vm.lastBlockTime = formattedTime;
@@ -741,11 +735,7 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                 this.blockTable = [];
 
                 this.$axios.$get("/blocks/list?limit=8").then(res => {
-                    let date = new Date(res[0].Timestamp*1000);
-                    let hours = date.getHours();
-                    let minutes = "0" + date.getMinutes();
-                    let seconds = "0" + date.getSeconds();
-                    let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+                    let formattedTime = timeToDate(res[0].Timestamp);
 
                     this.latestBlockNumber = res[0].Number;
                     this.lastBlockTime = formattedTime;

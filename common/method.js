@@ -98,3 +98,16 @@ export const toDecimals = function(temp) {
     }
     return temp;
 }
+
+export const timeToDate = (timestamp) => {
+    if(timestamp.length === 10) {
+        timestamp = timestamp * 1000;
+    }
+    else timestamp = parseInt(timestamp);
+    let date = new Date(timestamp);
+    let hours = date.getHours();
+    let minutes = "0" + date.getMinutes();
+    let seconds = "0" + date.getSeconds();
+    let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+    return formattedTime;
+}
