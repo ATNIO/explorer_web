@@ -1013,7 +1013,11 @@ Vue.use(VueClipboard);
                 }
                 //否则通过web3方法解析出来
                 else {
-                    this.inputDataString = Web3.utils.hexToUtf8(this.inputData)
+                    try {
+                        this.inputDataString = Web3.utils.hexToUtf8(this.inputData)
+                    } catch (error) {
+                        this.inputDataString = this.inputData;
+                    }
                 }
                 this.inputTemp = this.inputData;
                 this.inputData = this.inputDataString;
