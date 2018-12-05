@@ -764,7 +764,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate, cutStr, toTime } from '~/common/method.js'
+import { toDate, toTime } from '~/common/method.js'
 import VueClipboard from 'vue-clipboard2';
 import Vue from 'vue'
 

@@ -68,9 +68,11 @@
                                     <p class="last-block">
                                         USD/ATN
                                     </p>
-                                    <p class="last-block1">
+                                    <transition name="fade">
+                                        <p v-show="update" class="last-block1">
                                         {{atnPrice}}
-                                    </p>
+                                        </p>
+                                    </transition>
                                 </div>
                                 <div>
                                     <img src="~/assets/home-block time-icon.png" class="icon">
@@ -80,13 +82,14 @@
                     </div>
                 </div>
             </div>
-
             <div class="table2">
                 <div class="wrapper-blocks">
                     <div class="left-wrapper">
                         <div class="typeface">Recent Blocks</div>
                         <el-card class="box-card blocks">
                             <el-table
+                            :key="blockTable" 
+                            ref="bTable"
                             v-loading="loading1"
                             element-loading-text="Loading..."
                             element-loading-spinner="el-icon-loading"
@@ -209,10 +212,6 @@
                             <!-- </transition-group> -->
                         </el-card>
                     </div>
-                    
-
-                    
-
                 </div>
             </div>
         </el-main>
@@ -591,7 +590,7 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
 
         components: {
             Header,
-            Footer
+            Footer,
         },
         created() {
         },
@@ -620,6 +619,8 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                 loading1: true,
                 loading2: true,
                 update: true,
+                time1: [],
+                time2: [],
             };
         },
         methods: {
@@ -672,8 +673,19 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                         let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
                         vm.latestBlockNumber = res[0].Number;
+                        // vm.$refs.latestBN.innerText = res[0].Number;
                         vm.lastBlockTime = formattedTime;
                         vm.blockTable = [];
+                        // vm.blockTable.splice(vm.blockTable.length - 1, 1);
+                        // console.log("===", vm.blockTable)
+                        // let block = {};
+                        // block.number = res[0].Number;
+                        // block.txns = res[0].Txns;
+                        // block.time = toTime(res[0].Seconds);
+                        // block.blockHash = res[0].Hash.toString().substr(0,9) + '...';
+                        // vm.blockTable.splice(0, 0, block);
+                        // console.log("vm.$refs.bTable",vm.$refs.bTable)
+                        // vm.$refs.bTable.data = []
                         for( let r of res ) {
                             let block = {};
                             block.number = r.Number;
@@ -682,6 +694,9 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                             block.blockHash = r.Hash.toString().substr(0,9) + '...';
                             // console.log("block", block);
                             vm.blockTable.push(block);
+                            // console.log("vm.$refs.bTable",vm.$refs.bTable)
+                            // vm.$refs.bTable.tableData.push(block);
+                            // vm.$refs.bTable.data.push(block)
                         }
                         vm.loading1 = false;
                     })
@@ -711,6 +726,10 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                         vm.loading2 = false;
                     }),
 
+                    vm.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
+                        vm.atnPrice = parseFloat(res[0].price_usd).toFixed(5);
+                    })
+
                     vm.update = true;
                     // count++;
                     // if(count === 2)clearInterval(interval);
@@ -735,18 +754,48 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
 
                     this.latestBlockNumber = res[0].Number;
                     this.lastBlockTime = formattedTime;
-                    for( let r of res ) {
+                    let flag = false;
+                    for( let i = 0; i < res.length; i++ ) {
                         let block = {};
-                        block.number = r.Number;
-                        block.txns = r.Txns;
-                        block.time = toTime(r.Seconds);
-                        // block.time = '2 days ago'
-                        block.blockHash = r.Hash.toString().substr(0,9) + '...';
+                        block.number = res[i].Number;
+                        block.txns = res[i].Txns;
+                        block.time = toTime(res[i].Seconds);
+
+                        // console.log((block.time.toString().split(' ')));
+                        // this.time1[i] = parseInt(block.time.split(' ')[0]);
+                        // this.time2[i] = block.time.split(' ')[1] + " " + block.time.split(' ')[2];
+                        // let interval = setInterval(() => {
+                        //     this.time1[i] += 1;
+                        //     console.log("this.time1", this.time1[i])
+                        // }, 1000)
+                        // this.timedCount(block.time1);
+                        // console.log(this.time1[i], this.time2[i]);
+                        // block.time = this.time1[i] + " " + this.time2[i];
+
+                        block.blockHash = res[i].Hash.toString().substr(0,9) + '...';
+                        
+                        //可能出现-5 secs ago的情况
+                        if(block.time[0] === '-') {
+                            flag = true;
+                        }
+                        if(flag) {
+                            if(block.time[0] === '-') {
+                                block.time = (parseInt(block.time[1]) + 5).toString() + block.time.substr(2);
+                            }
+                            else {
+                                block.time = (parseInt(block.time[0]) + 5).toString() + block.time.substr(1);
+                            }
+                            console.log("block time", block.time)
+                        }
+                        
                         // console.log("block", block);
                         this.blockTable.push(block);
+
                     }
                     this.loading1 = false;
                 })
+
+                let vm = this;
                 
                 this.$axios.$get("/transactions/list?limit=8").then(res => {
                     for( let r of res ) {

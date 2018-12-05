@@ -474,6 +474,7 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
         handleCurrentChange(val) {
             this.$axios.$get("/transactions/list?limit=" + this.pageSize + "&offset=" + ((parseInt(val) - 1) * this.pageSize)).then(res => {
                 this.transactionTable = [];
+                console.log("res",res);
                 for( let r of res ) {
                     let transaction = {};
                     transaction.number = r.BlockNumber;
