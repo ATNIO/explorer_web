@@ -121,7 +121,7 @@
 
                                     <el-table-column
                                         prop="blockNumber"
-                                        label="Block"
+                                        :label="this.$t('transactionTable.blockNumber')"
                                         >
                                         <template slot-scope="scope">
                                             <nuxt-link :to="'/blocks/' + scope.row.blockNumber">{{ scope.row.blockNumber }}</nuxt-link>
@@ -130,13 +130,13 @@
 
                                     <el-table-column
                                         prop="time"
-                                        label="Time"
+                                        :label="this.$t('transactionTable.time')"
                                         >
                                     </el-table-column>
 
                                     <el-table-column
                                         prop="txId"
-                                        label="hash"
+                                        :label="this.$t('transactionTable.txHash')"
                                         >
                                         <template slot-scope="scope">
                                             <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
@@ -145,7 +145,7 @@
 
                                     <el-table-column
                                         prop="from"
-                                        label="From"
+                                        :label="this.$t('transactionTable.from')"
                                         >
                                         <template slot-scope="scope">
                                             <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
@@ -163,7 +163,7 @@
 
                                     <el-table-column
                                         prop="to"
-                                        label="To"
+                                        :label="this.$t('transactionTable.to')"
                                         >
                                         <template slot-scope="scope">
                                             <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
@@ -172,7 +172,7 @@
 
                                     <el-table-column
                                         prop="value"
-                                        label="Value"
+                                        :label="this.$t('transactionTable.value')"
                                         min-width="100"
                                     >
                                     </el-table-column>
@@ -815,7 +815,7 @@ Vue.use(VueClipboard);
                 this.atn = parseInt(res.Balance) / 1e18;
                 // console.log(this.atn)
                 this.isContract = res.IsContract;
-                this.leftTable.push({attribute: "Balance: ", value: (this.atn.toString()) + " ATN"});
+                this.leftTable.push({attribute: this.$t('accountTable.balance'), value: (this.atn.toString()) + " ATN"});
                 // this.accountDetailsTable.push({attribute: "Balance: ", value: cutStr(this.atn.toString()) + " ATN"});
                 // this.atnValue = (this.atn * 0.233416).toFixed(2)
                 // this.accountDetailsTable.push({attribute: "ATN Value: ", value: "$" + cutStr(this.atnValue.toString()) });
@@ -837,7 +837,7 @@ Vue.use(VueClipboard);
             this.$axios.$get("/transactions/count/account/" + this.address).then(res => {
                 // console.log(res)
                 this.txns = res.count;
-                this.rightTable.push({attribute: "Transactions: ", value: this.txns + " txns"});
+                this.rightTable.push({attribute: this.$t('accountTable.transactions'), value: this.txns + " txns"});
                 this.total = res.count;
             })
 

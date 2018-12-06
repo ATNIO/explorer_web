@@ -1,0 +1,59 @@
+{
+    "header": {
+      "home": "首页",
+      "blocks": "区块列表",
+      "transactions": "交易列表",
+      "accounts": "账户列表",
+      "dbots": "Dbots",
+      "lang": "简体中文"
+    },
+    "home": {
+      "block": "块",
+      "last_block": "最近的块",
+      "block_time": "块时间间隔",
+      "usd_atn": "ATN价格(美元)",
+      "recent_blocks": "最近块",
+      "recent_transactions": "最近交易"
+    },
+    "blockTable": {
+      "blocks": "块列表",
+      "block": "块",
+      "time": "时间",
+      "txns": "交易数",
+      "blockHash": "块哈希",
+      "blockNumber": "块号",
+      "miner": "矿工地址",
+      "size": "块大小"
+    },
+    "transactionTable": {
+      "transactions": "交易列表",
+      "txHash": "交易哈希",
+      "time": "时间",
+      "from": "发送者",
+      "to": "接收者",
+      "value": "转账金额",
+      "blockNumber": "块号"
+    },
+    "accountTable": {
+      "accounts": "账户列表",
+      "address": "地址",
+      "balance": "余额",
+      "percentage": "余额占所有ATN百分比",
+      "transactions": "已发交易数"
+    },
+    "dbotTable": {
+      "name": "名称",
+      "domain": "域名",
+      "address": "dbot合约地址",
+      "txHash": "创建dbot的交易哈希",
+      "isRegistered": "是否注册",
+      "method": "方法",
+      "price": "价格",
+      "uri": "链接",
+      "try_it_out": "点击尝试"
+    },
+    "about": {
+      "copyright": "Atmatrix ® 联盟链浏览器 Copyright © 2017"
+    }
+}
+  

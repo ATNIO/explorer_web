@@ -102,7 +102,7 @@
                     <el-tabs v-model="activeName2"  type="border-card" @tab-click="handleClick" style="width: 100%;">
                         <el-tab-pane label="资产包各方信息" name="first">
                         <el-table
-                            :data="stallsTable"
+                            :data="participantsTable"
                             style="width: 100%; "
                             :header-cell-style="{ 
                                 padding:'0px',
@@ -727,7 +727,7 @@ Vue.use(VueClipboard);
             activeName2: 'first',
             transactionTable: [],
             input: '',
-            stallsTable: [],
+            participantsTable: [],
       };
     },
     methods: {
@@ -736,12 +736,14 @@ Vue.use(VueClipboard);
         },
         async showData() {
             this.$axios.$get("/assets/id/" + this.assetId).then(res => {
+                console.log(res);
                 let asset = res;
                 this.stallsTable = res.stalls;
                 this.leftTable.push({attribute: "资产包名称", value: asset.Name});
                 this.leftTable.push({attribute: "购买时间", value: toLocalTime(asset.BuyTime)});
                 this.rightTable.push({attribute: "成交价格", value: asset.Price + " RMB"});
                 this.rightTable.push({attribute: "到期时间", value: toLocalTime(asset.EndTime)});
+                // let participants = JSON.parse(res.Participants);
             })
 
         },

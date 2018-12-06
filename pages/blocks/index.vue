@@ -12,7 +12,7 @@
                 </div>
             </div><br><br>
             <div class="description">
-                <p>ATN Blocks</p>
+                <p>ATN {{ this.$t('blockTable.blocks') }}</p>
             </div>
             <el-card class="table-card">
                 <el-table
@@ -39,7 +39,7 @@
 
                     <el-table-column
                         prop="number"
-                        label="Block"
+                        :label="this.$t('blockTable.block')"
                         min-width="100">
                         <template slot-scope="scope">
                             <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
@@ -47,7 +47,7 @@
                     </el-table-column>
                     <el-table-column
                         prop="txns"
-                        label="TXns"
+                        :label="this.$t('blockTable.txns')"
                     >
                     </el-table-column>
                 </el-table>
@@ -68,7 +68,7 @@
                         @current-change="handleCurrentChange"
                         :current-page.sync="currentPage"
                         :page-size=this.pageSize
-                        :pager-count="3"
+                        :pager-count=3
                         layout="prev, pager,next"
                         :total=this.total
                         >

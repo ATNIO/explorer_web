@@ -36,7 +36,8 @@ module.exports = {
   */
   plugins: [
     '@/plugins/element-ui',
-	{ src: '~plugins/account-icon', ssr: false }
+    { src: '~plugins/account-icon', ssr: false },
+    '~/plugins/i18n.js'
   ],
 
   /*
@@ -64,7 +65,9 @@ module.exports = {
       pathRewrite: { '^/api': '' },
     },
   },
-
+  router: {
+    middleware: ['i18n'],
+  },
   // generate: {
   //   routes: function () {
   //     return axios.get('http://119.3.57.66:4066/blocks/number/2')

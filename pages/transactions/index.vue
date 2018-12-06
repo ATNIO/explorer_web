@@ -12,7 +12,7 @@
                 </div>
             </div><br><br>
             <div class="description">
-                <p>ATN Transactions</p>
+                <p>ATN {{ this.$t('transactionTable.transactions') }}</p>
             </div>
             <el-card class="table-card">
                 <el-table
@@ -39,7 +39,7 @@
 
                     <el-table-column
                         prop="number"
-                        label="Block"
+                        :label="this.$t('transactionTable.blockNumber')">
                         >
                         <template slot-scope="scope">
                             <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
@@ -48,13 +48,13 @@
 
                     <el-table-column
                         prop="time"
-                        label="Time"
+                        :label="this.$t('transactionTable.time')">
                         >
                     </el-table-column>
 
                     <el-table-column
                         prop="txId"
-                        label="hash"
+                        :label="this.$t('transactionTable.txHash')">
                         >
                         <template slot-scope="scope">
                             <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
@@ -63,7 +63,7 @@
 
                     <el-table-column
                         prop="from"
-                        label="From"
+                        :label="this.$t('transactionTable.from')">
                         >
                         <template slot-scope="scope">
                             <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
@@ -72,7 +72,7 @@
 
                     <el-table-column
                         prop="to"
-                        label="To"
+                        :label="this.$t('transactionTable.to')">
                         >
                         <template slot-scope="scope">
                             <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
@@ -81,7 +81,7 @@
 
                     <el-table-column
                         prop="value"
-                        label="Value"
+                        :label="this.$t('transactionTable.value')">
                     >
                     </el-table-column>
                 </el-table>

@@ -18,7 +18,7 @@
             <el-card class="table-card">
                 <div slot="header" class="clearfix">
                     <img src="~/assets/address.png" class="address_image" />
-                    <span class="address">Hash: {{ this.blockHash }}</span>
+                    <span class="address">{{ $t('blockTable.blockHash') }}: {{ this.blockHash }}</span>
                     <a href="#"><img src="~/assets/copy.png" class="copy_image"
                         v-clipboard:copy="this.blockHash"
                         v-clipboard:success="onCopy"
@@ -114,7 +114,7 @@
 
                             <el-table-column
                                 prop="hash"
-                                label="Hash"
+                                :label="this.$t('transactionTable.txHash')"
                                 >
                                 <template slot-scope="scope">
                                     <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
@@ -123,12 +123,12 @@
                                 
                             <el-table-column
                                 prop="time"
-                                label="Time"
+                                :label="this.$t('transactionTable.time')"
                                 >
                             </el-table-column>
                             <el-table-column
                                 prop="from"
-                                label="From"
+                                :label="this.$t('transactionTable.from')"
                                 >
                                 <template slot-scope="scope">
                                     <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
@@ -136,7 +136,7 @@
                             </el-table-column>
                             <el-table-column
                                 prop="to"
-                                label="To"
+                                :label="this.$t('transactionTable.to')"
                                 >
                                 <template slot-scope="scope">
                                     <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
@@ -144,7 +144,7 @@
                             </el-table-column>                        
                             <el-table-column
                                 prop="value"
-                                label="Value"
+                                :label="this.$t('transactionTable.value')"
                                 >
                             </el-table-column>
                         </el-table>
@@ -758,10 +758,10 @@ Vue.use(VueClipboard);
         async showData() {
             this.$axios.$get("/blocks/number/" + this.blockNumber).then(res => {
                 this.blockHash = res.Hash;
-                this.leftTable.push({attribute: "Block Number", value: res.Number});
-                this.leftTable.push({attribute: "Number of Transactions", value: res.Txns});
-                this.rightTable.push({attribute: "Miner", value: res.Miner});
-                this.rightTable.push({attribute: "Size", value: res.Size});
+                this.leftTable.push({attribute: this.$t('blockTable.blockNumber'), value: res.Number});
+                this.leftTable.push({attribute: this.$t('blockTable.txns'), value: res.Txns});
+                this.rightTable.push({attribute: this.$t('blockTable.miner'), value: res.Miner});
+                this.rightTable.push({attribute: this.$t('blockTable.size'), value: res.Size});
             })
 
             this.$axios.$get("/transactions/count/blocknumber/" + this.blockNumber).then(res => {

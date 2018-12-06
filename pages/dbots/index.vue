@@ -40,7 +40,7 @@
 
                     <el-table-column
                         prop="name"
-                        label="Name"
+                        :label="this.$t('dbotTable.name')"
                         min-width="120">
                         <template slot-scope="scope">
                             <nuxt-link :to="'/dbots/' + scope.row.dbotAddress">{{ scope.row.name }}</nuxt-link>
@@ -49,14 +49,14 @@
 
                     <el-table-column
                         prop="domain"
-                        label="Domain"
+                        :label="this.$t('dbotTable.domain')"
                         min-width="120"
                         >
                     </el-table-column>
 
                     <el-table-column
                         prop="address"
-                        label="Address"
+                        :label="this.$t('dbotTable.address')"
                         min-width="120">
                         <template slot-scope="scope">
                             <nuxt-link :to="'/dbots/' + scope.row.dbotAddress">{{ scope.row.address }}</nuxt-link>
@@ -64,7 +64,7 @@
                     </el-table-column>
                      <el-table-column
                         prop="txId"
-                        label="TxHash"
+                        :label="this.$t('dbotTable.txHash')"
                         min-width="120">
                         <template slot-scope="scope">
                             <nuxt-link :to="'/transactions/' + scope.row.txHash">{{ scope.row.txId }}</nuxt-link>
@@ -72,7 +72,7 @@
                     </el-table-column>
                     <el-table-column
                         prop="isRegistered"
-                        label="IsRegistered"
+                        :label="this.$t('dbotTable.isRegistered')"
                         >
                     </el-table-column>
                 </el-table>

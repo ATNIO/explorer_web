@@ -16,7 +16,7 @@
                             <div class="grid-content" >
                                 <div>  
                                     <p class="last-block">
-                                    BLOCK
+                                    {{ $t('home.block' )}}
                                     </p>
                                     <transition name="fade">
                                         <p v-show="update" class="last-block1">
@@ -33,7 +33,7 @@
                         <div class="grid-content" >
                                 <div>  
                                     <p class="last-block">
-                                        LAST BLOCK
+                                        {{ $t('home.last_block' )}}
                                     </p>
                                     <transition name="fade">
                                         <p v-show="update" class="last-block1">
@@ -50,7 +50,7 @@
                             <div class="grid-content" >
                                 <div>  
                                     <p class="last-block">
-                                        BLOCK TIME
+                                        {{ $t('home.block_time' )}}
                                     </p>
                                     <p  class="last-block1">
                                         {{blockTime}}S
@@ -66,7 +66,7 @@
                             <div class="grid-content" >
                                 <div>  
                                     <p class="last-block">
-                                        USD/ATN
+                                        {{ $t('home.usd_atn' )}}
                                     </p>
                                     <p class="last-block1">
                                         {{atnPrice}}
@@ -84,7 +84,7 @@
             <div class="table2">
                 <div class="wrapper-blocks">
                     <div class="left-wrapper">
-                        <div class="typeface">Recent Blocks</div>
+                        <div class="typeface">{{ $t('home.recent_blocks') }}</div>
                         <el-card class="box-card blocks">
                             <el-table
                             v-loading="loading1"
@@ -111,7 +111,7 @@
                             >
                                 <el-table-column
                                     prop="number"
-                                    label="Block"
+                                    :label="this.$t('blockTable.block')"
                                     class="home-left-table"
                                     width="90px"
                                     >
@@ -121,20 +121,20 @@
                                 </el-table-column>
                                 <el-table-column
                                     prop="time"
-                                    label="Time"
+                                    :label="this.$t('blockTable.time')"
                                     class="home-left-table"
                                     width="110"
                                     >
                                 </el-table-column>
                                 <el-table-column
                                     prop="txns"
-                                    label="Txns"
+                                    :label="this.$t('blockTable.txns')"
                                     class="home-left-table"
                                     >
                                 </el-table-column>
                                 <el-table-column
                                     prop="blockHash"
-                                    label="BlockHash"
+                                    :label="this.$t('blockTable.blockHash')"
                                     class="home-left-table"
                                     width="120px">
                                     <template slot-scope="scope">
@@ -146,7 +146,7 @@
                     </div>
 
                     <div class="right-wrapper">
-                        <div class="typeface">Recent Transactions</div>
+                        <div class="typeface">{{ $t('home.recent_transactions' )}}</div>
                         <el-card class="box-card transactions">
                             <!-- <transition-group name="list" tag="p"> -->
                                 <el-table
@@ -175,26 +175,26 @@
 
                                     <el-table-column
                                         prop="txId"
-                                        label="TxHash">
+                                        :label="this.$t('transactionTable.txHash')">
                                         <template slot-scope="scope">
                                             <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
                                         </template>
                                     </el-table-column>
                                     <el-table-column
                                         prop="time"
-                                        label="Time"
+                                        :label="this.$t('transactionTable.time')"
                                         width="110">
                                     </el-table-column>    
                                     <el-table-column
                                         prop="from"
-                                        label="From">
+                                        :label="this.$t('transactionTable.from')">
                                         <template slot-scope="scope">
                                             <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
                                         </template>
                                     </el-table-column>
                                     <el-table-column
                                         prop="to"
-                                        label="To"
+                                        :label="this.$t('transactionTable.to')"
                                         >
                                         <template slot-scope="scope">
                                             <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
@@ -202,7 +202,7 @@
                                     </el-table-column>
                                     <el-table-column
                                         prop="value"
-                                        label="Value"
+                                        :label="this.$t('transactionTable.value')"
                                         >
                                     </el-table-column>
                                 </el-table>

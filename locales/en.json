@@ -1,0 +1,59 @@
+{
+    "header": {
+      "home": "Home",
+      "blocks": "Blocks",
+      "transactions": "Transactions",
+      "accounts": "Accounts",
+      "dbots": "Dbots",
+      "lang": "English"
+    },
+    "home": {
+      "block": "BLOCK",
+      "last_block": "LAST BLOCK",
+      "block_time": "BLOCK TIME",
+      "usd_atn": "USD/ATN",
+      "recent_blocks": "Recent Blocks",
+      "recent_transactions": "Recent Transactions"
+    },
+    "blockTable": {
+      "blocks": "Blocks",
+      "block": "Block",
+      "time": "Time",
+      "txns": "Txns",
+      "blockHash": "Hash",
+      "blockNumber": "Number",
+      "miner": "Miner",
+      "size": "Size"
+    },
+    "transactionTable": {
+      "transactions": "Transactions",
+      "txHash": "Txhash",
+      "time": "Time",
+      "from": "From",
+      "to": "To",
+      "value": "Value",
+      "blockNumber": "BlockNumber"
+    },
+    "accountTable": {
+      "accounts": "Accounts",
+      "address": "Address",
+      "balance": "Balance",
+      "percentage": "Percentage",
+      "transactions": "Transactions"
+    },
+    "dbotTable": {
+      "name": "Name",
+      "domain": "Domain",
+      "address": "Address",
+      "txHash": "TxHash",
+      "isRegistered": "IsRegistered",
+      "method": "Method",
+      "price": "Price",
+      "uri": "Uri",
+      "try_it_out": "Try it Out"
+    },
+    "about": {
+      "copyright": "Atmatrix ® Consortium Blockchain Explorer Copyright © 2017"
+    }
+}
+  

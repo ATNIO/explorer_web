@@ -17,7 +17,7 @@
             <el-card class="table-card">
                     <div slot="header" class="clearfix">
                         <img src="~/assets/address.png" class="address_image" />
-                        <span class="address">Address: {{ this.dbotAddress }}</span>
+                        <span class="address">{{ this.$t('dbotTable.address') }}: {{ this.dbotAddress }}</span>
                         <a href="#"><img src="~/assets/copy.png" class="copy_image"
                             v-clipboard:copy="this.dbotAddress"
                             v-clipboard:success="onCopy"
@@ -121,25 +121,25 @@
 
                                 <el-table-column
                                     prop="method"
-                                    label="Method"
+                                    :label="this.$t('dbotTable.method')"
                                     >
                                 </el-table-column>
                                 <el-table-column
                                     prop="price"
-                                    label="Price"
+                                    :label="this.$t('dbotTable.price')"
                                     >
                                 </el-table-column>
 
                                 <el-table-column
                                     prop="uri"
-                                    label="Uri"
+                                    :label="this.$t('dbotTable.uri')"
                                     >
                                 </el-table-column>
                             </el-table>
                         </div>
                         <br><br>
                         <template v-if="this.isRegistered == 'true'" >
-                            <a :href="this.marketUrl" target="_blank"><el-button type="primary" class="try-button" round>Try it out</el-button></a>
+                            <a :href="this.marketUrl" target="_blank"><el-button type="primary" class="try-button" round>{{ $t('dbotTable.try_it_out') }}</el-button></a>
                         </template>
                 </div>
             </el-card>
@@ -797,8 +797,8 @@ Vue.use(VueClipboard);
         },
         async showData() {
             this.$axios.$get("/dbots/address/" + this.dbotAddress).then(res => {
-                this.leftTable.push({attribute: "Name:", value: Web3.utils.hexToUtf8(res.Name)});
-                this.rightTable.push({attribute: "Domain:", value: Web3.utils.hexToUtf8(res.Domain)});
+                this.leftTable.push({attribute: this.$t('dbotTable.name'), value: Web3.utils.hexToUtf8(res.Name)});
+                this.rightTable.push({attribute: this.$t('dbotTable.domain'), value: Web3.utils.hexToUtf8(res.Domain)});
                 let keyToEndPoints = res.KeyToEndPoints;
                 for(let k of keyToEndPoints) {
                     let method = {};

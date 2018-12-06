@@ -11,7 +11,7 @@
                     </div>
                 </div><br><br>
                 <div class="description">
-                    <p>ATN Accounts</p>
+                    <p>ATN {{ this.$t('accountTable.accounts') }}</p>
                 </div>
                 <el-card class="table-card">
                     <el-table
@@ -38,7 +38,7 @@
 
                         <el-table-column
                             prop="address"
-                            label="Address"
+                            :label="this.$t('accountTable.address')"
                             min-width="400"
                             >
                             <template slot-scope="scope">
@@ -48,14 +48,14 @@
 
                         <el-table-column
                             prop="balance"
-                            label="Balance"
+                            :label="this.$t('accountTable.balance')"
                             min-width="200"
                         >
                         </el-table-column>
 
                         <el-table-column
                             prop="percentage"
-                            label="Percentage"
+                            :label="this.$t('accountTable.percentage')"
                             min-width="200"
                         >
                         </el-table-column>

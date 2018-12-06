@@ -1,31 +1,46 @@
 <template>
 <div>
     <div class="head">
-        <div class="wrapper">
-            <img src="~/assets/atmatrix-logo-02.png" class="image" >
-            <div class="right" v-bind:class="searchShow ? 'space-between' : 'center'">
-                <el-menu
-                    :default-active="$route.path"
-                    class="el-menu-demo menu"
-                    mode="horizontal"
-                    @select="handleSelect"
-                    text-color="#fff"
-                    active-text-color="#fff"
-                    background-color="transparent"
-                    :router="true"
-                >
-                    <el-menu-item index="/" class="home">Home</el-menu-item>
-                    <el-menu-item index="/blocks" class="blocks">Blocks</el-menu-item>
-                    <el-menu-item index="/transactions" class="transactions">Transactions</el-menu-item>
-                    <el-menu-item index="/accounts" class="accounts">Accounts</el-menu-item>
-                    <el-menu-item index="/dbots" class="dbots">Dbots</el-menu-item>
-                </el-menu>
-                <div class="search" v-show="searchShow">
-                    <el-input v-model="input" class="input" placeholder="Search" @keyup.enter.native="search"></el-input>
-                    <i class="search-icon" v-on:click="this.search"></i>
+        <div class="whole-wrapper">
+            <div class="wrapper">
+                <img src="~/assets/atmatrix-logo-02.png" class="image" >
+                <div class="right" v-bind:class="searchShow ? 'space-between' : 'center'">
+                    <el-menu
+                        :default-active="$route.path"
+                        class="el-menu-demo menu"
+                        mode="horizontal"
+                        @select="handleSelect"
+                        text-color="#fff"
+                        active-text-color="#fff"
+                        background-color="transparent"
+                        :router="true"
+                    >
+                        <el-menu-item index="/" class="home">{{ $t('header.home') }}</el-menu-item>
+                        <el-menu-item index="/blocks" class="blocks">{{ $t('header.blocks') }}</el-menu-item>
+                        <el-menu-item index="/transactions" class="transactions">{{ $t('header.transactions') }}</el-menu-item>
+                        <el-menu-item index="/accounts" class="accounts">{{ $t('header.accounts') }}</el-menu-item>
+                        <el-menu-item index="/dbots" class="dbots">{{ $t('header.dbots') }}</el-menu-item>
+                    </el-menu>
+                    <div class="search" v-show="searchShow">
+                        <el-input v-model="input" class="input" placeholder="Search" @keyup.enter.native="search"></el-input>
+                        <i class="search-icon" v-on:click="this.search"></i>
+                    </div>
                 </div>
             </div>
+            <div class="i18n">
+                <el-dropdown @command="handleCommand">
+                    <span class="link">
+                        {{ $t('header.lang') }}<i class="el-icon-arrow-down el-icon--right"></i>
+                    </span>
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item command="en">English</el-dropdown-item>
+                        <el-dropdown-item command="cn">简体中文</el-dropdown-item>
+                    </el-dropdown-menu>
+                </el-dropdown>
+            </div>
         </div>
+        
+        
         <div class="mobile-menu">
             <img src="~/assets/atn.png" class="image" >
             <el-dropdown trigger="click">
@@ -63,6 +78,12 @@
     background-image: linear-gradient(90deg, #9976EB 0%, #0EC7F7 100%);
     .mobile-menu {
         display: none;
+    }
+    .whole-wrapper {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .wrapper{
         margin: 0 auto;
@@ -124,6 +145,17 @@
         .center {
             justify-content: center;
         }
+
+    }
+
+    .i18n {
+            margin: 15px 50px 0 0;
+            width: 100px;
+            float: right;
+            // width: 100px;
+            .link {
+                color: white;
+            }
     }
 
     .menu {
@@ -141,14 +173,14 @@
         }
 
         .transactions {
-            margin-left: 20px;
+            margin-left: 10px;
             width: 90px;
             display: flex;
             justify-content: center;
         }
 
         .accounts {
-            margin-left: 20px;
+            margin-left: 15px;
             width: 70px;
             display: flex;
             justify-content: center;
@@ -245,6 +277,13 @@
         handleSelect(key, keyPath) {
             console.log(key, keyPath);
             // this.activeIndex2 = key
+        },
+        handleCommand(lang) {
+            console.log("lang", lang);
+            //mutate 'locale' in store
+            this.$store.commit('SET_LANG', lang)
+            //re-route to the current page but with the selected language in a query string
+            this.$router.push({ path: `${this.$router.currentRoute.path}?lang=${lang}` })
         },
         search() {
             console.log(this.input)

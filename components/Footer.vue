@@ -2,7 +2,7 @@
 <div>
     <!-- <hr  style="border:1 dashed #987cb9"  color=#00C7FB SIZE=1/> -->
 <div class="main">
-    Atmatrix ® 联盟链浏览器 Copyright © 2017
+    {{ $t('about.copyright') }}
 </div>
 </div>
 </template>
