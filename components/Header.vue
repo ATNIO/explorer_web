@@ -2,7 +2,7 @@
 <div>
     <div class="head">
         <div class="wrapper">
-            <img src="~/assets/atn.png" class="image" >
+            <img src="~/assets/atmatrix-logo-02.png" class="image" >
             <div class="right" v-bind:class="searchShow ? 'space-between' : 'center'">
                 <el-menu
                     :default-active="$route.path"
@@ -71,8 +71,8 @@
         align-items: center;
         .image{
             // margin-right: 256px;
-            width: 44px;
-            height: 41px;
+            width: 115px;
+            height: 115px;
             margin-top: 15px;
         }
         .nav{
@@ -167,7 +167,7 @@
     
 
     .wrapper-search{
-       margin-top: 60px;
+       margin-top: 40px;
         .search{
             width: 644px;
             height: 40px;
@@ -197,8 +197,8 @@
             }
             .image{
                 // margin-right: 256px;
-                width: 44px;
-                height: 41px;
+                width: 100px;
+                height: 85px;
             }
             .mobile-menu {
                 width: 100%;

@@ -354,7 +354,7 @@
     .el-footer {
         text-align: center;
         line-height: 60px;
-        margin-top: 800px;
+        margin-top: 750px;
     }
 
     .status {

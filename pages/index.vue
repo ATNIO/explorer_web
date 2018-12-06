@@ -209,14 +209,11 @@
                             <!-- </transition-group> -->
                         </el-card>
                     </div>
-                    
-
-                    
 
                 </div>
             </div>
         </el-main>
-
+        
         <el-footer>
             <Footer/>
         </el-footer>

@@ -205,7 +205,7 @@
     .el-footer {
         text-align: center;
         line-height: 60px;
-        margin-top: 680px;
+        margin-top: 650px;
     }
     
     .el-aside {

@@ -242,6 +242,7 @@
         background: #F4F6F9;
         display: flex;
         align-items: center;
+        justify-content: center;
     }
 
     & /deep/ .el-tabs__content {
@@ -252,7 +253,7 @@
     .clearfix {
         display: flex;
         // content: "";
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
     }
 
@@ -263,12 +264,13 @@
     }
 
     .address {
+        width: 100%;
         font-family: PingFangSC-Medium;
-        font-size: 24px;
+        font-size: 21px;
         color: #788091;
-        width: 1000px;
-        margin-left: 16px;
-        margin-right: 16px;
+        // width: 1000px;
+        // margin-left: 16px;
+        // margin-right: 16px;
     }
 
     .copy_image {
@@ -293,7 +295,7 @@
     .el-footer {
         text-align: center;
         line-height: 60px;
-        margin-top: 750px;
+        margin-top: 700px;
     }
 
     .status {

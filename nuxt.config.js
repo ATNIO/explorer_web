@@ -15,7 +15,7 @@ module.exports = {
       { hid: 'description', name: 'description', content: pkg.description }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico', style: 'width: 115px;height: 115px;' }
     ]
   },
 
@@ -58,8 +58,8 @@ module.exports = {
 
   proxy: {
     '/api': {
-      // target: 'http://119.3.57.66:4066',
-      target: 'http://localhost:7066',
+      target: 'http://114.116.83.230:7066',
+      // target: 'http://localhost:7066',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },

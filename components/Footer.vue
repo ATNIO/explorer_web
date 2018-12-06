@@ -1,32 +1,9 @@
 <template>
+<div>
+    <!-- <hr  style="border:1 dashed #987cb9"  color=#00C7FB SIZE=1/> -->
 <div class="main">
-    <div class="footer">
-        <div class="link">
-            <a href="https://github.com/ATNIO" target="_blank">
-                <img src="~/assets/github.svg" class="image">
-            </a> 
-        </div>
-        <div class="link">
-            <a href="https://t.me/ATN_Blockchain" target="_blank">
-                <img src="~/assets/telegram.svg" class="image"> 
-            </a>
-        </div>
-        <div class="link">
-            <a href="https://twitter.com/atn_io" target="_blank">
-                <img src="~/assets/twitter.svg" class="image"> 
-            </a> 
-        </div>
-        <div class="link">
-            <a href="https://www.reddit.com/r/ATN/" target="_blank">
-                <img src="~/assets/reddit.svg" class="image"> 
-            </a> 
-        </div>
-        <div class="link">
-            <a href="https://medium.com/@atnio" target="_blank">
-                <img src="~/assets/medium.svg" class="image"> 
-            </a>
-        </div>
-    </div>
+    Atmatrix ® 联盟链浏览器 Copyright © 2017
+</div>
 </div>
 </template>
 
@@ -54,18 +31,9 @@
     justify-content: center;
     align-items: center;
     width: 100%;
-}
-.image {
-    text-align: center;
-    height: 45px;
-}
-.footer {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    width: 335px;
-    
-    // margin-right: 15%;
+    font-weight: normal;
+    // color: #00C7FB;
+    font-family: PingFangSC-Semibold;;
 }
 @media screen and (max-width: 991px) {
      .footer {
