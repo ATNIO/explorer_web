@@ -123,9 +123,9 @@
                                 prop="name"
                                 label="参与方名称"
                                 >
-                                <template slot-scope="scope">
+                                <!-- <template slot-scope="scope">
                                     <nuxt-link :to="'/stall/' + scope.row.StallId">{{ scope.row.StallId }}</nuxt-link>
-                                </template>
+                                </template> -->
                             </el-table-column>
                         </el-table>
                         <br>
@@ -135,7 +135,7 @@
                             :current-page.sync="currentPage"
                             :page-size=this.pageSize
                             layout="total, prev, pager, next"
-                            :total=this.total>
+                            :total=this.participantsTotal>
                         </el-pagination>
                     </el-tab-pane>
                 </el-tabs>
@@ -728,6 +728,7 @@ Vue.use(VueClipboard);
             transactionTable: [],
             input: '',
             participantsTable: [],
+            participantsTotal: 0,
       };
     },
     methods: {
@@ -743,7 +744,15 @@ Vue.use(VueClipboard);
                 this.leftTable.push({attribute: "购买时间", value: toLocalTime(asset.BuyTime)});
                 this.rightTable.push({attribute: "成交价格", value: asset.Price + " RMB"});
                 this.rightTable.push({attribute: "到期时间", value: toLocalTime(asset.EndTime)});
-                // let participants = JSON.parse(res.Participants);
+                let participants = res.Participants.toString().split(',');
+                this.participantsTotal = participants.length;
+                participants.forEach((p) => {
+                    console.log("p", p)
+                    let participant = {};
+                    participant.actor = p.split(':')[0];
+                    participant.name = p.split(':')[1];
+                    this.participantsTable.push(participant)
+                })
             })
 
         },

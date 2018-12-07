@@ -1,5 +1,7 @@
 const BigNumber = require('bignumber.js');
 const moment = require('moment');
+const Web3 = require('web3')
+let web3 = new Web3(new Web3.providers.HttpProvider("https://rpc-test.atnio.net"));
 
 export const toTime = function(seconds) {
     // console.log("seconds", seconds)
@@ -133,4 +135,9 @@ export const toLocalTime = (timestamp) => {
     let minutes = date.getMinutes();
     let seconds = date.getSeconds();
     return year + "/" + month + "/" + day + " " + hours + ":" + minutes + ":" + seconds;
+}
+
+export const getEstimateGas = async function(){
+    let result = await web3.eth.getGasPrice();
+    return result / 1e9;
 }

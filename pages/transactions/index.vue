@@ -12,7 +12,7 @@
                 </div>
             </div><br><br>
             <div class="description">
-                <p>ATN {{ this.$t('transactionTable.transactions') }}</p>
+                <p>{{ this.companyName }} {{ this.$t('transactionTable.transactions') }}</p>
             </div>
             <el-card class="table-card">
                 <el-table
@@ -437,6 +437,7 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
             pageSize: 11,
             input: '',
             loading: true,
+            companyName: require('~/common/companyName.js').name,
       };
     },
     methods: {

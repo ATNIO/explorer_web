@@ -66,10 +66,10 @@
                             <div class="grid-content" >
                                 <div>  
                                     <p class="last-block">
-                                        {{ $t('home.usd_atn' )}}
+                                        {{ $t('home.gas_price' )}}
                                     </p>
                                     <p class="last-block1">
-                                        {{atnPrice}}
+                                        {{gasPrice}} GWei
                                     </p>
                                 </div>
                                 <div>
@@ -582,7 +582,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate, toDecimals, toTime } from '~/common/method.js'
+import { toDate, toDecimals, toTime, getEstimateGas } from '~/common/method.js'
 
     export default {
 
@@ -617,6 +617,7 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                 loading1: true,
                 loading2: true,
                 update: true,
+                gasPrice: 20,
             };
         },
         methods: {
@@ -720,7 +721,8 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
             },
 
             async showData() {
-
+                this.gasPrice = await getEstimateGas();
+                console.log("this.gasPrice", this.gasPrice)
                 this.blockTable = [];
 
                 this.$axios.$get("/blocks/list?limit=8").then(res => {

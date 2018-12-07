@@ -135,7 +135,7 @@
                             :current-page.sync="currentPage"
                             :page-size=this.pageSize
                             layout="total, prev, pager, next"
-                            :total=this.total>
+                            :total=this.stallTotal>
                         </el-pagination>
                     </el-tab-pane>
                 </el-tabs>
@@ -729,6 +729,7 @@ Vue.use(VueClipboard);
             transactionTable: [],
             input: '',
             stallsStable:[],
+            stallTotal: 0,
       };
     },
     methods: {
@@ -740,6 +741,7 @@ Vue.use(VueClipboard);
                 console.log(res);
                 let garage = res.garage;
                 this.stallsStable = res.stalls;
+                this.stallTotal = this.stallsStable.length;
                 this.leftTable.push({attribute: "车库名称", value: garage.Name});
                 this.rightTable.push({attribute: "车库地址", value: garage.Addr});
             })

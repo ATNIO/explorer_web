@@ -12,7 +12,7 @@
                 </div>
             </div><br><br>
             <div class="description">
-                <p>ATN Dbots</p>
+                <p>{{ this.companyName }} Dbots</p>
             </div>
             <el-card class="table-card">
                 <el-table
@@ -433,6 +433,7 @@ const Web3 = require('web3')
             pageSize: 11,
             input: '',
             loading: true,
+            companyName: require('~/common/companyName.js').name,
       };
     },
     methods: {

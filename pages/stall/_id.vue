@@ -128,22 +128,22 @@
                             </el-table-column>
                                 
                             <el-table-column
-                                prop="address"
-                                label="地址"
+                                prop="name"
+                                label="名称"
                                 >
-                                <template slot-scope="scope">
+                                <!-- <template slot-scope="scope">
                                     <nuxt-link :to="'/accounts/' + scope.row.account">{{ scope.row.address }}</nuxt-link>
-                                </template>
+                                </template> -->
                             </el-table-column>
 
-                            <el-table-column
+                            <!-- <el-table-column
                                 prop="txhash"
                                 label="确权交易"
                                 >
                                 <template slot-scope="scope">
                                     <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txhash }}</nuxt-link>
                                 </template>
-                            </el-table-column>
+                            </el-table-column> -->
                         </el-table>
                         <br>
                         <el-pagination
@@ -152,7 +152,7 @@
                             :current-page.sync="currentPage"
                             :page-size=this.pageSize
                             layout="total, prev, pager, next"
-                            :total=this.total>
+                            :total=this.confirmorsTotal>
                         </el-pagination>
                     </el-tab-pane>
                 </el-tabs>
@@ -743,8 +743,8 @@ Vue.use(VueClipboard);
             currentPage: 1,
             pageSize: 8,
             activeName2: 'first',
-            transactionTable: [],
             input: '',
+            confirmorsTotal: 0,
       };
     },
     methods: {
@@ -756,7 +756,6 @@ Vue.use(VueClipboard);
                 // this.blockHash = res.Hash;
                 console.log(res)
                 let stall = res.stall;
-                this.confirms = res.confirms;
                 this.leftTable.push({attribute: "车位编号", value: stall.Serial});
                 this.leftTable.push({attribute: "车位位置", value: stall.Loc});
                 this.leftTable.push({attribute: "车位面积", value: stall.Area + " 平方米"});
@@ -765,34 +764,17 @@ Vue.use(VueClipboard);
                 this.rightTable.push({attribute: "使用期限", value: stall.Period});
                 this.rightTable.push({attribute: "确权状态", value: stall.StallState});
                 this.rightTable.push({attribute: "车位描述", value: stall.Desc});
-                this.confirmors = JSON.parse(stall.Confirmors);
-                console.log("this.confirmors", this.confirmors)
-                console.log("this.confirms", this.confirms);
-
-                for(let i = 0; i < res.confirms.length; i++) {
+                let confirmors = stall.Confirmors;
+                // console.log("confirmors", confirmors)
+                let confimorsTable = confirmors.toString().split(',');
+                this.confirmorsTotal = confimorsTable.length;
+                confimorsTable.forEach((c) => {
+                    // console.log(c);
                     let confirmor = {};
-                    let j = i + 1;
-                    confirmor.actor = "角色" + j;
-                    confirmor.address = res.confirms[i].Sender.substr(0, 20) + '...';
-                    confirmor.account = res.confirms[i].Sender.toString();
-                    confirmor.txhash = res.confirms[i].Txhash.substr(0, 20) + '...';
-                    confirmor.hash = res.confirms[i].Txhash.toString();
-                    console.log("confirmor", confirmor)
+                    confirmor.actor = c.split(':')[0];
+                    confirmor.name = c.split(":")[1];
                     this.confirmorsTable.push(confirmor);
-                }
-                console.log("this.confirmorsTable", this.confirmorsTable)
-                // for (var key of this.confirms[0].keys()) {
-                //     console.log(key);
-                //     }
-
-                // this.confirmors.forEach(function(value, key) {
-                //     console.log(key + " = " + value);
-                // }, this.confirmors)
-
-                // for(let c of confirmors) {
-                //     let confirmor = [];
-                //     confirmor.actor = c.S
-                // }
+                })
             })
 
         },

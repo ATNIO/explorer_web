@@ -11,7 +11,7 @@
                     </div>
                 </div><br><br>
                 <div class="description">
-                    <p>ATN {{ this.$t('accountTable.accounts') }}</p>
+                    <p>{{ this.companyName }} {{ this.$t('accountTable.accounts') }}</p>
                 </div>
                 <el-card class="table-card">
                     <el-table
@@ -424,6 +424,7 @@ import axios from 'axios'
             pageSize: 11,
             input: '',
             loading: true,
+            companyName: require('~/common/companyName.js').name,
       };
     },
     methods: {

@@ -13,7 +13,8 @@
       "block_time": "块时间间隔",
       "usd_atn": "ATN价格(美元)",
       "recent_blocks": "最近块",
-      "recent_transactions": "最近交易"
+      "recent_transactions": "最近交易",
+      "gas_price": "当前Gas费"
     },
     "blockTable": {
       "blocks": "块列表",
