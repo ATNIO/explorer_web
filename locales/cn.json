@@ -11,7 +11,7 @@
       "block": "块",
       "last_block": "最近的块",
       "block_time": "块时间间隔",
-      "usd_atn": "ATN价格(美元)",
+      "usd_atn": "ATX价格(美元)",
       "recent_blocks": "最近块",
       "recent_transactions": "最近交易",
       "gas_price": "当前Gas费"
@@ -39,7 +39,7 @@
       "accounts": "账户列表",
       "address": "地址",
       "balance": "余额",
-      "percentage": "余额占所有ATN百分比",
+      "percentage": "余额占所有ATX百分比",
       "transactions": "已发交易数"
     },
     "dbotTable": {

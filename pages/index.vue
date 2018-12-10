@@ -701,7 +701,7 @@ import { toDate, toDecimals, toTime, getEstimateGas } from '~/common/method.js'
                                 number = array[0] + "e+" + array[1];
                             }
                             // console.log("number", number)
-                            transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATN";
+                            transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATX";
                             transaction.time = toTime(r.Seconds);
                             // transaction.time = "2 years ago"
                             vm.transactionTable.push(transaction);
@@ -780,7 +780,7 @@ import { toDate, toDecimals, toTime, getEstimateGas } from '~/common/method.js'
                             number = array[0] + "e+" + array[1];
                         }
                         // console.log("number", number)
-                        transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATN";
+                        transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATX";
                         transaction.time = toTime(r.Seconds);
                         // transaction.time = "2 years ago"
                         this.transactionTable.push(transaction);

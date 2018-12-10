@@ -438,7 +438,7 @@ import axios from 'axios'
                     let account = {};
                     // console.log("accounts list res", res)
                     account.address = r.Address;
-                    account.balance = Math.floor(parseInt(r.Balance) / 1e18 * 100) / 100 + " ATN";
+                    account.balance = Math.floor(parseInt(r.Balance) / 1e18 * 100) / 100 + " ATX";
                     let temp = (parseInt(r.Balance) / 1e18 / 1e56).toFixed(11);
                     var e = parseInt(temp.toString().split('e-')[1]);
                     // console.log("e",e)
@@ -470,7 +470,7 @@ import axios from 'axios'
                     let account = {};
                     // console.log("accounts list res", res)
                     account.address = r.Address;
-                    account.balance = parseInt(r.Balance) / 1e18 + " ATN";
+                    account.balance = parseInt(r.Balance) / 1e18 + " ATX";
                     let temp = (parseInt(r.Balance) / 1e18 / 1e56).toFixed(11);
                     var e = parseInt(temp.toString().split('e-')[1]);
                     // console.log("e",e)

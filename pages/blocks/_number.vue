@@ -780,7 +780,7 @@ Vue.use(VueClipboard);
                     tx.fromAddress = r.From.toString()
                     tx.to = r.To.toString().substr(0,10) + '...';
                     tx.toAddress = r.To.toString();
-                    tx.value = r.Value / 1e18 + ' ATN';
+                    tx.value = r.Value / 1e18 + ' ATX';
                     this.transactionTable.push(tx);
                 }
             })
@@ -796,7 +796,7 @@ Vue.use(VueClipboard);
                     tx.fromAddress = r.From.toString()
                     tx.to = r.To.toString().substr(0,10) + '...';
                     tx.toAddress = r.To.toString();
-                    tx.value = r.Value / 1e18 + ' ATN';
+                    tx.value = r.Value / 1e18 + ' ATX';
                     this.transactionTable.push(tx);
                 }
             })

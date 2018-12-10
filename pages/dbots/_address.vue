@@ -804,7 +804,7 @@ Vue.use(VueClipboard);
                     let method = {};
                     console.log("Web3.utils.hexToNumber(k.Endpoint.Price) / 1e18",k.Endpoint.Price)
                     method.method = Web3.utils.hexToAscii(k.Endpoint.Method);
-                    method.price = parseInt(Web3.utils.hexToNumberString(k.Endpoint.Price)) / 1e18 + ' ATN';
+                    method.price = parseInt(Web3.utils.hexToNumberString(k.Endpoint.Price)) / 1e18 + ' ATX';
                     method.uri = Web3.utils.hexToAscii(k.Endpoint.Uri);
                     this.methodTable.push(method);
                 }

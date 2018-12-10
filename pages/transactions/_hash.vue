@@ -968,11 +968,11 @@ Vue.use(VueClipboard);
                     // console.log("account details", res)
                     this.isContract = res.IsContract
                 })
-                this.value = toDecimals(res.Value / 1e18) + " ATN";
+                this.value = toDecimals(res.Value / 1e18) + " ATX";
                 this.gasLimit = res.Gas;
                 this.gasUsedByTxn = res.GasUsed;
-                this.gasPrice = toDecimals(res.GasPrice / 1e18) + " ATN";
-                this.actualTxCost = toDecimals((parseFloat(bigInt(res.GasUsed)) * parseFloat(bigInt(res.GasPrice)) / 1e18)) + " ATN";
+                this.gasPrice = toDecimals(res.GasPrice / 1e18) + " ATX";
+                this.actualTxCost = toDecimals((parseFloat(bigInt(res.GasUsed)) * parseFloat(bigInt(res.GasPrice)) / 1e18)) + " ATX";
                 this.nonce = res.Nonce;
                 this.inputData = res.Input;
 
@@ -1065,7 +1065,7 @@ Vue.use(VueClipboard);
                     data.toAddress = t.To;
                     data.input = t.Input;
                     // console.log("a",t.Value / 1e18)
-                    data.value = toDecimals(t.Value / 1e18) + " ATN";;
+                    data.value = toDecimals(t.Value / 1e18) + " ATX";;
                     data.type = t.Op;
                     this.internalData.push(data);
                 }

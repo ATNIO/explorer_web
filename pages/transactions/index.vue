@@ -463,7 +463,7 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                         number = array[0] + "e+" + array[1];
                     }
                     // console.log("number", number)
-                    transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATN";
+                    transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATX";
                     this.transactionTable.push(transaction);
                 }
                 this.loading = false;
@@ -493,8 +493,8 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                         number = array[0] + "e+" + array[1];
                     }
                     // console.log("number", number)
-                    transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATN";
-                    // let tempValue = Math.floor(r.Value / 1e18 * 100) / 100 + ' ATN';
+                    transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATX";
+                    // let tempValue = Math.floor(r.Value / 1e18 * 100) / 100 + ' ATX';
                     // if(tempValue.includes('e')) {
                     //     tempValue = tempValue.substr(0, 5) + tempValue.substr(tempValue.length - 10, tempValue.length);
                     //     // console.log("tempValue", tempValue)
