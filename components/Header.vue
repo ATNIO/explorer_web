@@ -19,7 +19,7 @@
                         <el-menu-item index="/blocks" class="blocks">{{ $t('header.blocks') }}</el-menu-item>
                         <el-menu-item index="/transactions" class="transactions">{{ $t('header.transactions') }}</el-menu-item>
                         <el-menu-item index="/accounts" class="accounts">{{ $t('header.accounts') }}</el-menu-item>
-                        <el-menu-item index="/dbots" class="dbots">{{ $t('header.dbots') }}</el-menu-item>
+                        <!-- <el-menu-item index="/dbots" class="dbots">{{ $t('header.dbots') }}</el-menu-item> -->
                     </el-menu>
                     <div class="search" v-show="searchShow">
                         <el-input v-model="input" class="input" placeholder="Search" @keyup.enter.native="search"></el-input>
@@ -52,7 +52,7 @@
                     <nuxt-link to="/blocks"><el-dropdown-item>Blocks</el-dropdown-item></nuxt-link>
                     <nuxt-link to="/transactions"><el-dropdown-item>Transactions</el-dropdown-item></nuxt-link>
                     <nuxt-link to="/accounts"><el-dropdown-item>Accounts</el-dropdown-item></nuxt-link>
-                    <nuxt-link to="/dbots"><el-dropdown-item>Dbots</el-dropdown-item></nuxt-link>
+                    <!-- <nuxt-link to="/dbots"><el-dropdown-item>Dbots</el-dropdown-item></nuxt-link> -->
                     <nuxt-link to="/votes"><el-dropdown-item>Votes</el-dropdown-item></nuxt-link>
 
                 </el-dropdown-menu>
@@ -174,13 +174,13 @@
 
         .transactions {
             margin-left: 10px;
-            width: 90px;
+            width: 100px;
             display: flex;
             justify-content: center;
         }
 
         .accounts {
-            margin-left: 15px;
+            // margin-left: 0px;
             width: 70px;
             display: flex;
             justify-content: center;
@@ -297,9 +297,9 @@
                 else if(type == "transaction") {
                     this.$router.push('/transactions/' + this.input);
                 }
-                else if(type == "dbot") {
-                    this.$router.push('/dbots/' + this.input);
-                }
+                // else if(type == "dbot") {
+                //     this.$router.push('/dbots/' + this.input);
+                // }
                 else if(type == "account") {
                     this.$router.push('/accounts/' + this.input);
                 }
