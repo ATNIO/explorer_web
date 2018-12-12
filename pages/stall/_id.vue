@@ -45,6 +45,14 @@
                                     label=""
                                     align="right"
                                     >
+                                    <template slot-scope="scope">
+                                        <template v-if="scope.row.attribute == '车位证书'"> 
+                                            <a :href="scope.row.certUrl" target="_blank" >{{ scope.row.value }}</a>
+                                        </template>
+                                        <template v-else> 
+                                            {{ scope.row.value }}
+                                        </template>
+                                    </template>
                                 </el-table-column>
                                 
                             </el-table>
@@ -756,10 +764,14 @@ Vue.use(VueClipboard);
                 // this.blockHash = res.Hash;
                 console.log(res)
                 let stall = res.stall;
+                let cert = stall.Cert.toString();
+                let certValue = cert.substr(cert.indexOf('NO'), cert.length);
+                console.log("certValue", certValue)
+                let certUrl = "http://greenland-api.atmatrix.org/greenland/v1" + cert;
                 this.leftTable.push({attribute: "车位编号", value: stall.Serial});
                 this.leftTable.push({attribute: "车位位置", value: stall.Loc});
                 this.leftTable.push({attribute: "车位面积", value: stall.Area + " 平方米"});
-                this.leftTable.push({attribute: "车位证书", value: stall.Cert});
+                this.leftTable.push({attribute: "车位证书", value: certValue, certUrl: certUrl});
                 this.rightTable.push({attribute: "车库ID", value: stall.GarageId});
                 this.rightTable.push({attribute: "使用期限", value: stall.Period});
                 this.rightTable.push({attribute: "确权状态", value: stall.StallState});
