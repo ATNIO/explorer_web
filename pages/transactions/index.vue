@@ -134,7 +134,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        margin-bottom: 64px;
+        margin-bottom: 15px;
         font-family: PingFangSC-Semibold;
         font-size: 36px;
         color: #FFFFFF;
@@ -147,9 +147,9 @@
         flex: 1;
     }
 
-    .el-card {
-        margin-top: -55px;
-    }
+    // .el-card {
+    //     margin-top: -55px;
+    // }
 
     .loading {
         width: 100%;
@@ -416,7 +416,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate, toDecimals, toTime } from '~/common/method.js'
+import { toDate, toDecimals, toTime, addressSimplify, search } from '~/common/method.js'
 
   export default {
 
@@ -448,10 +448,10 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                     let transaction = {};
                     transaction.number = r.BlockNumber;
                     transaction.time = toTime(r.Seconds);
-                    transaction.txId = r.Hash.toString().substr(0,10) + '...';
+                    transaction.txId = addressSimplify(r.Hash);
                     transaction.hash = r.Hash.toString();
-                    transaction.from = r.From.toString().substr(0,10) + '...';
-                    transaction.to = r.To.toString().substr(0,10) + '...';
+                    transaction.from = addressSimplify(r.From);
+                    transaction.to = addressSimplify(r.To);
                     transaction.fromAddress = r.From.toString()
                     transaction.toAddress = r.To.toString()
                     let number = (r.Value / 1e18).toString();
@@ -478,10 +478,10 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                     let transaction = {};
                     transaction.number = r.BlockNumber;
                     transaction.time = toTime(r.Seconds);
-                    transaction.txId = r.Hash.toString().substr(0,10) + '...';
+                    transaction.txId = addressSimplify(r.Hash);
                     transaction.hash = r.Hash.toString();
-                    transaction.from = r.From.toString().substr(0,10) + '...';
-                    transaction.to = r.To.toString().substr(0,10) + '...';
+                    transaction.from = addressSimplify(r.From);
+                    transaction.to = addressSimplify(r.To);
                     transaction.fromAddress = r.From.toString()
                     transaction.toAddress = r.To.toString()
                     let number = (r.Value / 1e18).toString();
@@ -504,26 +504,7 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
             })
         },
         search() {
-            // this.$router.push('blocks/248703')
-            this.$axios.$get("/search/" + this.input).then(res => {
-                let type = res.type;
-                if(type == "block") {
-                    let value = res.value;
-                    let number = value.Number;
-                    this.$router.push('/blocks/' + number);
-                }
-                else if(type == "transaction") {
-                    this.$router.push('/transactions/' + this.input);
-                }
-                else if(type == "dbot") {
-                    this.$router.push('/dbots/' + this.input);
-                }
-                else if(type == "account") {
-                    this.$router.push('/accounts/' + this.input);
-                }
-            }).catch(error => {
-                    this.$router.push('/error');
-            })
+            search(this);
         },
       
     },

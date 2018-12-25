@@ -889,7 +889,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate, toDecimals } from '~/common/method.js'
+import { toDate, toDecimals, search } from '~/common/method.js'
 const Web3 = require('web3')
 import VueClipboard from 'vue-clipboard2';
 import Vue from 'vue'
@@ -1091,26 +1091,7 @@ Vue.use(VueClipboard);
             }
         },
         search() {
-            // this.$router.push('blocks/248703')
-            this.$axios.$get("/search/" + this.input).then(res => {
-                let type = res.type;
-                if(type == "block") {
-                    let value = res.value;
-                    let number = value.Number;
-                    this.$router.push('/blocks/' + number);
-                }
-                else if(type == "transaction") {
-                    this.$router.push('/transactions/' + this.input);
-                }
-                else if(type == "dbot") {
-                    this.$router.push('/dbots/' + this.input);
-                }
-                else if(type == "account") {
-                    this.$router.push('/accounts/' + this.input);
-                }
-            }).catch(error => {
-                    this.$router.push('/error');
-            })
+            search(this);
         },
         onCopy() {
             this.$notify({

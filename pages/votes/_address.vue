@@ -718,7 +718,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate, toDecimals, toTime } from '~/common/method.js'
+import { toDate, toDecimals, toTime, addressSimplify2, timeToHms, search } from '~/common/method.js'
 const Web3 = require('web3')
 import VueClipboard from 'vue-clipboard2';
 import Vue from 'vue'
@@ -751,12 +751,13 @@ Vue.use(VueClipboard);
                 pVotes: 0,
                 lastSealTime: "",
                 transactionTable: [],
-                total: 25,
+                total: 21,
                 currentPage: 1,
                 pageSize: 21,
                 loading: true,
                 votersTable: [],
                 input: '',
+                pageNumber: 1,
         };
     },
     methods: {
@@ -765,70 +766,55 @@ Vue.use(VueClipboard);
         },
         async showData() {
             await this.$axios.$get("/votes/candidatesStatus?page_size=" + this.pageSize + "&page_number=1").then(res => {
+                let candidates = res.candidates;
                 let i = 1;
-                console.log(res)
-                for(let r of res) {
-                    if(r.address === this.address) {
+                for(let c of candidates) {
+                    if(c.address === this.address) {
                         this.rank = i;
-                        this.pVotes = r.pVotes.toFixed(3) + "%";
+                        this.pVotes = c.pVotes.toFixed(3) + "%";
                     } 
                     i++;
                 }
             })
 
             this.$axios.$get("/votes/candidateStatus/" + this.address).then(res => {
-                console.log(res)
-                this.votes = parseInt(res.votes).toLocaleString('en-US');
+                this.votes = +(res.votes).toLocaleString('en-US');
                 this.scores = this.votes + " (" + this.pVotes + ")";
                 this.voters = parseInt(res.voters).toLocaleString('en-US');
-                let date = new Date(parseInt(res.lastSealTime));
-                let hours = date.getHours();
-                let minutes = "0" + date.getMinutes();
-                let seconds = "0" + date.getSeconds();
-                let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-                this.lastSealTime = formattedTime;
+                this.lastSealTime = timeToHms(res.lastSealTime);
             })
 
-            this.$axios.$get("/votes/cacheVotes/" + this.address + "?page_size=" + this.pageSize + "&page_number=1").then(res => {
+            this.getCacheVotes();
+            
+
+        },
+
+        getCacheVotes() {
+            this.votersTable = [];
+            this.$axios.$get("/votes/cacheVotes/" + this.address + "?page_size=" + this.pageSize + "&page_number=" + this.pageNumber).then(res => {
+                this.total = res.length;
                 for(let r of res) {
                     let voters = {};
-                    voters.name = r.address.toString().substr(0,20) + '...';
+                    voters.name = addressSimplify2(r.address);
                     voters.address = r.address;
                     voters.votes = r.votes;
                     this.votersTable.push(voters);
                 }
                 this.loading = false;
             })
-
         },
+
         handleClick(tab, event) {
             // console.log(tab, event);
         },
 
         handleCurrentChange(val) {
+            this.pageNumber = val;
+            this.getCacheVotes();
         },
 
         search() {
-            // this.$router.push('blocks/248703')
-            this.$axios.$get("/search/" + this.input).then(res => {
-                let type = res.type;
-                if(type == "block") {
-                    let value = res.value;
-                    let number = value.Number;
-                    this.$router.push('/blocks/' + number);
-                }
-                else if(type == "transaction") {
-                    this.$router.push('/transactions/' + this.input);
-                }
-                else if(type == "dbot") {
-                    this.$router.push('/dbots/' + this.input);
-                }
-                else if(type == "account") {
-                    this.$router.push('/accounts/' + this.input);
-                }
-            }).catch(error => {
-                    this.$router.push('/error');
-            })
+            search(this);
         },
         onCopy() {
             this.$notify({

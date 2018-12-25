@@ -223,6 +223,8 @@
 </style>
 
 <script>
+import { search } from '~/common/method.js'
+
   export default {
     data() {
         return {
@@ -248,26 +250,7 @@
             // this.activeIndex2 = key
         },
         search() {
-            console.log(this.input)
-            this.$axios.$get("/search/" + this.input).then(res => {
-                let type = res.type;
-                if(type == "block") {
-                    let value = res.value;
-                    let number = value.Number;
-                    this.$router.push('/blocks/' + number);
-                }
-                else if(type == "transaction") {
-                    this.$router.push('/transactions/' + this.input);
-                }
-                else if(type == "dbot") {
-                    this.$router.push('/dbots/' + this.input);
-                }
-                else if(type == "account") {
-                    this.$router.push('/accounts/' + this.input);
-                }
-            }).catch(error => {
-                    this.$router.push('/error');
-            })
+            search(this);
         }
     }
   }

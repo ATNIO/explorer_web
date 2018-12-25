@@ -14,202 +14,223 @@
             <div class="description">
                 <p>Vote</p>
             </div>
-            <el-card class="table-card">
-                <div>
-                    <p class="title">超级节点</p>
+            
+            <el-tabs v-model="activeTab"  type="border-card" @tab-click="handleClick"  >
+                <el-tab-pane label="超级节点" name="first" class="tab-pane">
+                        <p class="title">超级节点</p>
+                        <span class="title-small green-circle">Top {{this.top}}</span>
+                        <span class="title-small orange-circle">Standby</span>
+                        <span class="title-small total">总计:</span><span class="title-small">{{this.total}} 个</span>
+                    <el-table
+                        ref="candidates"
+                        :data="candidatesTable"
+                        :header-cell-style="{ 
+                            background:'#F4F6F9',
+                            padding:'0px',
+                            textAlign:'center'
+                        }"
+                        :header-row-style="{
+                            height:'36px',
+                        }"
+                        :cell-style="{
+                            textAlign:'center',
+                            height:'60px',                                                               
+                            color:'#788091'
+                        }"
+                        empty-text=" "
+                        v-loading="loading"
+                        element-loading-text="Loading..."
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-customClass="loading"
+                        highlight-current-row
+                        >
 
-                    <span class="title-small green-circle">Top 31</span>
-                    <span class="title-small orange-circle">Standby</span>
-                    <span class="title-small total">总计:</span><span class="title-small">{{this.total}} 个</span>
+                        <el-table-column
+                            prop="rank"
+                            label="排名"
+                            width="80"
+                            >
+                            <template slot-scope="scope">
+                                <template v-if="scope.row.rank <= 31"> 
+                                    <el-tag size="success">{{ scope.row.rank }}</el-tag>
+                                </template>
+                                <template v-else> 
+                                    <el-tag size="warning">{{ scope.row.rank }}</el-tag>
+                                </template>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            prop="rankChange"
+                            label=""
+                            width="50"
+                            >
+                            
+                            <template slot-scope="scope">
+                                <template v-if="scope.row.rankIncrease == true" >
+                                    <i class="green-icon up" ></i>
+                                    <span class="green-rank-change">{{ scope.row.rankChange }}</span>
+                                </template>
+                                <template v-if="scope.row.rankDecrease == true" >
+                                    <i class="red-icon down" ></i>
+                                    <span class="red-rank-change">{{ scope.row.rankChange }}</span>
+                                </template>
+                            </template>
+                        </el-table-column >
+
+                        <el-table-column
+                            prop="name"
+                            label="名称"
+                            width="280"
+                            >
+                            <template slot-scope="scope">
+                                <div class="name-template">
+                                    <AccountIcon class="name-icon" :value="scope.row.address" size="15"/>
+                                    <div class="name-content">
+                                        <nuxt-link :to="'/votes/' + scope.row.address">{{ scope.row.name }}</nuxt-link>
+                                        <p class="content-style">{{ scope.row.content }}</p>
+                                    </div>
+                                </div>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            prop="pledge"
+                            label="质押ATN数"
+                            >
+                        </el-table-column>
+
+                        <el-table-column
+                            prop="pVotes"
+                            label="得票率"
+                            >
+                        </el-table-column>
+
+                        <el-table-column
+                            prop="voters"
+                            label="投票账户数"
+                            >
+                        </el-table-column>
+
+                        <el-table-column
+                            prop="seal"
+                            label="已生产区块数"
+                            >
+                        </el-table-column>
+
+                        <el-table-column
+                            prop="score"
+                            label="节点分数"
+                            >
+                        </el-table-column>
+
                     
-                </div>
-                <el-table
-                    ref="candidates"
-                    :data="candidatesTable"
-                    :header-cell-style="{ 
-                        background:'#F4F6F9',
-                        padding:'0px',
-                        textAlign:'center'
-                    }"
-                    :header-row-style="{
-                        height:'36px',
-                    }"
-                    :cell-style="{
-                        textAlign:'center',
-                        height:'60px',                                                               
-                        color:'#788091'
-                    }"
-                    empty-text=" "
-                    v-loading="loading"
-                    element-loading-text="Loading..."
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-customClass="loading"
-                    highlight-current-row
-                    >
-
-                    <el-table-column
-                        prop="rank"
-                        label="排名"
-                        width="80"
+                    </el-table>
+                    <br>
+                    <div class="page">
+                        <el-pagination
+                            small
+                            @current-change="handleCurrentChange1"
+                            :current-page.sync="currentPage"
+                            :page-size=this.pageSize
+                            layout="total, prev, pager, next"
+                            :total=this.total>
+                        </el-pagination>
+                    </div>
+                    <div class="mobile-page">
+                        <el-pagination
+                            small
+                            @current-change="handleCurrentChange1"
+                            :current-page.sync="currentPage"
+                            :page-size=this.pageSize
+                            layout="prev, pager,next"
+                            :total=this.total
+                            >
+                        </el-pagination>
+                    </div>
+                </el-tab-pane>
+                <el-tab-pane label="超级节点" name="second" class="tab-pane">
+                    <div>
+                        <p class="title">活跃见证人</p> 
+                    </div>
+                    <el-table
+                        ref="delegaters"
+                        :data="delegatersTable"
+                        :header-cell-style="{ 
+                            background:'#F4F6F9',
+                            padding:'0px',
+                            textAlign:'center'
+                        }"
+                        :header-row-style="{
+                            height:'36px',
+                        }"
+                        :cell-style="{
+                            textAlign:'center',
+                            height:'60px',                                                               
+                            color:'#788091'
+                        }"
+                        empty-text=" "
+                        v-loading="loading"
+                        element-loading-text="Loading..."
+                        element-loading-spinner="el-icon-loading"
+                        element-loading-customClass="loading"
                         >
-                        <template slot-scope="scope">
-                            <template v-if="scope.row.rank <= 31"> 
-                                <el-tag size="success">{{ scope.row.rank }}</el-tag>
-                            </template>
-                            <template v-else> 
-                                <el-tag size="warning">{{ scope.row.rank }}</el-tag>
-                            </template>
-                        </template>
-                    </el-table-column>
 
-                    <el-table-column
-                        prop="rankChange"
-                        label=""
-                        width="50"
-                        >
+                        <el-table-column
+                            prop="number"
+                            label="见证人"
+                            width="300"
+                            >
+                            <template slot-scope="scope">
+                                <div class="name-template">
+                                    <AccountIcon class="name-icon" :value="scope.row.address" size="15"/>
+                                    <div class="name-content">
+                                        <nuxt-link :to="'/votes/' + scope.row.address">{{ scope.row.name }}</nuxt-link>
+                                        <p class="content-style">{{ scope.row.content }}</p>
+                                    </div>
+                                </div>
+                            </template>
+                        </el-table-column>
+
+                        <el-table-column
+                            prop="votes"
+                            label="总票数"
+                            >
+                        </el-table-column>
+
+                        <el-table-column
+                            prop="lastSeal"
+                            label="最近确认"
+                            >
+                        </el-table-column>
+
+                        <el-table-column
+                            prop="sealInEpoch"
+                            label="当前周期出块数量"
+                            >
+                        </el-table-column>
+
+                        <el-table-column
+                            prop="lastSealTime"
+                            label="时间"
+                            >
+                        </el-table-column>
+
                         
-                        <template slot-scope="scope">
-                            <template v-if="scope.row.rankIncrease == true" >
-                                <i class="green-icon up" ></i>
-                                <span class="green-rank-change">{{ scope.row.rankChange }}</span>
-                            </template>
-                            <template v-if="scope.row.rankDecrease == true" >
-                                <i class="red-icon down" ></i>
-                                <span class="red-rank-change">{{ scope.row.rankChange }}</span>
-                            </template>
-                        </template>
-                    </el-table-column >
-
-                    <el-table-column
-                        prop="name"
-                        label="名称"
-                        width="300"
-                        >
-                        <template slot-scope="scope" class="name-template">
-							<AccountIcon class="name-icon" :value="scope.row.address" size="10"/>
-                            <nuxt-link :to="'/votes/' + scope.row.address">{{ scope.row.name }}</nuxt-link>
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column
-                        prop="pVotes"
-                        label="得票率"
-                        >
-                    </el-table-column>
-
-                    <el-table-column
-                        prop="voters"
-                        label="投票账户数"
-                        >
-                    </el-table-column>
-
-                    <el-table-column
-                        prop="seal"
-                        label="已生产区块数"
-                        >
-                    </el-table-column>
-
-                    
-                </el-table>
-                <br>
-                <div class="page">
-                    <el-pagination
-                        small
-                        @current-change="handleCurrentChange1"
-                        :current-page.sync="currentPage"
-                        :page-size=this.pageSize
-                        layout="total, prev, pager, next"
-                        :total=this.total>
-                    </el-pagination>
-                </div>
-                <div class="mobile-page">
-                    <el-pagination
-                        small
-                        @current-change="handleCurrentChange1"
-                        :current-page.sync="currentPage"
-                        :page-size=this.pageSize
-                        layout="prev, pager,next"
-                        :total=this.total
-                        >
-                    </el-pagination>
-                </div>
-            </el-card>
-
-            <el-card class="table-card">
-              <div>
-                <p class="title">活跃见证人</p> 
-              </div>
-                <el-table
-                    :data="delegatersTable"
-                    :header-cell-style="{ 
-                        background:'#F4F6F9',
-                        padding:'0px',
-                        textAlign:'center'
-                    }"
-                    :header-row-style="{
-                        height:'36px',
-                    }"
-                    :cell-style="{
-                        textAlign:'center',
-                        height:'60px',                                                               
-                        color:'#788091'
-                    }"
-                    empty-text=" "
-                    v-loading="loading"
-                    element-loading-text="Loading..."
-                    element-loading-spinner="el-icon-loading"
-                    element-loading-customClass="loading"
-                    >
-
-                    <el-table-column
-                        prop="number"
-                        label="见证人"
-                        width="300"
-                        >
-                        <template slot-scope="scope">
-                            <AccountIcon class="name-icon" :value="scope.row.address" size="10"/>
-                            <nuxt-link :to="'/accounts/' + scope.row.address">{{ scope.row.name }}</nuxt-link>
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column
-                        prop="votes"
-                        label="总票数"
-                        >
-                    </el-table-column>
-
-                    <el-table-column
-                        prop="lastSeal"
-                        label="最近确认"
-                        >
-                    </el-table-column>
-
-                    <el-table-column
-                        prop="sealInEpoch"
-                        label="当前周期出块数量"
-                        >
-                    </el-table-column>
-
-                    <el-table-column
-                        prop="lastSealTime"
-                        label="时间"
-                        >
-                    </el-table-column>
-
-                    
-                </el-table>
-                <br>
-                <div class="page">
-                    <el-pagination
-                        small
-                        @current-change="handleCurrentChange2"
-                        :current-page.sync="currentPage"
-                        :page-size=this.pageSize
-                        layout="total, prev, pager, next"
-                        :total=this.total>
-                    </el-pagination>
-                </div>
-            </el-card>
+                    </el-table>
+                    <br>
+                    <div class="page">
+                        <el-pagination
+                            small
+                            @current-change="handleCurrentChange2"
+                            :current-page.sync="currentPage"
+                            :page-size=this.pageSize
+                            layout="total, prev, pager, next"
+                            :total=this.total>
+                        </el-pagination>
+                    </div>
+                </el-tab-pane>
+            </el-tabs>
             </div>
         </div>
     </el-main>
@@ -237,7 +258,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        margin-bottom: 64px;
+        margin-bottom: 15px;
         font-family: PingFangSC-Semibold;
         font-size: 36px;
         color: #FFFFFF;
@@ -248,11 +269,20 @@
         width: 950px;
         height: 2108px;
         flex: 1;
+        margin: 50px 50px;
+    }
+
+    .tab-pane {
+        padding: 0;
+        width: 950px;
+        height: 2108px;
+        flex: 1;
         margin: 20px 50px;
     }
-     & /deep/ .el-table--fit{
+
+    & /deep/ .el-table--fit{
        margin-top: 20px;
-     }
+    }
 
     .table-card{
       margin-top: 20px;
@@ -268,7 +298,7 @@
       font-size:20px;
       font-family:PingFangSC-Regular;
       color:rgba(13,33,56,1);
-      margin: 30px auto 0px;
+      margin: -20px auto 0px;
     }
 
     & /deep/ .el-tag--success {
@@ -313,11 +343,28 @@
     .name-template {
         display: flex;
         flex-direction: row;
-        align-items: space-around;
+        align-items: center;
+        height: 50px;
     }
+
+    .name-content {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-around;
+        font-family: PingFangSC-Semibold;
+        font-size: 15px;
+    }
+    
+    .content-style {
+        font-family: PingFangSC-Semibold;
+        font-size: 10px;
+        font-weight: lighter;
+    }
+
     .name-icon{
         margin-right: 10px;
-        margin-bottom: -5px;
+        // margin-bottom: -5px;
     }
 
     .green-icon {
@@ -409,7 +456,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 1050px;
+        width: 1090px;
         position: absolute;
         top: 110px;
     }
@@ -667,7 +714,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDecimals, toTime } from '~/common/method.js'
+import { toDecimals, toTime, getANSInfo, hexToNumber, hexToUtf8, addressSimplify, addressSimplify2, timeToHms, search } from '~/common/method.js'
 
   export default {
 
@@ -692,100 +739,44 @@ import { toDecimals, toTime } from '~/common/method.js'
       return {
             candidatesTable: [],
             delegatersTable:[],
-            total: 40,
+            top: 0,
+            total: 0,
             currentPage: 1,
-            pageSize: 32,
+            pageSize: 21,
             loading: true,
             input: '',
             lastCandidatesTable: [],
+            lastDelegatersTable: [],
             candidatesPage: 1,
             delegatersPage: 1,
             currentRow: 0,
+            activeTab: 'first',
+            ansName: new Map(),
       };
     },
     methods: {
         handleSelect(key, keyPath) {
         },
         
-        showData() {
+        async showData() {
+            let self = this;
+            await this.getCandidateStatus(self);
+            this.getDelegaterStatus(self);
+        },
 
-            this.$axios.$get("/votes/candidatesStatus?page_size=" + this.pageSize + "&page_number=1").then(res => {
-                let i = 1;
-                let candidates = res;
-                for(let j = 0; j < candidates.length && j < this.pageSize; j++) {
-                    let candidate = {};
-                    candidate.rank = i;
-                    candidate.address = candidates[j].address;
-                    candidate.name = candidates[j].address.toString().substr(0,25) + '...';
-                    candidate.pVotes = candidates[j].pVotes.toFixed(3) + "%";
-                    candidate.voters = parseInt(candidates[j].voters).toLocaleString('en-US');
-                    candidate.seal = parseInt(candidates[j].seal).toLocaleString('en-US');
-                    this.candidatesTable.push(candidate);
-                    this.lastCandidatesTable.push(candidate);
-                    i++;
-                }
-                this.loading = false;
-            })
 
-            this.$axios.$get("/votes/delegatersStatus?page_size=" + this.pageSize + "&page_number=1").then(res => {
-                // console.log(res)
-                for( let r of res ) {
-                    let delegater = {};
-                    delegater.address = r.address;
-                    delegater.name = r.address.toString().substr(0,25) + '...';
-                    delegater.lastSeal = r.lastSeal;
-                    delegater.sealInEpoch = r.sealInEpoch;
-                    delegater.votes = parseInt(r.votes).toLocaleString('en-US');
+        handleClick() {
 
-                    let date = new Date(parseInt(r.lastSealTime));
-                    let hours = date.getHours();
-                    let minutes = "0" + date.getMinutes();
-                    let seconds = "0" + date.getSeconds();
-                    let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-
-                    delegater.lastSealTime = formattedTime;
-                    this.delegatersTable.push(delegater)
-                }
-                this.loading = false;
-            })
         },
 
         refresh() {
+            console.log("start interval...");
             let self = this;
-            this.setCurrent();
-            let count = 0;
             let interval = setInterval(async function() {
-                self.getCandidatesStatus(self);
+                self.refreshCandidatesStatus(self);
 
-                self.$axios.$get("/votes/delegatersStatus?page_size=" + self.pageSize + "&page_number=" + self.delegatersPage).then(res => {
-                    // console.log(res)
-                    // console.log("delegatersPage", self.delegatersPage);
-                    self.delegatersTable = [];
-                    for( let r of res ) {
-                        let delegater = {};
-                        delegater.address = r.address;
-                        delegater.name = r.address.toString().substr(0,25) + '...';
-                        delegater.lastSeal = r.lastSeal;
-                        delegater.sealInEpoch = r.sealInEpoch;
-                        delegater.votes = parseInt(r.votes).toLocaleString('en-US');
-
-                        let date = new Date(parseInt(r.lastSealTime));
-                        let hours = date.getHours();
-                        let minutes = "0" + date.getMinutes();
-                        let seconds = "0" + date.getSeconds();
-                        let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-
-                        delegater.lastSealTime = formattedTime;
-
-                        // for(let m = 0; m < self.delegatersTable.length; m++) {
-                        //     if(self.delegatersTable[m].address === delegater.address) {
-                        //         self.delegatersTable[m] = delegater;
-                        //     }
-                        // }
-                        self.delegatersTable.push(delegater)
-                    }
-                    self.loading = false;
-                })
+                // self.refreshDelegatersStatus(self);
+                
                 // count++;
                 // if(count === 2)clearInterval(interval);
                 // console.log("this.pageName", self.$route.name)
@@ -794,32 +785,103 @@ import { toDecimals, toTime } from '~/common/method.js'
                     clearInterval(interval);
                 }
 
-
             }, 5000)
         },
 
-        async getCandidatesStatus(self) {
+        async getCandidateStatus(self) {
+            self.lastCandidatesTable = [];
+            self.candidatesTable = [];
             await self.$axios.$get("/votes/candidatesStatus?page_size=" + self.pageSize + "&page_number=" + self.candidatesPage).then(async function(res){
-                // console.log(res)
-                // console.log("candidatesPage", self.candidatesPage);
+                self.top = res.total;
+                self.total = res.total;
                 let i = self.pageSize * (self.candidatesPage - 1) + 1;
-                // self.candidatesTable = [];
+                let candidates = res.candidates;
+                for(let j = 0; j < candidates.length && j < self.pageSize; j++) {
+                    let candidate = {};
+                    candidate.rank = i;
+                    candidate.address = candidates[j].address;
+                    let info = await getANSInfo(candidate.address);
+                    if(info.name !== undefined){
+                        let name = info.name;
+                        let address = ' (' + addressSimplify(candidate.address) + ')';
+                        let content = hexToUtf8(info.content);
+                        let ans = {};
+                        ans.name = name;
+                        ans.content = content;
+                        self.ansName.set(candidate.address, ans);
+                        candidate.content = content;
+                        candidate.name = name + address;
+                    }
+                    else candidate.name = addressSimplify2(candidate.address);
+                    candidate.pledge = 10000;
+                    candidate.pVotes = candidates[j].pVotes.toFixed(3) + "%";
+                    candidate.voters = (+candidates[j].voters).toLocaleString('en-US');
+                    candidate.seal = (+candidates[j].seal).toLocaleString('en-US');
+                    candidate.score = candidates[j].score;
+                    self.candidatesTable.push(candidate);
+                    self.lastCandidatesTable.push(candidate);
+                    i++;
+                }
+                self.loading = false;
+            })
+        },
+
+        async getDelegaterStatus(self) {
+            self.delegatersTable = [];
+            self.lastDelegatersTable = [];
+            self.$axios.$get("/votes/delegatersStatus?page_size=" + self.pageSize + "&page_number=" + self.delegatersPage).then(async function(res) {
+                for( let r of res ) {
+                    let delegater = {};
+                    delegater.address = r.address;
+                    let info = self.ansName.get(delegater.address);
+                    if(info !== undefined){
+                        let name = info.name;
+                        let address = ' (' + addressSimplify(delegater.address) + ')';
+                        let content = info.content;
+                        delegater.content = content;
+                        delegater.name = name + address;
+                    }
+                    else delegater.name =addressSimplify2(delegater.address);
+                    delegater.lastSeal = hexToNumber(r.lastSeal);
+                    delegater.sealInEpoch = r.sealInEpoch;
+                    delegater.votes = (+(r.votes)).toLocaleString('en-US');
+
+                    delegater.lastSealTime = timeToHms(r.lastSealTime);;
+                    self.delegatersTable.push(delegater)
+                }
+                self.loading = false;
+            })
+        },
+
+        async refreshCandidatesStatus(self) {
+            self.$axios.$get("/votes/candidatesStatus?page_size=" + self.pageSize + "&page_number=" + self.candidatesPage).then(async function(res){
+                self.top = res.total;
+                self.total = res.total;
+                let i = self.pageSize * (self.candidatesPage - 1) + 1;
                 let tempCandidatesTable = [];
-                let candidates = res;
+                let candidates = res.candidates;
                 let currentRow, test;
                 for(let j = 0; j < candidates.length && j < self.pageSize; j++) {
                     let candidate = {};
                     candidate.rank = i;
                     candidate.address = candidates[j].address;
-                    candidate.name = candidates[j].address.toString().substr(0,25) + '...';
+                    let info = self.ansName.get(candidate.address);
+                    if(info !== undefined){
+                        let name = info.name;
+                        let content = info.content;
+                        let address = ' (' + addressSimplify(candidate.address) + ')';
+                        candidate.content = content;
+                        candidate.name = name + address;
+                    }
+                    else candidate.name = addressSimplify2(candidate.address);
+                    candidate.pledge = 10000;
                     candidate.pVotes = candidates[j].pVotes.toFixed(3) + "%";
-                    candidate.voters = parseInt(candidates[j].voters).toLocaleString('en-US');
-                    candidate.seal = parseInt(candidates[j].seal).toLocaleString('en-US');
-
-                    // console.log("candidate.address", candidate.address);
-                    // console.log("lastCAndidatesTable", self.lastCandidatesTable)
+                    candidate.voters = (+candidates[j].voters).toLocaleString('en-US');
+                    candidate.seal = (+candidates[j].seal).toLocaleString('en-US');
+                    candidate.score = candidates[j].score;
                     for(let k = 0; k < self.lastCandidatesTable.length; k++) {
                         if(candidates[j].address === self.lastCandidatesTable[k].address) {
+                            //计算排名变化
                             if(j < k) {
                                 candidate.rankIncrease = true;
                                 candidate.rankChange = k - j;
@@ -828,10 +890,10 @@ import { toDecimals, toTime } from '~/common/method.js'
                                 candidate.rankDecrease = true;
                                 candidate.rankChange = j - k;
                             }
-                            if(candidates[j].seal > self.lastCandidatesTable[k].seal) {
+                            //计算出块变化
+                            if(+(candidates[j].seal) > +(self.lastCandidatesTable[k].seal.toString().replace(/,/g,''))) {
                                 currentRow = j;
                                 test = k;
-                                
                             }
                             break;
                         }
@@ -839,102 +901,84 @@ import { toDecimals, toTime } from '~/common/method.js'
                     tempCandidatesTable.push(candidate);
                     i++;
                 }
-                self.setCurrent(self.candidatesTable[test]);
+                self.setCurrentCandidates(self.candidatesTable[test]);
                 await self.sleep(1000);
                 self.candidatesTable = tempCandidatesTable;
-                self.setCurrent(self.candidatesTable[currentRow]);
+                self.setCurrentCandidates(self.candidatesTable[currentRow]);
                 self.lastCandidatesTable = self.candidatesTable;
+            })
+        },
+
+        async refreshDelegatersStatus(self) {
+            self.$axios.$get("/votes/delegatersStatus?page_size=" + self.pageSize + "&page_number=" + self.delegatersPage).then(async function(res){
+                let tempDelegatersTable = [];
+                let delegaters = res;
+                let currentRow, test;
+                for(let j = 0; j < delegaters.length && j < self.pageSize; j++) {
+                    let delegater = {};
+                    delegater.address = delegaters[j].address;
+                    let info = self.ansName.get(delegater.address);
+                    if(info !== undefined){
+                        let name = info.name;
+                        let content = info.content;
+                        let address = ' (' + addressSimplify(delegater.address) + ')';
+                        delegater.content = content;
+                        delegater.name = name + address;
+                    }
+                    else delegater.name = addressSimplify2(delegater.address);
+
+                    delegater.lastSeal = hexToNumber(delegaters[j].lastSeal);
+                    delegater.sealInEpoch = delegaters[j].sealInEpoch;
+                    delegater.votes = (+(delegaters[j].votes)).toLocaleString('en-US');
+
+                    delegater.lastSealTime = timeToHms(delegaters[j].lastSealTime);
+                    // console.log("delegater.address", delegater.address);
+                    // console.log("self.lastDelegatersTable", self.lastDelegatersTable)
+                    for(let k = 0; k < self.lastDelegatersTable.length; k++) {
+                        if(delegaters[j].address === self.lastDelegatersTable[k].address) {
+                            if(+(delegaters[j].lastSeal) > +(self.lastDelegatersTable[k].lastSeal.toString().replace(/,/g,''))) {
+                                currentRow = j;
+                                test = k;
+                            }
+                            break;
+                        }
+                    }
+                    tempDelegatersTable.push(delegater);
+                }
+                self.setCurrentDelegaters(self.delegatersTable[test]);
+                await self.sleep(1000);
+                self.delegatersTable = tempDelegatersTable;
+                self.setCurrentDelegaters(self.delegatersTable[currentRow]);
+                self.lastDelegatersTable = self.delegatersTable;
             })
         },
 
         sleep(ms) {
 	        return new Promise(resolve => setTimeout(resolve, ms))
         },
-        setCurrent(row) {
-            console.log("row", row);
+
+        setCurrentCandidates(row) {
             this.$refs.candidates.setCurrentRow(row);
         },
-        timeStamp2String (time){
-             var datetime = new Date();
-             datetime.setTime(time);
-             var year = datetime.getFullYear();
-             var month = datetime.getMonth() + 1;
-             var date = datetime.getDate();
-             var hour = datetime.getHours();
-             var minute = datetime.getMinutes();
-             var second = datetime.getSeconds();
-             var mseconds = datetime.getMilliseconds();
-             return year + "-" + month + "-" + date+" "+hour+":"+minute+":"+second+"."+mseconds;
+
+        setCurrentDelegaters(row) {
+            this.$refs.delegaters.setCurrentRow(row);
         },
+
         handleCurrentChange1(val) {
             // console.log("val", val)
             this.candidatesPage = val;
-            this.$axios.$get("/votes/candidatesStatus?page_size=" + this.pageSize + "&page_number="+val).then(res => {
-                // console.log("****", res)
-                let i = this.pageSize * (val - 1) + 1;
-                this.candidatesTable = [];
-                res = res.candidates;
-                for( let r of res ) {
-                    let candidate = {};
-                    candidate.rank = i;
-                    candidate.address = r.address;
-                    candidate.name = r.address.toString().substr(0,25) + '...';
-                    candidate.pVotes = r.pVotes.toFixed(3) + "%";
-                    candidate.voters = parseInt(r.voters).toLocaleString('en-US');
-                    candidate.seal = parseInt(r.seal).toLocaleString('en-US');
-                    this.candidatesTable.push(candidate)
-                    i++;
-                }
-                this.loading = false;
-            })
+            this.getCandidateStatus(this);
         },
+
         handleCurrentChange2(val) {
             // console.log("val", val)
             this.delegatersPage = val;
-            this.$axios.$get("/votes/delegatersStatus?page_size=" + this.pageSize + "&page_number=" + this.delegatersPage).then(res => {
-                // console.log(res)
-                this.delegatersTable = [];
-                for( let r of res ) {
-                    let delegater = {};
-                    delegater.address = r.address;
-                    delegater.name = r.address.toString().substr(0,25) + '...';
-                    delegater.lastSeal = r.lastSeal;
-                    delegater.sealInEpoch = r.sealInEpoch;
-                    delegater.votes = parseInt(r.votes).toLocaleString('en-US');
-
-                    let date = new Date(parseInt(r.lastSealTime));
-                    let hours = date.getHours();
-                    let minutes = "0" + date.getMinutes();
-                    let seconds = "0" + date.getSeconds();
-                    let formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-
-                    delegater.lastSealTime = formattedTime;
-                    this.delegatersTable.push(delegater)
-                }
-                this.loading = false;
-            })
+            this.getDelegaterStatus(this);
         },
+
         search() {
-            // this.$router.push('blocks/248703')
-            this.$axios.$get("/search/" + this.input).then(res => {
-                let type = res.type;
-                if(type == "block") {
-                    let value = res.value;
-                    let number = value.Number;
-                    this.$router.push('/blocks/' + number);
-                }
-                else if(type == "transaction") {
-                    this.$router.push('/transactions/' + this.input);
-                }
-                else if(type == "dbot") {
-                    this.$router.push('/dbots/' + this.input);
-                }
-                else if(type == "account") {
-                    this.$router.push('/accounts/' + this.input);
-                }
-            }).catch(error => {
-                    this.$router.push('/error');
-            })
+            search(this);
         },
       
     },

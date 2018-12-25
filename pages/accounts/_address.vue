@@ -137,6 +137,7 @@
                                     <el-table-column
                                         prop="txId"
                                         label="hash"
+                                        width="200"
                                         >
                                         <template slot-scope="scope">
                                             <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
@@ -764,7 +765,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate, toTime } from '~/common/method.js'
+import { toDate, toTime, addressSimplify, search } from '~/common/method.js'
 import VueClipboard from 'vue-clipboard2';
 import Vue from 'vue'
 
@@ -856,10 +857,10 @@ Vue.use(VueClipboard);
                     let tx = {};
                     tx.blockNumber = r.BlockNumber;
                     tx.time = toTime(r.Seconds);
-                    tx.from = r.From.toString().substr(0,10) + '...';
-                    tx.txId = r.Hash.toString().substr(0,10) + '...'
+                    tx.from = addressSimplify(r.From);
+                    tx.txId = addressSimplify(r.Hash);
                     tx.hash = r.Hash.toString();
-                    tx.to = r.To.toString().substr(0,10) + '...';
+                    tx.to = addressSimplify(r.To);
                     tx.fromAddress = r.From.toString();
                     tx.toAddress = r.To.toString();
                     tx.value = r.Value / 1e18 + ' ATN';
@@ -886,10 +887,10 @@ Vue.use(VueClipboard);
                     let tx = {};
                     tx.blockNumber = r.BlockNumber;
                     tx.time = toTime(r.Seconds);
-                    tx.from = r.From.toString().substr(0,10) + '...';
-                    tx.txId = r.Hash.toString().substr(0,10) + '...'
+                    tx.from = addressSimplify(r.From);
+                    tx.txId = addressSimplify(r.Hash);
                     tx.hash = r.Hash.toString();
-                    tx.to = r.To.toString().substr(0,10) + '...';
+                    tx.to = addressSimplify(r.To);
                     tx.fromAddress = r.From.toString();
                     tx.toAddress = r.To.toString();
                     tx.value = r.Value / 1e18 + ' ATN';
@@ -911,30 +912,7 @@ Vue.use(VueClipboard);
             // console.log(tab, event);
         },
         search() {
-            // console.log("search")
-            // console.log("input", this.input)
-            // console.log(this.$route.path);
-            // this.$router.push('blocks/248703')
-            this.$axios.$get("/search/" + this.input).then(res => {
-                // console.log(res)
-                let type = res.type;
-                if(type == "block") {
-                    let value = res.value;
-                    let number = value.Number;
-                    this.$router.push('/blocks/' + number);
-                }
-                else if(type == "transaction") {
-                    this.$router.push('/transactions/' + this.input);
-                }
-                else if(type == "dbot") {
-                    this.$router.push('/dbots/' + this.input);
-                }
-                else if(type == "account") {
-                    this.$router.push('/accounts/' + this.input);
-                }
-            }).catch(error => {
-                    this.$router.push('/error');
-            })
+            search(this);
         },
         onCopy() {
             this.$notify({
