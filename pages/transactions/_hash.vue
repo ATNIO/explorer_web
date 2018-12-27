@@ -101,7 +101,7 @@
                                                     <nuxt-link :to="'/accounts/' + this.to">{{ this.to }}</nuxt-link>
                                                 </span><br/>
                                             </template>
-                                            <template v-if="this.isContract == 'false'">
+                                            <template v-else>
                                                 <span>
                                                     <nuxt-link :to="'/accounts/' + this.to">{{ this.to }}</nuxt-link>
                                                 </span><br/>
@@ -963,6 +963,7 @@ Vue.use(VueClipboard);
                 this.timeStamp = toDate(res.Timestamp);
                 this.from = res.From;
                 this.to = res.To;
+                console.log("this.to", this.to);
                 this.$axios.$get("/accounts/address/" + this.to).then(res => {
                     // console.log("account details", res)
                     this.isContract = res.IsContract
@@ -1055,7 +1056,6 @@ Vue.use(VueClipboard);
             })
             this.$axios.$get("/traces/hash/" + this.hash).then(res => {
                 let trace = res.Trace;
-                console.log(res)
                 for(let t of trace) {
                     let data = {};
                     data.from = t.From.toString().substr(0,10) + '...';
@@ -1063,7 +1063,6 @@ Vue.use(VueClipboard);
                     data.to = t.To.toString().substr(0,10) + '...';
                     data.toAddress = t.To;
                     data.input = t.Input;
-                    console.log("a",t.Value / 1e18)
                     data.value = toDecimals(t.Value / 1e18) + " ATN";;
                     data.type = t.Op;
                     this.internalData.push(data);
