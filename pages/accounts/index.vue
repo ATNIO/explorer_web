@@ -48,17 +48,27 @@
               <el-table-column
                 prop="address"
                 :label="this.$t('account.address')"
-                min-width="400"
+                min-width="450"
               >
-                <template slot-scope="scope">
-                  <nuxt-link :to="'/accounts/' + scope.row.address">{{ scope.row.address }}</nuxt-link>
-                </template>
-              </el-table-column>
+              <template slot-scope="scope">
+                    <div class="name-template">
+                      <AccountIcon
+                        class="name-icon"
+                        :value="scope.row.address"
+                        size="15"
+                      />
+                      <div class="name-content">
+                        <nuxt-link :to="'/votes/' + scope.row.address">{{ scope.row.address }}</nuxt-link>
+                        <p class="content-style">{{ scope.row.name }}</p>
+                      </div>
+                    </div>
+                  </template>
+                </el-table-column>
 
               <el-table-column
                 prop="balance"
                 :label="this.$t('account.balance')"
-                min-width="200"
+                min-width="150"
               ></el-table-column>
 
               <el-table-column
@@ -129,10 +139,39 @@ a {
   color: #ffffff;
 }
 
+.name-template {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 50px;
+  margin-left: 30px;
+}
+
+.name-icon {
+  margin-right: 10px;
+  // margin-bottom: -5px;
+}
+
+.name-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-around;
+  font-family: PingFangSC-Semibold;
+  font-size: 15px;
+}
+
+.content-style {
+  font-family: PingFangSC-Semibold;
+  font-size: 15px;
+  font-weight: lighter;
+}
+
+
 & /deep/ .el-card__body {
   padding: 0;
   width: 1050px;
-  height: 754px;
+  height: 774px;
   flex: 1;
 }
 
@@ -422,7 +461,7 @@ export default {
       accountTable: [],
       total: 0,
       currentPage: 1,
-      pageSize: 11,
+      pageSize: 9,
       input: "",
       loading: true
     };
@@ -447,7 +486,7 @@ export default {
             account.address = r.Address;
             account.balance =
               Math.floor((parseInt(r.Balance) / 1e18) * 100) / 100 + " ATN";
-            let temp = (parseInt(r.Balance) / 1e18 / 1e56).toFixed(11);
+            let temp = (parseInt(r.Balance) / 1e18 / 210000000).toFixed(10);
             var e = parseInt(temp.toString().split("e-")[1]);
             // console.log("e",e)
             if (e) {
@@ -456,6 +495,7 @@ export default {
                 "0." + new Array(e).join("0") + temp.toString().substring(2);
             }
             account.percentage = temp + "%";
+            account.name = r.Name;
             this.accountTable.push(account);
           }
           this.loading = false;
@@ -483,7 +523,7 @@ export default {
             account.address = r.Address;
             account.balance =
               Math.floor((parseInt(r.Balance) / 1e18) * 100) / 100 + " ATN";
-            let temp = (parseInt(r.Balance) / 1e18 / 1e56).toFixed(11);
+            let temp = (parseInt(r.Balance) / 1e18 / 210000000).toFixed(10);
             var e = parseInt(temp.toString().split("e-")[1]);
             // console.log("e",e)
             if (e) {
@@ -492,6 +532,7 @@ export default {
                 "0." + new Array(e).join("0") + temp.toString().substring(2);
             }
             account.percentage = temp + "%";
+            account.name = r.Name;
             this.accountTable.push(account);
           }
           this.loading = false;
