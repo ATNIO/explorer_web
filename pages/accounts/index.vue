@@ -36,7 +36,7 @@
                             height:'60px',                                                               
                             color:'#788091'
                         }"
-              empty-text="暂无数据"
+              empty-text=""
               v-loading="loading"
               element-loading-text="Loading..."
               element-loading-spinner="el-icon-loading"
