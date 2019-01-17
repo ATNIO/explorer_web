@@ -1,0 +1,113 @@
+{
+    "header": {
+      "home": "首页",
+      "blocks": "区块列表",
+      "transactions": "交易列表",
+      "accounts": "账户列表",
+      "dbots": "Dbots",
+      "votes": "超级节点",
+      "ans": "短地址",
+      "lang": "简体中文",
+      "search": "交易/地址/块号"
+    },
+    "home": {
+      "block": "块",
+      "last_block": "最近的块",
+      "block_time": "块时间间隔",
+      "usd_atn": "ATN价格(美元)",
+      "recent_blocks": "最近块",
+      "recent_transactions": "最近交易",
+      "gas_price": "当前Gas费"
+    },
+    "block": {
+      "blocks": "块列表",
+      "block": "块",
+      "time": "时间",
+      "txns": "交易数",
+      "blockHash": "块哈希",
+      "blockNumber": "块号",
+      "miner": "矿工地址",
+      "size": "块大小"
+    },
+    "transaction": {
+      "transactions": "交易列表",
+      "txHash": "交易哈希",
+      "time": "时间",
+      "from": "发送者",
+      "to": "接收者",
+      "value": "转账金额",
+      "blockNumber": "块号",
+      "details": "交易详情",
+      "txStatus": "交易状态",
+      "txSuccess": "成功",
+      "txFailed": "失败",
+      "blockHeight": "块号",
+      "timestamp": "时间",
+      "gasLimit": "手续费总额",
+      "gasUsedByTxn": "交易所用手续费",
+      "gasPrice": "手续费价格",
+      "actualTxCost": "实际使用手续费",
+      "nonce": "交易序号",
+      "inputData": "交易附带数据",
+      "internalTransactions": "内部交易",
+      "overview": "详情",
+      "blockConfirmations": "个块确认"
+    },
+    "account": {
+      "accounts": "账户列表",
+      "address": "地址",
+      "balance": "余额",
+      "percentage": "余额占所有ATN百分比",
+      "transactions": "已发交易数"
+    },
+    "dbot": {
+      "name": "名称",
+      "domain": "域名",
+      "address": "dbot合约地址",
+      "txHash": "创建dbot的交易哈希",
+      "isRegistered": "是否注册",
+      "method": "方法",
+      "price": "价格",
+      "uri": "链接",
+      "try_it_out": "点击尝试"
+    },
+    "vote": {
+      "supernodes": "超级节点",
+      "candidates": "竞选节点",
+      "nodes": "节点",
+      "votes": "总票数",
+      "confirmed": "最近确认块",
+      "blocks": "当前周期出块数量",
+      "time": "上次出块时间",
+      "rank": "排名",
+      "name": "名称",
+      "staked": "质押ATN数",
+      "pVote": "得票率",
+      "voters": "投票账户数",
+      "allBlocks": "已生产区块数",
+      "score":"节点分数",
+      "voteRank": "票数排名",
+      "voterSlice": "投票人",
+      "voter": "投票人",
+      "voterVotings": "投票数",
+      "details": "节点详情"
+    },
+    "ans": {
+      "ans": "短地址",
+      "name": "名称",
+      "owner": "拥有者",
+      "price": "价格",
+      "content": "内容",
+      "highestPrice": "最高出价",
+      "bidder": "竞拍者",
+      "blockNo": "竞拍块号",
+      "search": "输入短地址名字以查询"
+    },
+    "about": {
+      "copyright": "Atmatrix ® 联盟链浏览器 Copyright © 2017"
+    },
+    "utils": {
+      "empty_text": "暂无数据"
+    }
+}
+  

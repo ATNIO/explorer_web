@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <Header/>
+    <Header />
 
     <el-main class="main">
       <div class="table">
@@ -13,7 +13,10 @@
                 placeholder="Search"
                 @keyup.enter.native="search"
               ></el-input>
-              <i class="search-icon" v-on:click="this.search"></i>
+              <i
+                class="search-icon"
+                v-on:click="this.search"
+              ></i>
             </div>
           </div>
           <br>
@@ -38,31 +41,50 @@
                     color:'#788091',
                     fontFamily: 'PingFangSC-Regular',
                 }"
-              empty-text="暂无数据"
+              :empty-text="this.$t('utils.empty_text')"
               v-loading="loading"
               element-loading-text="Loading..."
               element-loading-spinner="el-icon-loading"
               element-loading-customClass="loading"
             >
-              <el-table-column prop="name" label="Name" min-width="120">
+              <el-table-column
+                prop="name"
+                :label="this.$t('dbot.name')"
+                min-width="120"
+              >
                 <template slot-scope="scope">
                   <nuxt-link :to="'/dbots/' + scope.row.dbotAddress">{{ scope.row.name }}</nuxt-link>
                 </template>
               </el-table-column>
 
-              <el-table-column prop="domain" label="Domain" min-width="120"></el-table-column>
+              <el-table-column
+                prop="domain"
+                :label="this.$t('dbot.domain')"
+                min-width="120"
+              ></el-table-column>
 
-              <el-table-column prop="address" label="Address" min-width="120">
+              <el-table-column
+                prop="address"
+                :label="this.$t('dbot.address')"
+                min-width="120"
+              >
                 <template slot-scope="scope">
                   <nuxt-link :to="'/dbots/' + scope.row.dbotAddress">{{ scope.row.address }}</nuxt-link>
                 </template>
               </el-table-column>
-              <el-table-column prop="txId" label="TxHash" min-width="120">
+              <el-table-column
+                prop="txId"
+                :label="this.$t('dbot.txHash')"
+                min-width="120"
+              >
                 <template slot-scope="scope">
                   <nuxt-link :to="'/transactions/' + scope.row.txHash">{{ scope.row.txId }}</nuxt-link>
                 </template>
               </el-table-column>
-              <el-table-column prop="isRegistered" label="IsRegistered"></el-table-column>
+              <el-table-column
+                prop="isRegistered"
+                :label="this.$t('dbot.isRegistered')"
+              ></el-table-column>
             </el-table>
             <br>
             <div class="page">
@@ -93,7 +115,7 @@
     <br>
     <br>
     <el-footer>
-      <Footer/>
+      <Footer />
     </el-footer>
   </div>
 </template>

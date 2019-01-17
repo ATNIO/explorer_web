@@ -17,7 +17,9 @@
               <el-card>
                 <div class="grid-content">
                   <div>
-                    <p class="last-block">BLOCK</p>
+                    <p class="last-block">
+                      {{ $t('home.block' )}}
+                    </p>
                     <transition name="fade">
                       <p v-show="update" class="last-block1">{{latestBlockNumber}}</p>
                     </transition>
@@ -30,7 +32,9 @@
               <el-card>
                 <div class="grid-content">
                   <div>
-                    <p class="last-block">LAST BLOCK</p>
+                    <p class="last-block">
+                      {{ $t('home.last_block' )}}
+                    </p>
                     <transition name="fade">
                       <p v-show="update" class="last-block1">{{lastBlockTime}}</p>
                     </transition>
@@ -43,7 +47,7 @@
               <el-card>
                 <div class="grid-content">
                   <div>
-                    <p class="last-block">BLOCK TIME</p>
+                    <p class="last-block">{{ $t('home.block_time' )}}</p>
                     <p class="last-block1">{{blockTime}}S</p>
                   </div>
                   <div>
@@ -55,7 +59,7 @@
               <el-card>
                 <div class="grid-content">
                   <div>
-                    <p class="last-block">USD/ATN</p>
+                    <p class="last-block">{{ $t('home.usd_atn') }}</p>
                     <transition name="fade">
                       <p v-show="update" class="last-block1">{{atnPrice}}</p>
                     </transition>
@@ -71,14 +75,14 @@
         <div class="table2">
           <div class="wrapper-blocks">
             <div class="left-wrapper">
-              <div class="typeface">Recent Blocks</div>
+              <div class="typeface">{{ $t('home.recent_blocks') }}</div>
               <el-card class="box-card blocks">
                 <el-table
                   v-loading="loading1"
                   element-loading-text="Loading..."
                   element-loading-spinner="el-icon-loading"
                   :data="blockTable"
-                  empty-text="暂无数据"
+                  :empty-text="this.$t('utils.empty_text')"
                   :header-cell-style="{ 
                                 background:'#51B3FA',
                                 padding:'0px', 
@@ -96,16 +100,16 @@
                             }"
                   :row-class-name="tableRowClassName"
                 >
-                  <el-table-column prop="number" label="Block" class="home-left-table" width="90px">
+                  <el-table-column prop="number" :label="this.$t('block.block')" class="home-left-table" width="90px">
                     <template slot-scope="scope">
                       <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="time" label="Time" class="home-left-table" width="110"></el-table-column>
-                  <el-table-column prop="txns" label="Txns" class="home-left-table"></el-table-column>
+                  <el-table-column prop="time" :label="this.$t('block.time')" class="home-left-table" width="110"></el-table-column>
+                  <el-table-column prop="txns" :label="this.$t('block.txns')" class="home-left-table"></el-table-column>
                   <el-table-column
                     prop="blockHash"
-                    label="BlockHash"
+                    :label="this.$t('block.blockHash')"
                     class="home-left-table"
                     width="120px"
                   >
@@ -118,7 +122,7 @@
             </div>
 
             <div class="right-wrapper">
-              <div class="typeface">Recent Transactions</div>
+              <div class="typeface">{{ $t('home.recent_transactions' )}}</div>
               <el-card class="box-card transactions">
                 <!-- <transition-group name="list" tag="p"> -->
                 <el-table
@@ -142,25 +146,25 @@
                   element-loading-text="Loading..."
                   element-loading-spinner="el-icon-loading"
                   element-loading-customClass="loading"
-                  empty-text="暂无数据"
+                  :empty-text="this.$t('utils.empty_text')"
                 >
-                  <el-table-column prop="txId" label="TxHash">
+                  <el-table-column prop="txId" :label="this.$t('transaction.txHash')">
                     <template slot-scope="scope">
                       <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="time" label="Time" width="110"></el-table-column>
-                  <el-table-column prop="from" label="From">
+                  <el-table-column prop="time" :label="this.$t('transaction.time')" width="110"></el-table-column>
+                  <el-table-column prop="from" :label="this.$t('transaction.from')">
                     <template slot-scope="scope">
                       <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="to" label="To">
+                  <el-table-column prop="to" :label="this.$t('transaction.to')">
                     <template slot-scope="scope">
                       <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
                     </template>
                   </el-table-column>
-                  <el-table-column prop="value" label="Value"></el-table-column>
+                  <el-table-column prop="value" :label="this.$t('transaction.value')"></el-table-column>
                 </el-table>
                 <!-- </transition-group> -->
               </el-card>

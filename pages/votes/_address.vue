@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header/>
+    <Header />
 
     <el-main class="main">
       <div class="table">
@@ -13,18 +13,24 @@
                 placeholder="Search"
                 @keyup.enter.native="search"
               ></el-input>
-              <i class="search-icon" v-on:click="this.search"></i>
+              <i
+                class="search-icon"
+                v-on:click="this.search"
+              ></i>
             </div>
           </div>
           <br>
           <br>
           <div class="description">
-            <p>Vote Details</p>
+            <p>{{ this.$t("vote.details") }}</p>
           </div>
           <el-card class="first-card">
-            <div slot="header" class="clearfix">
+            <div
+              slot="header"
+              class="clearfix"
+            >
               <span class="address">
-                超级节点:
+                {{ this.$t("vote.supernodes") }}:
                 <span class="node_address">{{ this.address }}</span>
               </span>
               <a href="#">
@@ -38,26 +44,26 @@
               </a>
             </div>
             <div class="details_tag">
-              得票数：
+              {{ this.$t("vote.votes") }}：
               <span class="details_value">{{this.scores}}</span>
             </div>
             <div class="details_tag">
-              投票账户：
+              {{ this.$t("vote.voters") }}：
               <span class="details_value">{{this.voters}}</span>
             </div>
             <div class="details_tag">
-              票数排名：
+              {{ this.$t("vote.voteRank") }}：
               <span class="details_value">{{this.rank}}</span>
             </div>
             <div class="details_tag">
-              最近出块时间：
+              {{ this.$t("vote.time") }}：
               <span class="details_value">{{this.lastSealTime}}</span>
             </div>
           </el-card>
           <br>
 
           <el-card class="second-card">
-            <p class="title">投票人</p>
+            <p class="title">{{ this.$t("vote.voterSlice") }}:</p>
             <el-table
               :data="votersTable"
               :header-cell-style="{ 
@@ -73,19 +79,25 @@
                         height:'60px',                                                               
                         color:'#788091'
                     }"
-              empty-text="暂无数据"
+              :empty-text="this.$t('utils.empty_text')"
               v-loading="loading"
               element-loading-text="Loading..."
               element-loading-spinner="el-icon-loading"
               element-loading-customClass="loading"
             >
-              <el-table-column prop="number" label="见证人">
+              <el-table-column
+                prop="number"
+                :label="this.$t('vote.voter')"
+              >
                 <template slot-scope="scope">
                   <nuxt-link :to="'/accounts/' + scope.row.address">{{ scope.row.name }}</nuxt-link>
                 </template>
               </el-table-column>
 
-              <el-table-column prop="votes" label="投票数"></el-table-column>
+              <el-table-column
+                prop="votes"
+                :label="this.$t('vote.voterVotings')"
+              ></el-table-column>
             </el-table>
             <br>
             <div class="page">
@@ -116,7 +128,7 @@
     <br>
     <br>
     <el-footer>
-      <Footer/>
+      <Footer />
     </el-footer>
   </div>
 </template>

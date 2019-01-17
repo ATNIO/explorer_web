@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header/>
+    <Header />
 
     <el-main class="main">
       <div class="table">
@@ -13,7 +13,10 @@
                 placeholder="Search"
                 @keyup.enter.native="search"
               ></el-input>
-              <i class="search-icon" v-on:click="this.search"></i>
+              <i
+                class="search-icon"
+                v-on:click="this.search"
+              ></i>
             </div>
           </div>
           <br>
@@ -27,8 +30,14 @@
             </template>
           </div>
           <el-card class="table-card">
-            <div slot="header" class="clearfix">
-              <img src="~/assets/address.png" class="address_image">
+            <div
+              slot="header"
+              class="clearfix"
+            >
+              <img
+                src="~/assets/address.png"
+                class="address_image"
+              >
               <span class="address">Address: {{ this.address }}</span>
               <a href="#">
                 <img
@@ -52,7 +61,11 @@
                 >
                   <el-table-column prop="attribute"></el-table-column>
 
-                  <el-table-column prop="value" label align="right"></el-table-column>
+                  <el-table-column
+                    prop="value"
+                    label
+                    align="right"
+                  ></el-table-column>
                 </el-table>
 
                 <div class="common-right-table">
@@ -64,9 +77,18 @@
                     align="middle"
                     justify="space-between"
                   >
-                    <el-table-column prop="attribute" label min-width="150"></el-table-column>
+                    <el-table-column
+                      prop="attribute"
+                      label
+                      min-width="150"
+                    ></el-table-column>
 
-                    <el-table-column prop="value" label align="right" min-width="200"></el-table-column>
+                    <el-table-column
+                      prop="value"
+                      label
+                      align="right"
+                      min-width="200"
+                    ></el-table-column>
                   </el-table>
                 </div>
 
@@ -79,9 +101,16 @@
                     align="middle"
                     justify="space-between"
                   >
-                    <el-table-column prop="attribute" label></el-table-column>
+                    <el-table-column
+                      prop="attribute"
+                      label
+                    ></el-table-column>
 
-                    <el-table-column prop="value" label align="right"></el-table-column>
+                    <el-table-column
+                      prop="value"
+                      label
+                      align="right"
+                    ></el-table-column>
                   </el-table>
                 </div>
               </div>
@@ -94,7 +123,10 @@
                 @tab-click="handleClick"
                 style="width: 100%;"
               >
-                <el-tab-pane label="Transactions" name="first">
+                <el-tab-pane
+                  label="Transactions"
+                  name="first"
+                >
                   <el-table
                     :data="transactionTable"
                     style="width: 100%; "
@@ -107,23 +139,34 @@
                                         color:'#788091'
                                     }"
                   >
-                    <el-table-column prop="blockNumber" label="Block">
+                    <el-table-column
+                      prop="blockNumber"
+                      :label="this.$t('transaction.blockNumber')"
+                    >
                       <template slot-scope="scope">
-                        <nuxt-link
-                          :to="'/blocks/' + scope.row.blockNumber"
-                        >{{ scope.row.blockNumber }}</nuxt-link>
+                        <nuxt-link :to="'/blocks/' + scope.row.blockNumber">{{ scope.row.blockNumber }}</nuxt-link>
                       </template>
                     </el-table-column>
 
-                    <el-table-column prop="time" label="Time"></el-table-column>
+                    <el-table-column
+                      prop="time"
+                      :label="this.$t('transaction.time')"
+                    ></el-table-column>
 
-                    <el-table-column prop="txId" label="hash" width="200">
+                    <el-table-column
+                      prop="txId"
+                      :label="this.$t('transaction.txHash')"
+                      width="200"
+                    >
                       <template slot-scope="scope">
                         <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
                       </template>
                     </el-table-column>
 
-                    <el-table-column prop="from" label="From">
+                    <el-table-column
+                      prop="from"
+                      :label="this.$t('transaction.from')"
+                    >
                       <template slot-scope="scope">
                         <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
                       </template>
@@ -137,13 +180,20 @@
                                             <el-tag :type="scope.row.tag" size="small" class="tag">{{ scope.row.tagValue }}</el-tag>
                                         </template>
                     </el-table-column>-->
-                    <el-table-column prop="to" label="To">
+                    <el-table-column
+                      prop="to"
+                      :label="this.$t('transaction.to')"
+                    >
                       <template slot-scope="scope">
                         <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
                       </template>
                     </el-table-column>
 
-                    <el-table-column prop="value" label="Value" min-width="100"></el-table-column>
+                    <el-table-column
+                      prop="value"
+                      :label="this.$t('transaction.value')"
+                      min-width="100"
+                    ></el-table-column>
                   </el-table>
                   <br>
                   <el-pagination
@@ -164,7 +214,7 @@
     <br>
     <br>
     <el-footer>
-      <Footer/>
+      <Footer />
     </el-footer>
   </div>
 </template>
@@ -777,7 +827,7 @@ export default {
         this.atn = parseInt(res.Balance) / 1e18;
         this.isContract = res.IsContract;
         this.leftTable.push({
-          attribute: "Balance: ",
+          attribute: this.$t('account.balance'),
           value: this.atn.toString() + " ATN"
         });
       });
@@ -795,7 +845,7 @@ export default {
         .then(res => {
           this.txns = res.count;
           this.rightTable.push({
-            attribute: "Transactions: ",
+            attribute: this.$t('account.transactions'),
             value: this.txns + " txns"
           });
           this.total = res.count;

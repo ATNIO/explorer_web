@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <Header/>
+    <Header />
 
     <el-main class="main">
       <div class="table">
@@ -13,17 +13,20 @@
                 placeholder="Search"
                 @keyup.enter.native="search"
               ></el-input>
-              <i class="search-icon" v-on:click="this.search"></i>
+              <i
+                class="search-icon"
+                v-on:click="this.search"
+              ></i>
             </div>
           </div>
           <br>
           <br>
           <div class="description">
-            <p>ATN Blocks</p>
+            <p>ATN {{ this.$t('block.blocks') }}</p>
           </div>
           <el-card class="table-card">
             <el-table
-              :data="blockTable"
+              :data="block"
               :header-cell-style="{ 
                         background:'#F4F6F9',
                         padding:'0px',
@@ -37,18 +40,25 @@
                         height:'60px',                                                               
                         color:'#788091'
                     }"
-              empty-text="暂无数据"
+              :empty-text="this.$t('utils.empty_text')"
               v-loading="loading"
               element-loading-text="Loading..."
               element-loading-spinner="el-icon-loading"
               element-loading-customClass="loading"
             >
-              <el-table-column prop="number" label="Block" min-width="100">
+              <el-table-column
+                prop="number"
+                :label="this.$t('block.block')"
+                min-width="100"
+              >
                 <template slot-scope="scope">
                   <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
                 </template>
               </el-table-column>
-              <el-table-column prop="txns" label="TXns"></el-table-column>
+              <el-table-column
+                prop="txns"
+                :label="this.$t('block.txns')"
+              ></el-table-column>
             </el-table>
             <br>
             <div class="page">
@@ -79,7 +89,7 @@
     <br>
     <br>
     <el-footer>
-      <Footer/>
+      <Footer />
     </el-footer>
   </div>
 </template>
@@ -381,7 +391,7 @@ export default {
   },
   data() {
     return {
-      blockTable: [],
+      block: [],
       total: 0,
       currentPage: 1,
       pageSize: 11,
@@ -405,7 +415,7 @@ export default {
             let block = {};
             block.number = r.Number;
             block.txns = r.Txns;
-            this.blockTable.push(block);
+            this.block.push(block);
           }
           this.loading = false;
         });
@@ -422,12 +432,12 @@ export default {
         )
         .then(res => {
           this.total = res.count;
-          this.blockTable = [];
+          this.block = [];
           for (let r of res.blocksList) {
             let block = {};
             block.number = r.Number;
             block.txns = r.Txns;
-            this.blockTable.push(block);
+            this.block.push(block);
           }
         });
     },

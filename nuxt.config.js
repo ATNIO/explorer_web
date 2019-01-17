@@ -36,7 +36,8 @@ module.exports = {
   */
   plugins: [
     '@/plugins/element-ui',
-	{ src: '~plugins/account-icon', ssr: false }
+  { src: '~plugins/account-icon', ssr: false },
+  '~/plugins/i18n.js'
   ],
 
   /*
@@ -59,11 +60,14 @@ module.exports = {
   proxy: {
     '/api': {
       // target: 'http://119.3.57.66:4068',
-      // target: 'http://localhost:4068',
-      target: 'http://localhost:7001',
+      target: 'http://localhost:4068',
+      // target: 'http://localhost:7001',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
+  },
+  router: {
+    middleware: ['i18n'],
   },
 
   // generate: {

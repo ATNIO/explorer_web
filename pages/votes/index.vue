@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <Header/>
+    <Header />
 
     <el-main class="main">
       <div class="table">
@@ -13,18 +13,29 @@
                 placeholder="Search"
                 @keyup.enter.native="search"
               ></el-input>
-              <i class="search-icon" v-on:click="this.search"></i>
+              <i
+                class="search-icon"
+                v-on:click="this.search"
+              ></i>
             </div>
           </div>
           <br>
           <br>
           <div class="description">
-            <p>Vote</p>
+            <p>{{ this.$t('vote.supernodes') }}</p>
           </div>
 
-          <el-tabs v-model="activeTab" type="border-card" @tab-click="handleClick">
-            <el-tab-pane label="超级节点" name="first" class="tab-pane">
-              <p class="title">超级节点</p>
+          <el-tabs
+            v-model="activeTab"
+            type="border-card"
+            @tab-click="handleClick"
+          >
+            <el-tab-pane
+              :label="this.$t('vote.supernodes')"
+              name="first"
+              class="tab-pane"
+            >
+              <p class="title">{{ this.$t('vote.supernodes') }}</p>
               <el-table
                 ref="delegaters"
                 :data="delegatersTable"
@@ -41,17 +52,25 @@
                             height:'60px',                                                               
                             color:'#788091'
                         }"
-                empty-text="暂无数据"
+                :empty-text="this.$t('utils.empty_text')"
                 v-loading="loading"
                 element-loading-text="Loading..."
                 element-loading-spinner="el-icon-loading"
                 element-loading-customClass="loading"
                 highlight-current-row
               >
-                <el-table-column prop="number" label="见证人" width="300">
+                <el-table-column
+                  prop="number"
+                  :label="this.$t('vote.name')"
+                  width="300"
+                >
                   <template slot-scope="scope">
                     <div class="name-template">
-                      <AccountIcon class="name-icon" :value="scope.row.address" size="15"/>
+                      <AccountIcon
+                        class="name-icon"
+                        :value="scope.row.address"
+                        size="15"
+                      />
                       <div class="name-content">
                         <nuxt-link :to="'/votes/' + scope.row.address">{{ scope.row.name }}</nuxt-link>
                         <p class="content-style">{{ scope.row.content }}</p>
@@ -60,13 +79,25 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column prop="votes" label="总票数"></el-table-column>
+                <el-table-column
+                  prop="votes"
+                  :label="this.$t('vote.votes')"
+                ></el-table-column>
 
-                <el-table-column prop="lastSeal" label="最近确认"></el-table-column>
+                <el-table-column
+                  prop="lastSeal"
+                  :label="this.$t('vote.confirmed')"
+                ></el-table-column>
 
-                <el-table-column prop="sealInEpoch" label="当前周期出块数量"></el-table-column>
+                <el-table-column
+                  prop="sealInEpoch"
+                  :label="this.$t('vote.blocks')"
+                ></el-table-column>
 
-                <el-table-column prop="lastSealTime" label="时间"></el-table-column>
+                <el-table-column
+                  prop="lastSealTime"
+                  :label="this.$t('vote.time')"
+                ></el-table-column>
               </el-table>
               <br>
               <div class="page">
@@ -81,11 +112,15 @@
               </div>
             </el-tab-pane>
 
-            <el-tab-pane label="竞选节点" name="second" class="tab-pane">
-              <p class="title">竞选节点</p>
+            <el-tab-pane
+              :label="this.$t('vote.candidates')"
+              name="second"
+              class="tab-pane"
+            >
+              <p class="title">{{ this.$t('vote.candidates') }}</p>
               <span class="title-small green-circle">Top {{this.top}}</span>
               <span class="title-small orange-circle">Standby</span>
-              <span class="title-small total">总计:</span>
+              <span class="title-small total">Total:</span>
               <span class="title-small">{{this.total}} 个</span>
               <el-table
                 ref="candidates"
@@ -103,14 +138,18 @@
                             height:'60px',                                                               
                             color:'#788091'
                         }"
-                empty-text="暂无数据"
+                :empty-text="this.$t('utils.empty_text')"
                 v-loading="loading"
                 element-loading-text="Loading..."
                 element-loading-spinner="el-icon-loading"
                 element-loading-customClass="loading"
                 highlight-current-row
               >
-                <el-table-column prop="rank" label="排名" width="80">
+                <el-table-column
+                  prop="rank"
+                  :label="this.$t('vote.rank')"
+                  width="80"
+                >
                   <template slot-scope="scope">
                     <template v-if="scope.row.rank <= 31">
                       <el-tag size="success">{{ scope.row.rank }}</el-tag>
@@ -121,7 +160,11 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column prop="rankChange" label width="50">
+                <el-table-column
+                  prop="rankChange"
+                  label
+                  width="50"
+                >
                   <template slot-scope="scope">
                     <template v-if="scope.row.rankIncrease == true">
                       <i class="green-icon up"></i>
@@ -134,10 +177,18 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column prop="name" label="名称" width="280">
+                <el-table-column
+                  prop="name"
+                  :label="this.$t('vote.name')"
+                  width="280"
+                >
                   <template slot-scope="scope">
                     <div class="name-template">
-                      <AccountIcon class="name-icon" :value="scope.row.address" size="15"/>
+                      <AccountIcon
+                        class="name-icon"
+                        :value="scope.row.address"
+                        size="15"
+                      />
                       <div class="name-content">
                         <nuxt-link :to="'/votes/' + scope.row.address">{{ scope.row.name }}</nuxt-link>
                         <p class="content-style">{{ scope.row.content }}</p>
@@ -146,15 +197,30 @@
                   </template>
                 </el-table-column>
 
-                <el-table-column prop="pledge" label="质押ATN数"></el-table-column>
+                <el-table-column
+                  prop="pledge"
+                  :label="this.$t('vote.staked')"
+                ></el-table-column>
 
-                <el-table-column prop="pVotes" label="得票率"></el-table-column>
+                <el-table-column
+                  prop="pVotes"
+                  :label="this.$t('vote.pVote')"
+                ></el-table-column>
 
-                <el-table-column prop="voters" label="投票账户数"></el-table-column>
+                <el-table-column
+                  prop="voters"
+                  :label="this.$t('vote.voters')"
+                ></el-table-column>
 
-                <el-table-column prop="seal" label="已生产区块数"></el-table-column>
+                <el-table-column
+                  prop="seal"
+                  :label="this.$t('vote.allBlocks')"
+                ></el-table-column>
 
-                <el-table-column prop="score" label="节点分数"></el-table-column>
+                <el-table-column
+                  prop="score"
+                  :label="this.$t('vote.score')"
+                ></el-table-column>
               </el-table>
               <br>
               <div class="page">

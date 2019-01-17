@@ -1,0 +1,113 @@
+{
+    "header": {
+      "home": "Home",
+      "blocks": "Blocks",
+      "transactions": "Transactions",
+      "accounts": "Accounts",
+      "dbots": "Dbots",
+      "votes": "Votes",
+      "ans": "Ans",
+      "lang": "English",
+      "search": "Transaction/Address/Block"
+    },
+    "home": {
+      "block": "BLOCK",
+      "last_block": "LAST BLOCK",
+      "block_time": "BLOCK TIME",
+      "usd_atn": "USD/ATN",
+      "recent_blocks": "Recent Blocks",
+      "recent_transactions": "Recent Transactions",
+      "gas_price": "GasPrice"
+    },
+    "block": {
+      "blocks": "Blocks",
+      "block": "Block",
+      "time": "Time",
+      "txns": "Txns",
+      "blockHash": "Hash",
+      "blockNumber": "Number",
+      "miner": "Miner",
+      "size": "Size"
+    },
+    "transaction": {
+      "transactions": "Transactions",
+      "txHash": "Txhash",
+      "time": "Time",
+      "from": "From",
+      "to": "To",
+      "value": "Value",
+      "blockNumber": "BlockNumber",
+      "details": "Transaction Details",
+      "txStatus": "TxReceipt Status",
+      "txSuccess": "Success",
+      "txFailed": "Failed",
+      "blockHeight": "BlockHeight",
+      "timestamp": "Timestamp",
+      "gasLimit": "Gas Limit",
+      "gasUsedByTxn": "Gas Used By Txn",
+      "gasPrice": "Gas Price",
+      "actualTxCost": "Actual Tx Cost/Fee",
+      "nonce": "Nonce",
+      "inputData": "InputData",
+      "internalTransactions": "Internal Transactions",
+      "overview": "Overview",
+      "blockConfirmations": "block comfirmations"
+    },
+    "account": {
+      "accounts": "Accounts",
+      "address": "Address",
+      "balance": "Balance",
+      "percentage": "Percentage",
+      "transactions": "Transactions"
+    },
+    "dbot": {
+      "name": "Name",
+      "domain": "Domain",
+      "address": "Address",
+      "txHash": "TxHash",
+      "isRegistered": "IsRegistered",
+      "method": "Method",
+      "price": "Price",
+      "uri": "Uri",
+      "try_it_out": "Try it Out"
+    },
+    "vote": {
+      "supernodes": "Nodes",
+      "candidates": "Candidates",
+      "nodes": "Name",
+      "votes": "Votes",
+      "confirmed": "Last Produce",
+      "blocks": "Blocks in Period",
+      "time": "Time",
+      "rank": "Rank",
+      "name": "Name",
+      "staked": "Staked",
+      "pVote": "Vote Ratio",
+      "voters": "Voters",
+      "allBlocks": "Blocks",
+      "score":"Score Ratio",
+      "voteRank": "Rank",
+      "voterSlice": "Voters",
+      "voter": "Voter",
+      "voterVotings": "Votes",
+      "details": "Node Details"
+    },
+    "ans": {
+      "ans": "Ans",
+      "name": "Name",
+      "owner": "Owner",
+      "price": "Price",
+      "content": "Content",
+      "highestPrice": "Highest Price",
+      "bidder": "Bidder",
+      "blockNo": "BlockNo",
+      "search": "Input name to search"
+    },
+    "about": {
+      "copyright": "Atmatrix ® Consortium Blockchain Explorer Copyright © 2017"
+    },
+    "utils": {
+      "empty_text": "No Data"
+    }
+}
+  

@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <Header/>
+    <Header />
 
     <el-main class="main">
       <div class="table">
@@ -13,26 +13,40 @@
                 placeholder="Search"
                 @keyup.enter.native="search"
               ></el-input>
-              <i class="search-icon" v-on:click="this.search"></i>
+              <i
+                class="search-icon"
+                v-on:click="this.search"
+              ></i>
             </div>
           </div>
           <br>
           <br>
           <div class="description">
-            <p>Vote</p>
+            <p>{{ this.$t('ans.ans') }}</p>
           </div>
 
-          <el-tabs v-model="activeTab" type="border-card" @tab-click="handleClick">
-            <el-tab-pane label="短地址" name="first" class="tab-pane">
+          <el-tabs
+            v-model="activeTab"
+            type="border-card"
+            @tab-click="handleClick"
+          >
+            <el-tab-pane
+              :label="this.$t('ans.ans')"
+              name="first"
+              class="tab-pane"
+            >
               <div class="wrapper-search">
                 <div class="search">
                   <el-input
                     v-model="inputAns"
                     class="input"
-                    placeholder="输入短地址名字以查询"
+                    :placeholder="this.$t('ans.search')"
                     @keyup.enter.native="searchAns"
                   ></el-input>
-                  <i class="search-icon" v-on:click="this.searchAns"></i>
+                  <i
+                    class="search-icon"
+                    v-on:click="this.searchAns"
+                  ></i>
                 </div>
               </div>
               <el-table
@@ -51,33 +65,60 @@
                     color:'#788091',
                     fontFamily: 'PingFangSC-Regular',
                 }"
-                empty-text="Loading..."
+                :empty-text="this.$t('utils.empty_text')"
                 v-loading="loading"
                 element-loading-text="Loading..."
                 element-loading-spinner="el-icon-loading"
                 element-loading-customClass="loading"
               >
-                <el-table-column prop="name" label="Name" min-width="120"></el-table-column>
+                <el-table-column
+                  prop="name"
+                  :label="this.$t('ans.name')"
+                  min-width="120"
+                ></el-table-column>
 
-                <el-table-column prop="owner" label="Owner" min-width="120">
+                <el-table-column
+                  prop="owner"
+                  :label="this.$t('ans.owner')"
+                  min-width="120"
+                >
                   <template slot-scope="scope">
                     <nuxt-link :to="'/accounts/' + scope.row.owner">{{ scope.row.ownerAddress }}</nuxt-link>
                   </template>
                 </el-table-column>
 
-                <el-table-column prop="price" label="Price" min-width="150"></el-table-column>
+                <el-table-column
+                  prop="price"
+                  :label="this.$t('ans.price')"
+                  min-width="150"
+                ></el-table-column>
 
-                <el-table-column prop="content" label="Content" min-width="160"></el-table-column>
+                <el-table-column
+                  prop="content"
+                  :label="this.$t('ans.content')"
+                  min-width="160"
+                ></el-table-column>
 
-                <el-table-column prop="bidPrice" label="Highest Price" min-width="150"></el-table-column>
+                <el-table-column
+                  prop="bidPrice"
+                  :label="this.$t('ans.highestPrice')"
+                  min-width="150"
+                ></el-table-column>
 
-                <el-table-column prop="bidder" label="Bidder" min-width="120">
+                <el-table-column
+                  prop="bidder"
+                  :label="this.$t('ans.bidder')"
+                  min-width="120"
+                >
                   <template slot-scope="scope">
                     <nuxt-link :to="'/accounts/' + scope.row.bidder">{{ scope.row.bidderAddress }}</nuxt-link>
                   </template>
                 </el-table-column>
 
-                <el-table-column prop="blockNumber" label="BlockNo">
+                <el-table-column
+                  prop="blockNumber"
+                  :label="this.$t('ans.blockNo')"
+                >
                   <template slot-scope="scope">
                     <nuxt-link :to="'/blocks/' + scope.row.blockNumber">{{ scope.row.blockNumber }}</nuxt-link>
                   </template>
@@ -668,6 +709,7 @@ export default {
             ans.content = hexToUtf8(e.Content);
             ans.bidPrice = valueToATN(e.BidPrice);
             ans.price = valueToATN(e.Price);
+            ans.bidder = e.Bidder;
             ans.bidderAddress = addressSimplify(e.Bidder);
             this.ansTable.push(ans);
           });
@@ -702,6 +744,7 @@ export default {
             ans.content = hexToUtf8(e.Content);
             ans.bidPrice = valueToATN(e.BidPrice);
             ans.price = valueToATN(e.Price);
+            ans.bidder = e.Bidder;
             ans.bidderAddress = addressSimplify(e.Bidder);
             this.ansTable.push(ans);
           });

@@ -11,12 +11,12 @@
                 </div>
             </div><br><br>
             <div class="description">
-                <p>Transaction Details</p>
+                <p>{{ this.$t('transaction.details') }}</p>
             </div>
             <el-card class="table-card">
                 <div slot="header" class="clearfix">
                     <img src="~/assets/address.png" class="address_image" />
-                    <span class="address">Hash: {{ this.hash }}</span>
+                    <span class="address">{{ this.$t('transaction.txHash') }}: {{ this.hash }}</span>
                     <a href="#"><img src="~/assets/copy.png" class="copy_image"
                         v-clipboard:copy="this.hash"
                         v-clipboard:success="onCopy"
@@ -24,12 +24,12 @@
                 </div>
                 <div class="overview">
                     <el-tabs v-model="activeName2"  type="border-card" @tab-click="handleClick" style="width: 100%">
-                        <el-tab-pane label="Overview" name="first">
+                        <el-tab-pane :label="this.$t('transaction.overview')" name="first">
                             <div class="panel">
                                 <div class="content">
                                     <p>
                                         <span class="name">
-                                            TxHash:
+                                            {{ this.$t('transaction.txHash') }}:
                                         </span>
                                         <span class="value">
                                             {{ this.hash }}
@@ -38,22 +38,22 @@
                                     <br/>
                                     <p>
                                         <span class="name">
-                                            TxReceipt Status:
+                                            {{ this.$t('transaction.txStatus') }}:
                                         </span>
                                         <template v-if="this.pending == 'true'">
                                             <span class="receipt-pending-true" ><i class="el-icon-loading"></i>&nbsp;{{ this.status }}</span><br/>
                                         </template>
                                         <template v-if="this.status == 'Success'">
-                                            <span class="receipt-status-success">{{ this.status }}</span><br/>
+                                            <span class="receipt-status-success">{{ this.$t('transaction.txSuccess') }}</span><br/>
                                         </template>
                                         <template v-if="this.status == 'Failed'">
-                                            <span class="receipt-status-failed" >{{ this.status }}</span><br/>
+                                            <span class="receipt-status-failed" >{{ this.$t('transaction.txFailed') }}</span><br/>
                                         </template>
                                     </p>
                                     <br/>
                                     <p>
                                         <span class="name">
-                                            Block Height:
+                                            {{ this.$t('transaction.blockHeight') }}:
                                         </span>
                                         <template v-if="this.pending == 'true'">
                                             <span class="blockheight-pending-true" >
@@ -74,7 +74,7 @@
                                     <br/>
                                     <p>
                                         <span class="name">
-                                            TimeStamp:
+                                            {{ this.$t('transaction.timestamp') }}:
                                         </span>
                                         <span class="value">
                                             {{ this.timeStamp }}
@@ -82,7 +82,7 @@
                                     </p><br/>
                                     <p>
                                         <span class="name">
-                                            From:
+                                            {{ this.$t('transaction.from') }}:
                                         </span>
                                         <span class="value">
                                             <nuxt-link :to="'/accounts/' + this.from">
@@ -92,7 +92,7 @@
                                     </p><br/>
                                     <p>
                                         <span class="name">
-                                            To:
+                                            {{ this.$t('transaction.to') }}:
                                         </span>
                                         <span class="value">
                                             <template v-if="this.isContract == true" >
@@ -112,7 +112,7 @@
                                     </p><br/>
                                     <p>
                                         <span class="name">
-                                            Value:
+                                            {{ this.$t('transaction.value') }}:
                                         </span>
                                         <span class="value">
                                             {{ this.value }}
@@ -121,7 +121,7 @@
                                     <br/>
                                     <p>
                                         <span class="name">
-                                            Gas Limit:
+                                            {{ this.$t('transaction.gasLimit') }}:
                                         </span>
                                         <span class="value">
                                             {{ this.gasLimit }}
@@ -130,7 +130,7 @@
                                     <br/>
                                     <p>
                                         <span class="name">
-                                            Gas Used By Txn:
+                                            {{ this.$t('transaction.gasUsedByTxn') }}:
                                         </span>
                                         <span class="value">
                                             {{ this.gasUsedByTxn }}
@@ -139,7 +139,7 @@
                                     <br/>
                                     <p>
                                         <span class="name">
-                                            Gas Price:
+                                            {{ this.$t('transaction.gasPrice') }}:
                                         </span>
                                         <span class="value">
                                             {{ this.gasPrice }}
@@ -148,7 +148,7 @@
                                     <br/>
                                     <p>
                                         <span class="name">
-                                            Actual Tx Cost/Fee:
+                                            {{ this.$t('transaction.actualTxCost') }}:
                                             </span>
                                         <span class="value">
                                             {{ this.actualTxCost }}
@@ -157,7 +157,7 @@
                                     <br/>
                                     <p>
                                         <span class="name">
-                                            Nonce:
+                                            {{ this.$t('transaction.nonce') }}:
                                         </span>
                                         <span class="value">
                                             {{ this.nonce }}
@@ -165,7 +165,7 @@
                                     </p>
                                     <br/>
                                     <div class="inputData">
-                                        <span class="name">InputData:</span><br/>
+                                        <span class="name">{{ this.$t('transaction.inputData') }}:</span><br/>
                                         <div class="decodeHex">
                                             <div class="value">
                                                 <el-input
@@ -195,7 +195,7 @@
                             </div>
                         </el-tab-pane>
 
-                        <el-tab-pane label="Internal Transactions" name="second">
+                        <el-tab-pane :label="this.$t('transaction.internalTransactions')" name="second">
                             <div class="internal_tx">
                                 <el-table
                                     :data="internalData"
@@ -968,8 +968,9 @@ Vue.use(VueClipboard);
                 await self.$axios.$get("/accounts/address/" + self.to).then(res => {
                     self.isContract = res.IsContract
                 }).catch(error => {
-                console.log("trace error", error)
-            })
+                  console.log("trace error", error)
+                })
+                console.log("res.value", res.Value);
                 self.value = toDecimals(res.Value / 1e18) + " ATN";
                 self.gasLimit = res.Gas;
                 self.gasUsedByTxn = res.GasUsed;

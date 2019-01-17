@@ -100,7 +100,7 @@ export const toDate = function (timestamp) {
 }
 
 export const toDecimals = function (temp) {
-  if(!temp)return;
+  if(!temp)return 0;
   var e = parseInt(temp.toString().split('e-')[1]);
   // if(!e) e = parseInt(temp.toString().split('e+')[1]);
   // console.log("e",e)

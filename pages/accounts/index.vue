@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <Header/>
+    <Header />
     <el-main class="main">
       <div class="table">
         <div class="network-status">
@@ -12,13 +12,16 @@
                 placeholder="Search"
                 @keyup.enter.native="search"
               ></el-input>
-              <i class="search-icon" v-on:click="this.search"></i>
+              <i
+                class="search-icon"
+                v-on:click="this.search"
+              ></i>
             </div>
           </div>
           <br>
           <br>
           <div class="description">
-            <p>ATN Accounts</p>
+            <p>ATN {{ this.$t('account.accounts') }}</p>
           </div>
           <el-card class="table-card">
             <el-table
@@ -36,21 +39,33 @@
                             height:'60px',                                                               
                             color:'#788091'
                         }"
-              empty-text=""
+              :empty-text="this.$t('utils.empty_text')"
               v-loading="loading"
               element-loading-text="Loading..."
               element-loading-spinner="el-icon-loading"
               element-loading-customClass="loading"
             >
-              <el-table-column prop="address" label="Address" min-width="400">
+              <el-table-column
+                prop="address"
+                :label="this.$t('account.address')"
+                min-width="400"
+              >
                 <template slot-scope="scope">
                   <nuxt-link :to="'/accounts/' + scope.row.address">{{ scope.row.address }}</nuxt-link>
                 </template>
               </el-table-column>
 
-              <el-table-column prop="balance" label="Balance" min-width="200"></el-table-column>
+              <el-table-column
+                prop="balance"
+                :label="this.$t('account.balance')"
+                min-width="200"
+              ></el-table-column>
 
-              <el-table-column prop="percentage" label="Percentage" min-width="200"></el-table-column>
+              <el-table-column
+                prop="percentage"
+                :label="this.$t('account.percentage')"
+                min-width="200"
+              ></el-table-column>
 
               <!-- <el-table-column
                             prop="txCount"
@@ -88,7 +103,7 @@
     <br>
     <br>
     <el-footer>
-      <Footer/>
+      <Footer />
     </el-footer>
   </div>
 </template>

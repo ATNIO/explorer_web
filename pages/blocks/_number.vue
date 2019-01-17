@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header/>
+    <Header />
 
     <el-main class="main">
       <br>
@@ -15,7 +15,10 @@
                 placeholder="Search"
                 @keyup.enter.native="search"
               ></el-input>
-              <i class="search-icon" v-on:click="this.search"></i>
+              <i
+                class="search-icon"
+                v-on:click="this.search"
+              ></i>
             </div>
           </div>
           <br>
@@ -24,9 +27,15 @@
             <p>Block Details</p>
           </div>
           <el-card class="table-card">
-            <div slot="header" class="clearfix">
-              <img src="~/assets/address.png" class="address_image">
-              <span class="address">Hash: {{ this.blockHash }}</span>
+            <div
+              slot="header"
+              class="clearfix"
+            >
+              <img
+                src="~/assets/address.png"
+                class="address_image"
+              >
+              <span class="address">{{ $t('block.blockHash') }}: {{ this.blockHash }}</span>
               <a href="#">
                 <img
                   src="~/assets/copy.png"
@@ -49,7 +58,11 @@
                 >
                   <el-table-column prop="attribute"></el-table-column>
 
-                  <el-table-column prop="value" label align="right"></el-table-column>
+                  <el-table-column
+                    prop="value"
+                    label
+                    align="right"
+                  ></el-table-column>
                 </el-table>
                 <div class="common-right-table">
                   <el-table
@@ -60,9 +73,17 @@
                     align="middle"
                     justify="space-between"
                   >
-                    <el-table-column prop="attribute" label></el-table-column>
+                    <el-table-column
+                      prop="attribute"
+                      label
+                    ></el-table-column>
 
-                    <el-table-column prop="value" label align="right" min-width="400"></el-table-column>
+                    <el-table-column
+                      prop="value"
+                      label
+                      align="right"
+                      min-width="400"
+                    ></el-table-column>
                   </el-table>
                 </div>
 
@@ -75,9 +96,16 @@
                     align="middle"
                     justify="space-between"
                   >
-                    <el-table-column prop="attribute" label></el-table-column>
+                    <el-table-column
+                      prop="attribute"
+                      label
+                    ></el-table-column>
 
-                    <el-table-column prop="value" label align="left"></el-table-column>
+                    <el-table-column
+                      prop="value"
+                      label
+                      align="left"
+                    ></el-table-column>
                   </el-table>
                 </div>
               </div>
@@ -90,10 +118,14 @@
                 @tab-click="handleClick"
                 style="width: 100%;"
               >
-                <el-tab-pane label="Transactions" name="first">
+                <el-tab-pane
+                  :label="this.$t('transaction.transactions')"
+                  name="first"
+                >
                   <el-table
                     :data="transactionTable"
                     style="width: 100%; "
+                    :empty-text="this.$t('utils.empty_text')"
                     :header-cell-style="{ 
                                 padding:'0px',
                                 textAlign:'center'
@@ -103,24 +135,39 @@
                                 color:'#788091'
                             }"
                   >
-                    <el-table-column prop="hash" label="Hash">
+                    <el-table-column
+                      prop="hash"
+                      :label="this.$t('transaction.txHash')"
+                    >
                       <template slot-scope="scope">
                         <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
                       </template>
                     </el-table-column>
 
-                    <el-table-column prop="time" label="Time"></el-table-column>
-                    <el-table-column prop="from" label="From">
+                    <el-table-column
+                      prop="time"
+                      :label="this.$t('transaction.time')"
+                    ></el-table-column>
+                    <el-table-column
+                      prop="from"
+                      :label="this.$t('transaction.from')"
+                    >
                       <template slot-scope="scope">
                         <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="to" label="To">
+                    <el-table-column
+                      prop="to"
+                      :label="this.$t('transaction.to')"
+                    >
                       <template slot-scope="scope">
                         <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
                       </template>
                     </el-table-column>
-                    <el-table-column prop="value" label="Value"></el-table-column>
+                    <el-table-column
+                      prop="value"
+                      :label="this.$t('transaction.value')"
+                    ></el-table-column>
                   </el-table>
                   <br>
                   <el-pagination
@@ -141,7 +188,7 @@
     <br>
     <br>
     <el-footer>
-      <Footer/>
+      <Footer />
     </el-footer>
   </div>
 </template>
@@ -715,7 +762,7 @@ export default {
       txns: "",
       activeName2: "first",
       transactionTable: [],
-      input: ""
+      input: "",
     };
   },
   methods: {
@@ -725,13 +772,10 @@ export default {
     async showData() {
       this.$axios.$get("/blocks/number/" + this.blockNumber).then(res => {
         this.blockHash = res.Hash;
-        this.leftTable.push({ attribute: "Block Number", value: res.Number });
-        this.leftTable.push({
-          attribute: "Number of Transactions",
-          value: res.Txns
-        });
-        this.rightTable.push({ attribute: "Miner", value: res.Miner });
-        this.rightTable.push({ attribute: "Size", value: res.Size });
+        this.leftTable.push({attribute: this.$t('block.blockNumber'), value: res.Number});
+        this.leftTable.push({attribute: this.$t('block.txns'), value: res.Txns});
+        this.rightTable.push({attribute: this.$t('block.miner'), value: res.Miner});
+        this.rightTable.push({attribute: this.$t('block.size'), value: res.Size});
       });
 
       this.$axios

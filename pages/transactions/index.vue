@@ -1,6 +1,6 @@
 <template>
   <div class="body">
-    <Header/>
+    <Header />
 
     <el-main class="main">
       <div class="table">
@@ -13,13 +13,16 @@
                 placeholder="Search"
                 @keyup.enter.native="search"
               ></el-input>
-              <i class="search-icon" v-on:click="this.search"></i>
+              <i
+                class="search-icon"
+                v-on:click="this.search"
+              ></i>
             </div>
           </div>
           <br>
           <br>
           <div class="description">
-            <p>ATN Transactions</p>
+            <p>ATN {{ this.$t('transaction.transactions') }}</p>
           </div>
           <el-card class="table-card">
             <el-table
@@ -37,39 +40,57 @@
                         height:'60px',                                                               
                         color:'#788091'
                     }"
-              empty-text="Loading..."
+              :empty-text="this.$t('utils.empty_text')"
               v-loading="loading"
               element-loading-text="Loading..."
               element-loading-spinner="el-icon-loading"
               element-loading-customClass="loading"
             >
-              <el-table-column prop="number" label="Block">
+              <el-table-column
+                prop="number"
+                :label="this.$t('transaction.blockNumber')">
+              >
                 <template slot-scope="scope">
                   <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
                 </template>
               </el-table-column>
 
-              <el-table-column prop="time" label="Time"></el-table-column>
+              <el-table-column
+                prop="time"
+                :label="this.$t('transaction.time')">
+              ></el-table-column>
 
-              <el-table-column prop="txId" label="hash">
+              <el-table-column
+                prop="txId"
+                :label="this.$t('transaction.txHash')">
+              >
                 <template slot-scope="scope">
                   <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
                 </template>
               </el-table-column>
 
-              <el-table-column prop="from" label="From">
+              <el-table-column
+                prop="from"
+                :label="this.$t('transaction.from')">
+              >
                 <template slot-scope="scope">
                   <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
                 </template>
               </el-table-column>
 
-              <el-table-column prop="to" label="To">
+              <el-table-column
+                prop="to"
+                :label="this.$t('transaction.to')">
+              >
                 <template slot-scope="scope">
                   <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
                 </template>
               </el-table-column>
 
-              <el-table-column prop="value" label="Value"></el-table-column>
+              <el-table-column
+                prop="value"
+                :label="this.$t('transaction.value')">
+              ></el-table-column>
             </el-table>
             <br>
             <div class="page">
@@ -99,7 +120,7 @@
     <br>
     <br>
     <el-footer>
-      <Footer/>
+      <Footer />
     </el-footer>
   </div>
 </template>
