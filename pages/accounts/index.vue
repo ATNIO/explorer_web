@@ -39,7 +39,7 @@
                             height:'60px',                                                               
                             color:'#788091'
                         }"
-              :empty-text="this.$t('utils.empty_text')"
+              empty-text=""
               v-loading="loading"
               element-loading-text="Loading..."
               element-loading-spinner="el-icon-loading"
@@ -58,7 +58,7 @@
                         size="15"
                       />
                       <div class="name-content">
-                        <nuxt-link :to="'/votes/' + scope.row.address">{{ scope.row.address }}</nuxt-link>
+                        <nuxt-link :to="'/accounts/' + scope.row.address">{{ scope.row.address }}</nuxt-link>
                         <p class="content-style">{{ scope.row.name }}</p>
                       </div>
                     </div>
