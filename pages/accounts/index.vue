@@ -48,7 +48,7 @@
               <el-table-column
                 prop="address"
                 :label="this.$t('account.address')"
-                min-width="450"
+                min-width="310"
               >
               <template slot-scope="scope">
                     <div class="name-template">
@@ -74,7 +74,7 @@
               <el-table-column
                 prop="percentage"
                 :label="this.$t('account.percentage')"
-                min-width="200"
+                min-width="210"
               ></el-table-column>
 
               <!-- <el-table-column
