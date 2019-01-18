@@ -101,7 +101,9 @@
       "highestPrice": "最高出价",
       "bidder": "竞拍者",
       "blockNo": "竞拍块号",
-      "search": "输入短地址名字以查询"
+      "search": "输入短地址名字以查询",
+      "notForSale": "未出价",
+      "notForAuction": "未竞拍"
     },
     "about": {
       "copyright": "Atmatrix ® 联盟链浏览器 Copyright © 2017"

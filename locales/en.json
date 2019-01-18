@@ -101,7 +101,9 @@
       "highestPrice": "Highest Price",
       "bidder": "Bidder",
       "blockNo": "BlockNo",
-      "search": "Input name to search"
+      "search": "Input name to search",
+      "notForSale": "Not For Sale",
+      "notForAuction": "Not For Auction"
     },
     "about": {
       "copyright": "Atmatrix ® Consortium Blockchain Explorer Copyright © 2017"

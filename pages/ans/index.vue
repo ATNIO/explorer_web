@@ -707,8 +707,8 @@ export default {
             ans.txId = addressSimplify(e.TransactionHash);
             ans.time = timeFormat(e.Timestamp);
             ans.content = hexToUtf8(e.Content);
-            ans.bidPrice = valueToATN(e.BidPrice);
-            ans.price = valueToATN(e.Price);
+            ans.bidPrice = e.BidPrice === "" ? this.$t('ans.notForAuction') : valueToATN(e.BidPrice);
+            ans.price = e.Price === "" ? this.$t('ans.notForSale') : valueToATN(e.Price);
             ans.bidder = e.Bidder;
             ans.bidderAddress = addressSimplify(e.Bidder);
             this.ansTable.push(ans);
