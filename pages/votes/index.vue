@@ -103,11 +103,11 @@
               <div class="page">
                 <el-pagination
                   small
-                  @current-change="handleCurrentChange2"
+                  @current-change="handleCurrentChange1"
                   :current-page.sync="currentPage"
                   :page-size="this.pageSize"
                   layout="total, prev, pager, next"
-                  :total="this.total"
+                  :total="this.totalDelegaters"
                 ></el-pagination>
               </div>
             </el-tab-pane>
@@ -121,7 +121,7 @@
               <span class="title-small green-circle">Top {{this.top}}</span>
               <span class="title-small orange-circle">Standby</span>
               <span class="title-small total">Total:</span>
-              <span class="title-small">{{this.total}} 个</span>
+              <span class="title-small">{{this.totalCandidates}} 个</span>
               <el-table
                 ref="candidates"
                 :data="candidatesTable"
@@ -221,11 +221,11 @@
               <div class="page">
                 <el-pagination
                   small
-                  @current-change="handleCurrentChange1"
+                  @current-change="handleCurrentChange2"
                   :current-page.sync="currentPage"
                   :page-size="this.pageSize"
                   layout="total, prev, pager, next"
-                  :total="this.total"
+                  :total="this.totalCandidates"
                 ></el-pagination>
               </div>
             </el-tab-pane>
@@ -244,7 +244,7 @@
 <style scoped lang="less">
 .body {
   background-color: #f5f7fa;
-  height: 1275px;
+  height: 1375px;
   position: relative;
 }
 
@@ -757,7 +757,8 @@ export default {
       candidatesTable: [],
       delegatersTable: [],
       top: 0,
-      total: 0,
+      totalDelegaters: 0,
+      totalCandidates: 0,
       currentPage: 1,
       pageSize: 10,
       loading: true,
@@ -811,9 +812,8 @@ export default {
             self.candidatesPage
         )
         .then(async function(res) {
-          console.log(res);
           self.top = res.count;
-          self.total = res.count;
+          self.totalCandidates = res.count;
           let i = self.pageSize * (self.candidatesPage - 1) + 1;
           let candidates = res.candidates;
           for (let j = 0; j < candidates.length && j < self.pageSize; j++) {
@@ -862,7 +862,10 @@ export default {
             self.delegatersPage
         )
         .then(async function(res) {
-          for (let r of res) {
+          console.log("delegaters1", res);
+          self.totalDelegaters = res.count;
+          let delegaters = res.delegaters;
+          for (let r of delegaters) {
             let delegater = {};
             delegater.address = r.address;
             let info = self.ansName.get(delegater.address);
@@ -898,7 +901,7 @@ export default {
         )
         .then(async function(res) {
           self.top = res.count;
-          self.total = res.count;
+          self.totalCandidates = res.count;
           let i = self.pageSize * (self.candidatesPage - 1) + 1;
           let tempCandidatesTable = [];
           let candidates = res.candidates;
@@ -973,8 +976,10 @@ export default {
             self.delegatersPage
         )
         .then(async function(res) {
+          console.log("delegaters2", res);
           let tempDelegatersTable = [];
-          let delegaters = res;
+          self.totalDelegaters = res.count;
+          let delegaters = res.delegaters;
           let currentRow, test;
           for (let j = 0; j < delegaters.length && j < self.pageSize; j++) {
             let delegater = {};
@@ -1038,13 +1043,13 @@ export default {
       this.$refs.delegaters.setCurrentRow(row);
     },
 
-    handleCurrentChange1(val) {
+    handleCurrentChange2(val) {
       // console.log("val", val)
       this.candidatesPage = val;
       this.getCandidateStatus(this);
     },
 
-    handleCurrentChange2(val) {
+    handleCurrentChange1(val) {
       // console.log("val", val)
       this.delegatersPage = val;
       this.getDelegaterStatus(this);
