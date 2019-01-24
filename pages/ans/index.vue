@@ -130,7 +130,6 @@
                   min-width="120"
                 >
                   <template slot-scope="scope">
-                    <template v-if="scope.row.price === $parent.$t('ans.noPrice')">
                       <el-popover
                         placement="bottom"
                         title=""
@@ -141,7 +140,6 @@
                          <VueQArt :config='config'></VueQArt>
                         <el-button slot="reference" type="primary" size="small" round v-on:click="showQRcode(scope.row.name)">{{ $parent.$t('ans.toBid2') }}</el-button>
                       </el-popover>
-                    </template>
                   </template>
                 </el-table-column>
               </el-table>
