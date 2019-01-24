@@ -1644,14 +1644,16 @@ export default {
               paramsType.push(p.type);
               paramsValue.push(p.value);
             }
-            // console.log(functionName, params)
+            console.log(functionName, params)
 
             self.inputDataString = "Function: " + functionName + "(";
             for (let i = 0; i < paramsName.length; i++) {
               self.inputDataString +=
                 paramsType[i] + "  " + paramsName[i] + ",";
             }
-            self.inputDataString =
+            if(params.length === 0) self.inputDataString =
+              self.inputDataString + ") \n\n";
+            else self.inputDataString =
               self.inputDataString.substr(0, self.inputDataString.length - 1) +
               ") \n\n";
             // console.log("inputdata", this.inputData)
