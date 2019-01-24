@@ -275,16 +275,16 @@ a {
 
 & /deep/ .el-card__body {
   padding: 0;
-  width: 950px;
-  height: 900px;
+  width: 900px;
+  height: 820px;
   flex: 1;
   margin: 50px 50px;
 }
 
 .tab-pane {
   padding: 0;
-  width: 950px;
-  height: 900px;
+  width: 900px;
+  height: 820px;
   flex: 1;
   margin: 20px 50px;
 }
@@ -501,7 +501,7 @@ a {
 .el-footer {
   text-align: center;
   line-height: 60px;
-  margin-top: 900px;
+  margin-top: 820px;
 }
 
 .el-aside {
