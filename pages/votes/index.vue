@@ -228,16 +228,6 @@
                   :total="this.total"
                 ></el-pagination>
               </div>
-              <div class="mobile-page">
-                <el-pagination
-                  small
-                  @current-change="handleCurrentChange1"
-                  :current-page.sync="currentPage"
-                  :page-size="this.pageSize"
-                  layout="prev, pager,next"
-                  :total="this.total"
-                ></el-pagination>
-              </div>
             </el-tab-pane>
           </el-tabs>
         </div>
@@ -276,7 +266,7 @@ a {
 & /deep/ .el-card__body {
   padding: 0;
   width: 900px;
-  height: 820px;
+  height: 890px;
   flex: 1;
   margin: 50px 50px;
 }
@@ -284,7 +274,7 @@ a {
 .tab-pane {
   padding: 0;
   width: 900px;
-  height: 820px;
+  height: 890px;
   flex: 1;
   margin: 20px 50px;
 }
@@ -501,7 +491,7 @@ a {
 .el-footer {
   text-align: center;
   line-height: 60px;
-  margin-top: 820px;
+  margin-top: 850px;
 }
 
 .el-aside {
@@ -531,7 +521,7 @@ a {
  & /deep/ .el-card__body {
     padding: 0;
     width: 750px;
-    height: 850px;
+    height: 950px;
     flex: 1;
   }
 
@@ -542,7 +532,7 @@ a {
   .tab-pane {
     padding: 0;
     width:  700px;
-    height: 850px;
+    height: 950px;
     flex: 1;
     margin: 20px 50px;
   }
@@ -573,7 +563,7 @@ a {
     // background-color: #00C8FF;
     text-align: center;
     line-height: 60px;
-    margin-top: 1100px;
+    margin-top: 1200px;
   }
   .status {
     font-family: "Helvetica Neue", Helvetica;
@@ -628,7 +618,7 @@ a {
   & /deep/ .el-card__body {
     padding: 0;
     width: 400px;
-    height: 900px;
+    height: 980px;
     flex: 1;
   }
 
@@ -639,7 +629,7 @@ a {
   .tab-pane {
     padding: 0;
     width:  300px;
-    height: 900px;
+    height: 980px;
     flex: 1;
     margin: 20px 50px;
   }
@@ -670,7 +660,7 @@ a {
     // background-color: #00C8FF;
     text-align: center;
     line-height: 60px;
-    margin-top: 1100px;
+    margin-top: 1220px;
   }
   .status {
     font-family: "Helvetica Neue", Helvetica;
