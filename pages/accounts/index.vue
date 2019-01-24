@@ -9,7 +9,7 @@
               <el-input
                 v-model="input"
                 class="input"
-                placeholder="Search"
+                :placeholder="this.$t('header.search')"
                 @keyup.enter.native="search"
               ></el-input>
               <i
@@ -263,7 +263,7 @@ body > .el-container {
 @media screen and (max-width: 991px) {
   & /deep/ .el-card__body {
     padding: 0;
-    width: 450px;
+    width: 750px;
     height: 880px;
     flex: 1;
   }
@@ -445,8 +445,10 @@ body > .el-container {
 <script>
 import Header from "~/components/Header.vue";
 import Footer from "~/components/Footer.vue";
-import { search } from "~/common/method.js";
+import { search, valueToATNFixed2 } from "~/common/method.js";
 import axios from "axios";
+const BigNumber = require('bignumber.js');
+
 export default {
   components: {
     Header,
@@ -484,9 +486,8 @@ export default {
             let account = {};
             // console.log("accounts list res", res)
             account.address = r.Address;
-            account.balance =
-              Math.floor((parseInt(r.Balance) / 1e18) * 100) / 100 + " ATN";
-            let temp = (parseInt(r.Balance) / 1e18 / 210000000).toFixed(10);
+            account.balance =valueToATNFixed2(r.Balance) + " ATN";
+            let temp = new BigNumber(r.Balance).div(1e18).div(new BigNumber(9.1e56)).toFixed(10) * 100;
             var e = parseInt(temp.toString().split("e-")[1]);
             // console.log("e",e)
             if (e) {
@@ -521,9 +522,8 @@ export default {
             let account = {};
             // console.log("accounts list res", res)
             account.address = r.Address;
-            account.balance =
-              Math.floor((parseInt(r.Balance) / 1e18) * 100) / 100 + " ATN";
-            let temp = (parseInt(r.Balance) / 1e18 / 210000000).toFixed(10);
+            account.balance =valueToATNFixed2(r.Balance) + " ATN";
+            let temp = new BigNumber(r.Balance).div(1e18).div(210000000).toFixed(10);
             var e = parseInt(temp.toString().split("e-")[1]);
             // console.log("e",e)
             if (e) {

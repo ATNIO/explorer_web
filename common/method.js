@@ -4,7 +4,7 @@ const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider("http://47.110.54.206:4051"));
 
 export const toTime = function (timestamp) {
-  if(!timestamp)return;
+  if(!timestamp)return "";
   let now;
   let microTimeStamp = false;
   if (timestamp.length > 10) {
@@ -57,7 +57,7 @@ export const toTime = function (timestamp) {
 }
 
 export const toDate = function (timestamp) {
-  if(!timestamp)return;
+  if(!timestamp)return "";
   let now = new BigNumber(moment().unix() * 1000)
   let blockTime = new BigNumber(timestamp)
   let seconds = parseInt(now.minus(blockTime)) / 1000;
@@ -114,7 +114,7 @@ export const toDecimals = function (temp) {
 }
 
 export const timeToDate = (timestamp) => {
-  if(!timestamp)return;
+  if(!timestamp)return "";
   if (timestamp.length === 10) {
     timestamp = timestamp * 1000;
   }
@@ -144,38 +144,38 @@ export async function getANSInfo(addr) {
 }
 
 export const hexToNumber = (hex) => {
-  if(!hex)return;
+  if(!hex)return 0;
   return web3.utils.hexToNumber(hex);
 }
 
 export const hexToUtf8 = (hex) => {
-  if(!hex)return;
+  if(!hex)return "";
   return web3.utils.hexToUtf8(hex);
 }
 
 //地址显示缩短
 export const addressSimplify = (address) => {
-  if(!address)return;
+  if(!address)return "";
   address = address.toString();
   return address.substr(0, 6) + '...' + address.substr(address.length - 5, address.length);
 }
 
 //地址显示缩短
 export const addressSimplify2 = (address) => {
-  if(!address)return;
+  if(!address)return "";
   address = address.toString();
   return address.substr(0, 15) + '...' + address.substr(address.length - 5, address.length);
 }
 
 export const addressSimplify3 = (address) => {
-  if(!address)return;
+  if(!address)return "";
   address = address.toString();
   return address.substr(0, 8) + '...' + address.substr(address.length - 8, address.length);
 }
 
 //时间戳转化时分秒显示
 export const timeToHms = (time) => {
-  if(!time)return;
+  if(!time)return "";
   let date = new Date(+(time));
   let hours = date.getHours();
   let minutes = "0" + date.getMinutes();
@@ -217,20 +217,28 @@ export const search = (self) => {
 
 //时间戳转化年月日时分秒显示
 export const timeFormat = (timestamp) => {
-  if(!timestamp)return;
+  if(!timestamp)return "";
   return moment(+timestamp).format("YYYY-MM-DD H:MM:SS");
 }
 
-//转账金额wei转换为ATN为单位
-export const valueToATN = (value) => {
-  if(!value)return;
-  let number = new BigNumber(value);
-  let result = number.div(1e18);
-  if(result.toString().length > 6) {
-    result = result.toExponential(4);
+//转账金额wei转换为ATN为单位，不保留小数
+export const valueToATNFixed = (value) => {
+  if(!value)return 0;
+  let result = new BigNumber(value).div(1e18);
+  if(result.get(1e7)) {
+    result = result.toExponential(0);
   }
-  else {
-    result = result.toFixed(4);
+  else result = result.toFormat(0);
+  return result;
+}
+
+//转账金额wei转换为ATN为单位，保留小数点后2位
+export const valueToATNFixed2 = (value) => {
+  if(!value)return 0;
+  let result = new BigNumber(value).div(1e18);
+  if(result.gte(1e7)) {
+    result = result.toExponential(2);
   }
-  return result + " ATN";
+  else result = result.toFormat(2);
+  return result;
 }

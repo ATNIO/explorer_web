@@ -51,7 +51,8 @@
       "inputData": "InputData",
       "internalTransactions": "Internal Transactions",
       "overview": "Overview",
-      "blockConfirmations": "block comfirmations"
+      "blockConfirmations": "block comfirmations",
+      "type": "Type"
     },
     "account": {
       "accounts": "Accounts",
@@ -102,8 +103,10 @@
       "bidder": "Bidder",
       "blockNo": "BlockNo",
       "search": "Input name to search",
-      "notForSale": "Not For Sale",
-      "notForAuction": "Not For Auction"
+      "noPrice": "No Price",
+      "noBid": "No Bidding",
+      "toBid1": "Wallet Scan Code",
+      "toBid2": "Bid Account"
     },
     "about": {
       "copyright": "Atmatrix ® Consortium Blockchain Explorer Copyright © 2017"

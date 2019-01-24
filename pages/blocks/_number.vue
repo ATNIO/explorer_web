@@ -12,7 +12,7 @@
               <el-input
                 v-model="input"
                 class="input"
-                placeholder="Search"
+                :placeholder="this.$t('header.search')"
                 @keyup.enter.native="search"
               ></el-input>
               <i
@@ -485,7 +485,7 @@ a {
   }
 
   .search {
-    width: 644px;
+    width: 425px;
     height: 40px;
     margin: 0 auto;
     position: relative;
@@ -502,7 +502,7 @@ a {
     }
     & /deep/ .el-input__inner {
       border-radius: 20px;
-      width: 640px;
+      width: 400px;
       text-align: center;
     }
   }
@@ -728,7 +728,7 @@ body > .el-container {
 import Header from "~/components/Header.vue";
 import Footer from "~/components/Footer.vue";
 import axios from "axios";
-import { toDate, toTime, search, addressSimplify } from "~/common/method.js";
+import { toDate, toTime, search, addressSimplify, valueToATNFixed2 } from "~/common/method.js";
 import VueClipboard from "vue-clipboard2";
 import Vue from "vue";
 
@@ -798,7 +798,7 @@ export default {
             tx.fromAddress = r.From.toString();
             tx.to = addressSimplify(r.To);
             tx.toAddress = r.To.toString();
-            tx.value = r.Value / 1e18 + " ATN";
+            tx.value = valueToATNFixed2(r.Value) + " ATN";
             this.transactionTable.push(tx);
           }
         });
@@ -825,7 +825,7 @@ export default {
             tx.fromAddress = r.From.toString();
             tx.to = addressSimplify(r.To);
             tx.toAddress = r.To.toString();
-            tx.value = r.Value / 1e18 + " ATN";
+            tx.value = valueToATNFixed2(r.Value) + " ATN";
             this.transactionTable.push(tx);
           }
         });

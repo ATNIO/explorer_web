@@ -10,7 +10,7 @@
               <el-input
                 v-model="input"
                 class="input"
-                placeholder="Search"
+                :placeholder="this.$t('header.search')"
                 @keyup.enter.native="search"
               ></el-input>
               <i
@@ -198,11 +198,6 @@
                 </el-table-column>
 
                 <el-table-column
-                  prop="pledge"
-                  :label="this.$t('vote.staked')"
-                ></el-table-column>
-
-                <el-table-column
                   prop="pVotes"
                   :label="this.$t('vote.pVote')"
                 ></el-table-column>
@@ -251,7 +246,7 @@
     <br>
     <br>
     <el-footer>
-      <!-- <Footer/> -->
+      <Footer/>
     </el-footer>
   </div>
 </template>
@@ -259,7 +254,7 @@
 <style scoped lang="less">
 .body {
   background-color: #f5f7fa;
-  height: 3515px;
+  height: 1275px;
   position: relative;
 }
 
@@ -281,7 +276,7 @@ a {
 & /deep/ .el-card__body {
   padding: 0;
   width: 950px;
-  height: 2108px;
+  height: 900px;
   flex: 1;
   margin: 50px 50px;
 }
@@ -289,7 +284,7 @@ a {
 .tab-pane {
   padding: 0;
   width: 950px;
-  height: 2108px;
+  height: 900px;
   flex: 1;
   margin: 20px 50px;
 }
@@ -504,11 +499,9 @@ a {
 }
 
 .el-footer {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-bottom: 35px;
+  text-align: center;
+  line-height: 60px;
+  margin-top: 900px;
 }
 
 .el-aside {
@@ -532,14 +525,26 @@ a {
 @media screen and (max-width: 991px) {
   .body {
     background-color: #f5f7fa;
-    height: 2300px;
+    height: 1400px;
     position: relative;
   }
-  & /deep/ .el-card__body {
+ & /deep/ .el-card__body {
     padding: 0;
     width: 750px;
-    height: 800px;
+    height: 850px;
     flex: 1;
+  }
+
+  & /deep/ .el-tabs__content {
+    width: 800px;
+  }
+
+  .tab-pane {
+    padding: 0;
+    width:  700px;
+    height: 850px;
+    flex: 1;
+    margin: 20px 50px;
   }
   .search {
     width: 425px;
@@ -568,8 +573,7 @@ a {
     // background-color: #00C8FF;
     text-align: center;
     line-height: 60px;
-    margin-top: 1000px;
-    width: 100%;
+    margin-top: 1100px;
   }
   .status {
     font-family: "Helvetica Neue", Helvetica;
@@ -620,14 +624,24 @@ a {
   .mobile-page {
     display: inline;
   }
-  .page {
-    display: none;
-  }
+
   & /deep/ .el-card__body {
     padding: 0;
     width: 400px;
     height: 900px;
     flex: 1;
+  }
+
+  & /deep/ .el-tabs__content {
+    width: 400px;
+  }
+
+  .tab-pane {
+    padding: 0;
+    width:  300px;
+    height: 900px;
+    flex: 1;
+    margin: 20px 50px;
   }
   .search {
     width: 350px;
@@ -656,8 +670,7 @@ a {
     // background-color: #00C8FF;
     text-align: center;
     line-height: 60px;
-    margin-top: 1050px;
-    width: 100%;
+    margin-top: 1100px;
   }
   .status {
     font-family: "Helvetica Neue", Helvetica;
@@ -756,7 +769,7 @@ export default {
       top: 0,
       total: 0,
       currentPage: 1,
-      pageSize: 21,
+      pageSize: 10,
       loading: true,
       input: "",
       lastCandidatesTable: [],
@@ -817,14 +830,16 @@ export default {
             let candidate = {};
             candidate.rank = i;
             candidate.address = candidates[j].address;
-            let info = await getANSInfo(candidate.address);
-            if (info.name !== undefined) {
-              let name = info.name;
+            candidate.name = candidates[j].nss;
+            candidate.content = candidates[j].nssdetail;
+            if (candidate.name !== "") {
+              let name = candidate.name;
               let address = " (" + addressSimplify(candidate.address) + ")";
-              let content = hexToUtf8(info.content);
+              let content = candidate.content;
               let ans = {};
               ans.name = name;
               ans.content = content;
+              //获取到短地址名称和内容时存起来以便delegaters使用
               self.ansName.set(candidate.address, ans);
               candidate.content = content;
               candidate.name = name + address;
@@ -902,11 +917,17 @@ export default {
             let candidate = {};
             candidate.rank = i;
             candidate.address = candidates[j].address;
-            let info = self.ansName.get(candidate.address);
-            if (info !== undefined) {
-              let name = info.name;
-              let content = info.content;
+            candidate.name = candidates[j].nss;
+            candidate.content = candidates[j].nssdetail;
+            if (candidate.name !== "") {
+              let name = candidate.name;
               let address = " (" + addressSimplify(candidate.address) + ")";
+              let content = candidate.content;
+              let ans = {};
+              ans.name = name;
+              ans.content = content;
+              //获取到短地址名称和内容时存起来以便getDelegaters使用
+              self.ansName.set(candidate.address, ans);
               candidate.content = content;
               candidate.name = name + address;
             } else candidate.name = addressSimplify2(candidate.address);

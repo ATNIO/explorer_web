@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="body">
     <Header />
 
     <el-main class="main">
@@ -10,7 +10,7 @@
               <el-input
                 v-model="input"
                 class="input"
-                placeholder="Search"
+                :placeholder="this.$t('header.search')"
                 @keyup.enter.native="search"
               ></el-input>
               <i
@@ -134,6 +134,12 @@
 </template>
 
 <style scoped lang="less">
+
+.body {
+  background-color: #f5f7fa;
+  position: relative;
+}
+
 .method-table {
   width: 930px;
   // margin-left: 60px;
@@ -282,18 +288,6 @@ span {
   top: 110px;
 }
 
-.try-button {
-  background: #74b8fb;
-  box-shadow: 0 2px 9px 0 rgba(120, 171, 221, 0.6);
-  border-radius: 28px;
-  font-family: PingFangSC-Medium;
-  font-size: 24px;
-  color: #ffffff;
-  text-align: center;
-  width: 363px;
-  height: 56px;
-}
-
 a {
   color: #74b8fb;
   text-decoration: none;
@@ -343,13 +337,6 @@ a {
   width: 100%;
 }
 
-.el-aside {
-  background-color: #d3dce6;
-  color: #333;
-  text-align: center;
-  line-height: 200px;
-}
-
 .el-main {
   background-color: #fff;
   color: #333;
@@ -359,20 +346,35 @@ a {
 .right-nav {
   display: none;
 }
-.common-right-table {
-  display: flex;
-  width: 550px;
-}
-
-.mobile-right-table {
-  display: none;
-}
 @media screen and (max-width: 991px) {
-  & /deep/ .el-card__body {
-    padding: 0;
-    width: 675px;
-    height: 875px;
+  // & /deep/ .el-card__body {
+  //   padding: 0;
+  //   width: 675px;
+  //   height: 875px;
+  //   flex: 1;
+  // }
+
+  & /deep/ .el-card__header {
+    height: 60px;
+    width: 800px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    border: none;
+  }
+
+  .first-card {
+    width: 800px;
+    height: 206pt;
     flex: 1;
+    border-radius: 5px;
+  }
+
+  .second-card {
+    width: 800px;
+    height: 1024px;
+    flex: 1;
+    border-radius: 5px;
   }
 
   .method-table {
@@ -390,9 +392,6 @@ a {
     }
   }
 
-  .el-main {
-    display: none;
-  }
   .address_image {
     width: 20px;
     height: 20px;
@@ -470,7 +469,7 @@ a {
   }
 
   .search {
-    width: 644px;
+    width: 425px;
     height: 40px;
     margin: 0 auto;
     position: relative;
@@ -487,7 +486,7 @@ a {
     }
     & /deep/ .el-input__inner {
       border-radius: 20px;
-      width: 640px;
+      width: 400px;
       text-align: center;
     }
   }
@@ -527,10 +526,9 @@ a {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 1200px;
-    margin-top: -50px;
+    width: 1090px;
+    position: absolute;
+    top: 110px;
   }
   .main {
     display: flex;
@@ -542,11 +540,32 @@ a {
 }
 
 @media screen and (max-width: 591px) {
-  & /deep/ .el-card__body {
-    padding: 0;
-    width: 375px;
-    height: 875px;
+  // & /deep/ .el-card__body {
+  //   padding: 0;
+  //   width: 375px;
+  //   height: 875px;
+  //   flex: 1;
+  // }
+
+  & /deep/ .el-card__header {
+    height: 93px;
+    width: 400px;
+    background: #f4f6f9;
+    display: flex;
+    align-items: center;
+  }
+  .first-card {
+    width: 400px;
+    height: 206pt;
     flex: 1;
+    border-radius: 5px;
+  }
+
+  .second-card {
+    width: 400px;
+    // height: 2624px;
+    flex: 1;
+    border-radius: 5px;
   }
 
   .method-table {
@@ -576,13 +595,7 @@ a {
     width: 260px;
     word-break: break-all;
   }
-  & /deep/ .el-card__header {
-    height: 93px;
-    width: 375px;
-    background: #f4f6f9;
-    display: flex;
-    align-items: center;
-  }
+  
 
   .common-right-table {
     display: none;
@@ -684,6 +697,7 @@ a {
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+    margin-top: 30px;
   }
   .input {
     width: 200px;
@@ -709,8 +723,6 @@ a {
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 1200px;
-    margin-top: -50px;
   }
   .main {
     display: flex;

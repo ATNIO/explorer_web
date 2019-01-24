@@ -10,7 +10,7 @@
               <el-input
                 v-model="input"
                 class="input"
-                placeholder="Search"
+                :placeholder="this.$t('header.search')"
                 @keyup.enter.native="search"
               ></el-input>
               <i
@@ -228,7 +228,7 @@ a {
 @media screen and (max-width: 991px) {
   & /deep/ .el-card__body {
     padding: 0;
-    width: 450px;
+    width: 750px;
     height: 880px;
     flex: 1;
   }

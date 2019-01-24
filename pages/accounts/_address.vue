@@ -10,7 +10,7 @@
               <el-input
                 v-model="input"
                 class="input"
-                placeholder="Search"
+                :placeholder="this.$t('header.search')"
                 @keyup.enter.native="search"
               ></el-input>
               <i
@@ -138,6 +138,7 @@
                                         textAlign:'center',
                                         color:'#788091'
                                     }"
+                    :empty-text="this.$t('utils.empty_text')"
                   >
                     <el-table-column
                       prop="blockNumber"
@@ -533,7 +534,7 @@ a {
   }
 
   .search {
-    width: 644px;
+    width: 425px;
     height: 40px;
     margin: 0 auto;
     position: relative;
@@ -550,7 +551,7 @@ a {
     }
     & /deep/ .el-input__inner {
       border-radius: 20px;
-      width: 640px;
+      width: 400px;
       text-align: center;
     }
   }
@@ -780,7 +781,7 @@ body > .el-container {
 import Header from "~/components/Header.vue";
 import Footer from "~/components/Footer.vue";
 import axios from "axios";
-import { toDate, toTime, addressSimplify, search } from "~/common/method.js";
+import { toDate, toTime, addressSimplify, search, valueToATNFixed2 } from "~/common/method.js";
 import VueClipboard from "vue-clipboard2";
 import Vue from "vue";
 
@@ -824,7 +825,7 @@ export default {
     },
     async showData() {
       this.$axios.$get("/accounts/address/" + this.address).then(res => {
-        this.atn = parseInt(res.Balance) / 1e18;
+        this.atn = valueToATNFixed2(res.Balance);
         this.isContract = res.IsContract;
         this.leftTable.push({
           attribute: this.$t('account.balance'),
@@ -859,7 +860,7 @@ export default {
             tx.to = addressSimplify(r.To);
             tx.fromAddress = r.From.toString();
             tx.toAddress = r.To.toString();
-            tx.value = r.Value / 1e18 + " ATN";
+            tx.value = valueToATNFixed2(r.Value) + " ATN";
             this.transactionTable.push(tx);
           }
           // console.log(Date.now())
@@ -889,7 +890,7 @@ export default {
             tx.to = addressSimplify(r.To);
             tx.fromAddress = r.From.toString();
             tx.toAddress = r.To.toString();
-            tx.value = r.Value / 1e18 + " ATN";
+            tx.value = valueToATNFixed2(r.Value) + " ATN";
             this.transactionTable.push(tx);
           }
           // console.log(Date.now())

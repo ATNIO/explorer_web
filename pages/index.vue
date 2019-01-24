@@ -5,7 +5,7 @@
       <el-main class="main">
         <div class="right-nav">
           <div class="search">
-            <el-input v-model="input" class="input" placeholder="Search"></el-input>
+            <el-input v-model="input" class="input" :placeholder="this.$t('header.search')"></el-input>
             <i class="search-icon" v-on:click="this.search"></i>
           </div>
         </div>

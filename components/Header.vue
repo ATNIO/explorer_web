@@ -43,18 +43,20 @@
        </div>
         <div class="mobile-menu">
             <img src="~/assets/atn.png" class="image" >
-            <el-dropdown trigger="click">
+            <el-dropdown trigger="click"  @command="handleCommand">
                 <span class="el-dropdown-link">
                     <i class="el-icon-menu"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
-                    <nuxt-link to="/"><el-dropdown-item>Home</el-dropdown-item></nuxt-link>
-                    <nuxt-link to="/blocks"><el-dropdown-item>Blocks</el-dropdown-item></nuxt-link>
-                    <nuxt-link to="/transactions"><el-dropdown-item>Transactions</el-dropdown-item></nuxt-link>
-                    <nuxt-link to="/accounts"><el-dropdown-item>Accounts</el-dropdown-item></nuxt-link>
-                    <nuxt-link to="/dbots"><el-dropdown-item>Dbots</el-dropdown-item></nuxt-link>
-                    <nuxt-link to="/votes"><el-dropdown-item>Votes</el-dropdown-item></nuxt-link>
-
+                    <nuxt-link to="/"><el-dropdown-item>{{ $t('header.home') }}</el-dropdown-item></nuxt-link>
+                    <nuxt-link to="/blocks"><el-dropdown-item>{{ $t('header.blocks') }}</el-dropdown-item></nuxt-link>
+                    <nuxt-link to="/transactions"><el-dropdown-item>{{ $t('header.transactions') }}</el-dropdown-item></nuxt-link>
+                    <nuxt-link to="/accounts"><el-dropdown-item>{{ $t('header.accounts') }}</el-dropdown-item></nuxt-link>
+                    <nuxt-link to="/dbots"><el-dropdown-item>{{ $t('header.dbots') }}</el-dropdown-item></nuxt-link>
+                    <nuxt-link to="/votes"><el-dropdown-item>{{ $t('header.votes') }}</el-dropdown-item></nuxt-link>
+                    <nuxt-link to="/ans"><el-dropdown-item>{{ $t('header.ans') }}</el-dropdown-item></nuxt-link>
+                    <el-dropdown-item command="en" divided>English</el-dropdown-item>
+                    <el-dropdown-item command="cn">简体中文</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
             <!-- <i class="el-icon-menu"></i> -->
@@ -157,6 +159,10 @@
             }
     }
 
+    .mobile-i18n {
+      display: none;
+    }
+
     .menu {
         .home{
             width: 40px;
@@ -243,6 +249,19 @@
                 width: 44px;
                 height: 41px;
             }
+            .i18n {
+              display: none;
+            }
+            
+            .mobile-i18n {
+              margin: 15px 50px 0 0;
+                    width: 100px;
+                    float: right;
+                    // width: 100px;
+                    .link {
+                        color: white;
+                    }
+            }
             .mobile-menu {
                 width: 100%;
                 height: 56px;
@@ -292,8 +311,9 @@ import { search } from '~/common/method.js'
             // this.activeIndex2 = key
         },
         handleCommand(lang) {
-            console.log("lang", lang);
+            if(lang !== "en" && lang !== "cn")return;
             //mutate 'locale' in store
+            console.log("lang", lang);
             this.$store.commit('SET_LANG', lang)
             //re-route to the current page but with the selected language in a query string
             this.$router.push({ path: `${this.$router.currentRoute.path}?lang=${lang}` })

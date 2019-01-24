@@ -7,7 +7,7 @@
         <div class="network-status">
             <div class="right-nav">
                 <div class="search">
-                    <el-input v-model="input" class="input" placeholder="Search" @keyup.enter.native="search"></el-input>
+                    <el-input v-model="input" class="input" :placeholder="this.$t('header.search')" @keyup.enter.native="search"></el-input>
                     <i class="search-icon" v-on:click="this.search"></i>
                 </div>
             </div><br><br>
@@ -504,7 +504,7 @@
             }
             & /deep/ .el-input__inner{
                 border-radius: 20px;
-                width: 640px;
+                width: 400px;
                 text-align: center;
             }
         }

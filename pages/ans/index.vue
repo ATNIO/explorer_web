@@ -10,7 +10,7 @@
               <el-input
                 v-model="input"
                 class="input"
-                placeholder="Search"
+                :placeholder="this.$t('header.search')"
                 @keyup.enter.native="search"
               ></el-input>
               <i
@@ -90,19 +90,19 @@
                 <el-table-column
                   prop="price"
                   :label="this.$t('ans.price')"
-                  min-width="150"
+                  min-width="190"
                 ></el-table-column>
 
                 <el-table-column
                   prop="content"
                   :label="this.$t('ans.content')"
-                  min-width="160"
+                  min-width="170"
                 ></el-table-column>
 
                 <el-table-column
                   prop="bidPrice"
                   :label="this.$t('ans.highestPrice')"
-                  min-width="150"
+                  min-width="190"
                 ></el-table-column>
 
                 <el-table-column
@@ -121,6 +121,27 @@
                 >
                   <template slot-scope="scope">
                     <nuxt-link :to="'/blocks/' + scope.row.blockNumber">{{ scope.row.blockNumber }}</nuxt-link>
+                  </template>
+                </el-table-column>
+
+                <el-table-column
+                  prop="qrcode"
+                  :label="this.$t('ans.toBid1')"
+                  min-width="120"
+                >
+                  <template slot-scope="scope">
+                    <template v-if="scope.row.price === $parent.$t('ans.noPrice')">
+                      <el-popover
+                        placement="bottom"
+                        title=""
+                        width="220"
+                        height="400"
+                        trigger="click"
+                        >
+                         <VueQArt :config='config'></VueQArt>
+                        <el-button slot="reference" type="primary" size="small" round v-on:click="showQRcode(scope.row.name)">{{ $parent.$t('ans.toBid2') }}</el-button>
+                      </el-popover>
+                    </template>
                   </template>
                 </el-table-column>
               </el-table>
@@ -143,7 +164,7 @@
     <br>
     <br>
     <el-footer>
-      <!-- <Footer/> -->
+      <Footer/>
     </el-footer>
   </div>
 </template>
@@ -151,7 +172,7 @@
 <style scoped lang="less">
 .body {
   background-color: #f5f7fa;
-  height: 3515px;
+  height: 1275px;
   position: relative;
 }
 
@@ -192,25 +213,21 @@ a {
 }
 & /deep/ .el-card__body {
   padding: 0;
-  width: 950px;
-  height: 2108px;
+  width: 1120px;
+  height: 800px;
   flex: 1;
   margin: 50px 50px;
 }
 
 .tab-pane {
   padding: 0;
-  width: 950px;
-  height: 2108px;
+  width: 1120px;
+  height: 800px;
   flex: 1;
   margin: 20px 50px;
 }
 
 & /deep/ .el-table--fit {
-  margin-top: 20px;
-}
-
-.table-card {
   margin-top: 20px;
 }
 
@@ -227,152 +244,10 @@ a {
   margin: -20px auto 0px;
 }
 
-& /deep/ .el-tag--success {
-  width: 36px;
-  // height: 20px;
-  background: #eef9f4;
-  border-radius: 9.5px;
-  opacity: 1;
-  display: inline-block;
-  border: none;
-  color: #44c58e;
-  font-size: 13px;
-}
-
-& /deep/ .el-tag--warning {
-  width: 36px;
-  // height: 20px;
-  background: #fff5ea;
-  border-radius: 9.5px;
-  opacity: 1;
-  display: inline-block;
-  border: none;
-  color: #ff9500;
-  font-size: 13px;
-}
-
-.orange-rag {
-  & /deep/ .el-tag--medium {
-    width: 36px;
-    // height: 20px;
-    background: #eef9f4;
-    border-radius: 9.5px;
-    opacity: 1;
-    display: inline-block;
-    border: none;
-    color: #44c58e;
-    font-size: 13px;
-  }
-}
-
-.name-template {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 50px;
-}
-
-.name-content {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-around;
-  font-family: PingFangSC-Semibold;
-  font-size: 15px;
-}
-
-.content-style {
-  font-family: PingFangSC-Semibold;
-  font-size: 10px;
-  font-weight: lighter;
-}
-
-.name-icon {
-  margin-right: 10px;
-  // margin-bottom: -5px;
-}
-
-.green-icon {
-  margin-left: -20px;
-  color: #00d555;
-  width: 6.2px;
-  height: 8.2px;
-}
-
-.red-icon {
-  margin-left: -20px;
-  color: #f13a30;
-  width: 6.2px;
-  height: 8.2px;
-}
-.up {
-  background: url("../../assets/up.png") no-repeat center center / contain;
-  width: 10px;
-  height: 10px;
-  display: inline-block;
-  margin-right: -10px;
-}
-.down {
-  background: url("../../assets/down.png") no-repeat center center / contain;
-  width: 10px;
-  height: 10px;
-  display: inline-block;
-  margin-right: -10px;
-}
-
-.green-rank-change {
-  color: #00d555;
-  font-size: 1px;
-  margin-left: 15px;
-}
-
-.red-rank-change {
-  color: #f13a30;
-  font-size: 1px;
-  margin-left: 15px;
-}
-
-.title-small {
-  width: 53px;
-  height: 20px;
-  font-size: 14px;
-  font-family: PingFangSC-Regular;
-  color: rgba(120, 128, 145, 1);
-  line-height: 20px;
-  margin-right: 30px;
-}
-.total {
-  margin-right: 5px !important;
-}
-
-.green-circle:before {
-  content: "";
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  background: rgba(68, 197, 142, 1);
-  border-radius: 100%;
-  margin-right: 10px;
-}
-.orange-circle:before {
-  content: "";
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  background: rgba(255, 149, 0, 1);
-  border-radius: 100%;
-  margin-right: 10px;
-}
 
 .loading {
   width: 100%;
   height: 754px;
-}
-
-& /deep/ .el-table__empty-block {
-  height: 754px;
-  background-color: #fff;
-  color: #fff;
 }
 
 .network-status {
@@ -416,18 +291,9 @@ a {
 }
 
 .el-footer {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-bottom: 35px;
-}
-
-.el-aside {
-  background-color: #d3dce6;
-  color: #333;
   text-align: center;
-  line-height: 200px;
+  line-height: 60px;
+  margin-top: 850px;
 }
 
 .el-main {
@@ -444,7 +310,7 @@ a {
 @media screen and (max-width: 991px) {
   .body {
     background-color: #f5f7fa;
-    height: 2300px;
+    height: 1300px;
     position: relative;
   }
   & /deep/ .el-card__body {
@@ -453,6 +319,41 @@ a {
     height: 800px;
     flex: 1;
   }
+
+  & /deep/ .el-tabs__content {
+    width: 800px;
+  }
+
+  .tab-pane {
+    padding: 0;
+    width:  700px;
+    height: 800px;
+    flex: 1;
+    margin: 20px 50px;
+  }
+
+.wrapper-search {
+  margin-bottom: 20px;
+  width: 100%;
+  .search {
+    width: 306px;
+    height: 36px;
+    position: relative;
+
+    .search-icon {
+      width: 20px;
+      height: 20px;
+      background-image: url(~/assets/home-search-icon.png);
+      position: absolute;
+      right: 16px;
+      bottom: 9px;
+    }
+    & /deep/ .el-input__inner {
+      border-radius: 20px;
+    }
+  }
+}
+
   .search {
     width: 425px;
     height: 40px;
@@ -480,8 +381,8 @@ a {
     // background-color: #00C8FF;
     text-align: center;
     line-height: 60px;
-    margin-top: 1000px;
-    width: 100%;
+    margin-top: 1050px;
+    // width: 100%;
   }
   .status {
     font-family: "Helvetica Neue", Helvetica;
@@ -493,9 +394,6 @@ a {
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-  }
-  .input {
-    width: 200px;
   }
   .button {
     background: #00c8ff;
@@ -532,15 +430,50 @@ a {
   .mobile-page {
     display: inline;
   }
-  .page {
-    display: none;
-  }
+
   & /deep/ .el-card__body {
     padding: 0;
     width: 400px;
-    height: 900px;
+    height: 820px;
     flex: 1;
   }
+
+  & /deep/ .el-tabs__content {
+    width: 400px;
+  }
+
+  .tab-pane {
+    padding: 0;
+    width:  300px;
+    height: 820px;
+    flex: 1;
+    margin: 20px 50px;
+  }
+
+.wrapper-search {
+  .search {
+    width: 206px;
+    height: 36px;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .search-icon {
+      width: 24px;
+      height: 24px;
+      background-image: url(~/assets/home-search-icon.png);
+      position: absolute;
+      right: -10px;
+      top: 8px;
+    }
+    & /deep/ .el-input__inner {
+      border-radius: 20px;
+      width: 230px;
+      text-align: center;
+    }
+  }
+}
   .search {
     width: 350px;
     height: 40px;
@@ -568,7 +501,7 @@ a {
     // background-color: #00C8FF;
     text-align: center;
     line-height: 60px;
-    margin-top: 1050px;
+    margin-top: 1000px;
     width: 100%;
   }
   .status {
@@ -634,19 +567,22 @@ body > .el-container {
 import Header from "~/components/Header.vue";
 import Footer from "~/components/Footer.vue";
 import axios from "axios";
+// import VueQArt from 'vue-qart'
+
 import {
   search,
   addressSimplify,
   timeFormat,
   hexToUtf8,
-  valueToATN
+  valueToATNFixed2
 } from "~/common/method.js";
 const Web3 = require("web3");
 
 export default {
   components: {
     Header,
-    Footer
+    Footer,
+    // VueQArt
   },
   created() {},
   mounted() {
@@ -661,7 +597,12 @@ export default {
       input: "",
       inputAns: "",
       loading: true,
-      activeTab: "first"
+      activeTab: "first",
+      config: {
+        value: "abc",
+        imagePath: require('~/assets/atn3.png'),
+        filter: 'color'
+      }
     };
   },
   methods: {
@@ -707,8 +648,8 @@ export default {
             ans.txId = addressSimplify(e.TransactionHash);
             ans.time = timeFormat(e.Timestamp);
             ans.content = hexToUtf8(e.Content);
-            ans.bidPrice = e.BidPrice === "" ? this.$t('ans.notForAuction') : valueToATN(e.BidPrice);
-            ans.price = e.Price === "" ? this.$t('ans.notForSale') : valueToATN(e.Price);
+            ans.bidPrice = e.BidPrice === "" ? this.$t('ans.noBid') : valueToATNFixed2(e.BidPrice).toLocaleString('en-US') + " ATN";
+            ans.price = e.Price === "" ? this.$t('ans.noPrice') : valueToATNFixed2(e.Price).toLocaleString('en-US') + " ATN";
             ans.bidder = e.Bidder;
             ans.bidderAddress = addressSimplify(e.Bidder);
             this.ansTable.push(ans);
@@ -742,8 +683,8 @@ export default {
             ans.txId = addressSimplify(e.TransactionHash);
             ans.time = timeFormat(e.Timestamp);
             ans.content = hexToUtf8(e.Content);
-            ans.bidPrice = valueToATN(e.BidPrice);
-            ans.price = valueToATN(e.Price);
+            ans.bidPrice = e.BidPrice === "" ? this.$t('ans.noBid') : valueToATNFixed2(e.BidPrice) + " ATN";
+            ans.price = e.Price === "" ? this.$t('ans.noPrice') : valueToATNFixed2(e.Price) + " ATN";
             ans.bidder = e.Bidder;
             ans.bidderAddress = addressSimplify(e.Bidder);
             this.ansTable.push(ans);
@@ -755,7 +696,10 @@ export default {
           this.loading = false;
         });
     },
-    handleClick() {}
+    handleClick() {},
+    showQRcode(name) {
+      this.config.value = name;
+    }
   }
 };
 </script>

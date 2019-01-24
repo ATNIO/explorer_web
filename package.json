@@ -36,8 +36,9 @@
     "moment": "^2.22.2",
     "nuxt": "^1.0.0",
     "vue-clipboard2": "^0.2.1",
-    "web3": "^1.0.0-beta.35",
-    "vue-i18n": "^8.4.0"
+    "vue-i18n": "^8.4.0",
+    "vue-qart": "^2.2.0",
+    "web3": "^1.0.0-beta.35"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.1",

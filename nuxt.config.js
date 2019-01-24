@@ -37,7 +37,8 @@ module.exports = {
   plugins: [
     '@/plugins/element-ui',
   { src: '~plugins/account-icon', ssr: false },
-  '~/plugins/i18n.js'
+  '~/plugins/i18n.js',
+  { src: '~/plugins/vue-qart', ssr: false },
   ],
 
   /*
@@ -83,6 +84,7 @@ module.exports = {
   ** Build configuration
   */
   build: {
+    vendor: ['axios'],
     /*
     ** You can extend webpack config here
     */
