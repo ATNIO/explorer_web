@@ -236,7 +236,7 @@
     <br>
     <br>
     <el-footer>
-      <Footer/>
+      <Footer />
     </el-footer>
   </div>
 </template>
@@ -271,6 +271,7 @@ a {
   margin: 50px 50px;
 }
 
+
 .tab-pane {
   padding: 0;
   width: 900px;
@@ -287,10 +288,6 @@ a {
   margin-top: 20px;
 }
 
-.el-card {
-  margin-top: -55px;
-  margin-bottom: 85px;
-}
 .title {
   width: 100px;
   height: 28px;
@@ -518,20 +515,25 @@ a {
     height: 1400px;
     position: relative;
   }
- & /deep/ .el-card__body {
+  & /deep/ .el-card__body {
     padding: 0;
     width: 750px;
     height: 950px;
     flex: 1;
   }
 
+  & /deep/ .el-tabs {
+    border-radius: 20px;
+  }
+
   & /deep/ .el-tabs__content {
     width: 800px;
+    border-radius: 20px;
   }
 
   .tab-pane {
     padding: 0;
-    width:  700px;
+    width: 700px;
     height: 950px;
     flex: 1;
     margin: 20px 50px;
@@ -624,11 +626,12 @@ a {
 
   & /deep/ .el-tabs__content {
     width: 400px;
+    border-radius: 20px;
   }
 
   .tab-pane {
     padding: 0;
-    width:  300px;
+    width: 300px;
     height: 980px;
     flex: 1;
     margin: 20px 50px;
@@ -821,8 +824,8 @@ export default {
             candidate.rank = i;
             candidate.address = candidates[j].address;
             candidate.name = candidates[j].nss;
-            candidate.content = candidates[j].nssdetail;
-            if (candidate.name !== "") {
+            if (candidate.name.length !== 0) {
+              candidate.content = candidates[j].nssdetail;
               let name = candidate.name;
               let address = " (" + addressSimplify(candidate.address) + ")";
               let content = candidate.content;
@@ -862,7 +865,6 @@ export default {
             self.delegatersPage
         )
         .then(async function(res) {
-          console.log("delegaters1", res);
           self.totalDelegaters = res.count;
           let delegaters = res.delegaters;
           for (let r of delegaters) {
@@ -911,8 +913,8 @@ export default {
             candidate.rank = i;
             candidate.address = candidates[j].address;
             candidate.name = candidates[j].nss;
-            candidate.content = candidates[j].nssdetail;
-            if (candidate.name !== "") {
+            if (candidate.name.length !== 0) {
+              candidate.content = candidates[j].nssdetail;
               let name = candidate.name;
               let address = " (" + addressSimplify(candidate.address) + ")";
               let content = candidate.content;
@@ -976,7 +978,6 @@ export default {
             self.delegatersPage
         )
         .then(async function(res) {
-          console.log("delegaters2", res);
           let tempDelegatersTable = [];
           self.totalDelegaters = res.count;
           let delegaters = res.delegaters;
