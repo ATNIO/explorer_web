@@ -293,7 +293,7 @@ a {
 .el-footer {
   text-align: center;
   line-height: 60px;
-  margin-top: 850px;
+  margin-top: 820px;
 }
 
 .el-main {
@@ -316,18 +316,18 @@ a {
   & /deep/ .el-card__body {
     padding: 0;
     width: 750px;
-    height: 800px;
+    height: 850px;
     flex: 1;
   }
 
   & /deep/ .el-tabs__content {
-    width: 800px;
+    width: 850px;
   }
 
   .tab-pane {
     padding: 0;
     width:  700px;
-    height: 800px;
+    height: 850px;
     flex: 1;
     margin: 20px 50px;
   }
@@ -381,7 +381,7 @@ a {
     // background-color: #00C8FF;
     text-align: center;
     line-height: 60px;
-    margin-top: 1050px;
+    margin-top: 1100px;
     // width: 100%;
   }
   .status {
@@ -434,7 +434,7 @@ a {
   & /deep/ .el-card__body {
     padding: 0;
     width: 400px;
-    height: 820px;
+    height: 900px;
     flex: 1;
   }
 
@@ -445,7 +445,7 @@ a {
   .tab-pane {
     padding: 0;
     width:  300px;
-    height: 820px;
+    height: 900px;
     flex: 1;
     margin: 20px 50px;
   }
@@ -501,7 +501,7 @@ a {
     // background-color: #00C8FF;
     text-align: center;
     line-height: 60px;
-    margin-top: 1000px;
+    margin-top: 1150px;
     width: 100%;
   }
   .status {
