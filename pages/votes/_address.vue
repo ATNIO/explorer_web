@@ -789,7 +789,7 @@ export default {
       pVotes: 0,
       lastSealTime: "",
       transactionTable: [],
-      total: 21,
+      total: 0,
       currentPage: 1,
       pageSize: 21,
       loading: true,
