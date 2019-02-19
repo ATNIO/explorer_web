@@ -7,7 +7,7 @@
             </a> 
         </div>
         <div class="link">
-            <a href="https://t.me/ATN_Blockchain" target="_blank">
+            <a href="https://t.me/ATN_blockchain" target="_blank">
                 <img src="~/assets/telegram.svg" class="image"> 
             </a>
         </div>

@@ -772,7 +772,8 @@ export default {
       delegatersPage: 1,
       currentRow: 0,
       activeTab: "first",
-      ansName: new Map()
+      ansName: new Map(),
+      pageChange: false,
     };
   },
   methods: {
@@ -787,8 +788,8 @@ export default {
     handleClick() {},
 
     refresh() {
-      console.log("start interval...");
       let self = this;
+      console.log("start interval...");
       let interval = setInterval(async function() {
         self.refreshCandidatesStatus(self);
 
@@ -797,7 +798,8 @@ export default {
         // count++;
         // if(count === 2)clearInterval(interval);
         // console.log("this.pageName", self.$route.name)
-        if (self.$route.name !== "votes") {
+        console.log("self.pageChange", self.pageChange)
+        if (self.$route.name !== "votes" || self.pageChange) {
           console.log("clear interval...");
           clearInterval(interval);
         }
@@ -847,6 +849,7 @@ export default {
             i++;
           }
           self.loading = false;
+          self.pageChange = false;
         })
         .catch(error => {
           console.log("error", error);
@@ -865,6 +868,7 @@ export default {
             self.delegatersPage
         )
         .then(async function(res) {
+          console.log(res)
           self.totalDelegaters = res.count;
           let delegaters = res.delegaters;
           for (let r of delegaters) {
@@ -886,6 +890,7 @@ export default {
             self.delegatersTable.push(delegater);
           }
           self.loading = false;
+          self.pageChange = false;
         })
         .catch(error => {
           console.log("error", error);
@@ -1019,6 +1024,7 @@ export default {
             }
             tempDelegatersTable.push(delegater);
           }
+          console.log("test", test)
           self.setCurrentDelegaters(self.delegatersTable[test]);
           await self.sleep(1000);
           self.delegatersTable = tempDelegatersTable;
@@ -1045,14 +1051,16 @@ export default {
     },
 
     handleCurrentChange2(val) {
-      // console.log("val", val)
+      // console.log("candidate val", val)
       this.candidatesPage = val;
+      this.pageChange = true;
       this.getCandidateStatus(this);
     },
 
     handleCurrentChange1(val) {
-      // console.log("val", val)
+      // console.log("delegater val", val)
       this.delegatersPage = val;
+      this.pageChange = true;
       this.getDelegaterStatus(this);
     },
 
