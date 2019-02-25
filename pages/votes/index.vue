@@ -49,7 +49,7 @@
                         }"
                 :cell-style="{
                             textAlign:'center',
-                            height:'60px',                                                               
+                            height:'100px',                                                               
                             color:'#788091'
                         }"
                 :empty-text="this.$t('utils.empty_text')"
@@ -266,16 +266,15 @@ a {
 & /deep/ .el-card__body {
   padding: 0;
   width: 900px;
-  height: 890px;
+  height: 1300px;
   flex: 1;
   margin: 50px 50px;
 }
 
-
 .tab-pane {
   padding: 0;
   width: 900px;
-  height: 890px;
+  height: 1350px;
   flex: 1;
   margin: 20px 50px;
 }
@@ -339,7 +338,7 @@ a {
   display: flex;
   flex-direction: row;
   align-items: center;
-  height: 50px;
+  height: 95px;
 }
 
 .name-content {
@@ -518,7 +517,7 @@ a {
   & /deep/ .el-card__body {
     padding: 0;
     width: 750px;
-    height: 950px;
+    height: 1400px;
     flex: 1;
   }
 
@@ -534,7 +533,7 @@ a {
   .tab-pane {
     padding: 0;
     width: 700px;
-    height: 950px;
+    height: 1400px;
     flex: 1;
     margin: 20px 50px;
   }
@@ -620,7 +619,7 @@ a {
   & /deep/ .el-card__body {
     padding: 0;
     width: 400px;
-    height: 980px;
+    height: 1450px;
     flex: 1;
   }
 
@@ -632,7 +631,7 @@ a {
   .tab-pane {
     padding: 0;
     width: 300px;
-    height: 980px;
+    height: 1450px;
     flex: 1;
     margin: 20px 50px;
   }
@@ -798,7 +797,7 @@ export default {
         // count++;
         // if(count === 2)clearInterval(interval);
         // console.log("this.pageName", self.$route.name)
-        console.log("self.pageChange", self.pageChange)
+        // console.log("self.pageChange", self.pageChange)
         if (self.$route.name !== "votes" || self.pageChange) {
           console.log("clear interval...");
           clearInterval(interval);
@@ -849,7 +848,7 @@ export default {
             i++;
           }
           self.loading = false;
-          self.pageChange = false;
+          // self.pageChange = false;
         })
         .catch(error => {
           console.log("error", error);
@@ -890,7 +889,7 @@ export default {
             self.delegatersTable.push(delegater);
           }
           self.loading = false;
-          self.pageChange = false;
+          // self.pageChange = false;
         })
         .catch(error => {
           console.log("error", error);
@@ -1024,7 +1023,7 @@ export default {
             }
             tempDelegatersTable.push(delegater);
           }
-          console.log("test", test)
+        //   console.log("test", test)
           self.setCurrentDelegaters(self.delegatersTable[test]);
           await self.sleep(1000);
           self.delegatersTable = tempDelegatersTable;
@@ -1046,7 +1045,7 @@ export default {
     },
 
     setCurrentDelegaters(row) {
-      console.log("row", row);
+    //   console.log("row", row);
       this.$refs.delegaters.setCurrentRow(row);
     },
 
