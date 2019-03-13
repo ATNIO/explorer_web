@@ -417,7 +417,7 @@ import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
 import { toDate, toDecimals, toTime } from '~/common/method.js'
-
+const BN = require('bignumber.js')
   export default {
 
     components: {
@@ -455,7 +455,7 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                     transaction.to = r.To.toString().substr(0,10) + '...';
                     transaction.fromAddress = r.From.toString()
                     transaction.toAddress = r.To.toString()
-                    let number = (r.Value / 1e18).toString();
+                    let number = (new BN(r.Value).div(1e18)).toString();
                     // console.log('number', r.Value / 1e18)
                     if(number.includes("e+")) {
                         let array = number.split("e+");
@@ -485,7 +485,7 @@ import { toDate, toDecimals, toTime } from '~/common/method.js'
                     transaction.to = r.To.toString().substr(0,10) + '...';
                     transaction.fromAddress = r.From.toString()
                     transaction.toAddress = r.To.toString()
-                    let number = (r.Value / 1e18).toString();
+                    let number = (new BN(r.Value).div(1e18)).toString();
                     // console.log('number', r.Value / 1e18)
                     if(number.includes("e+")) {
                         let array = number.split("e+");
