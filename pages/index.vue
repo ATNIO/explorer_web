@@ -726,7 +726,11 @@ import { toDate, toDecimals, toTime, getEstimateGas } from '~/common/method.js'
                 this.blockTable = [];
 
                 this.$axios.$get("/blocks/list?limit=8").then(res => {
-                    let date = new Date(res[0].Timestamp*1000);
+                    let date;
+                    if(res[0].Timestamp.length === 10) {
+                      date = new Date(res[0].Timestamp*1000);
+                    }
+                    else date = new Date(res[0].Timestamp)
                     let hours = date.getHours();
                     let minutes = "0" + date.getMinutes();
                     let seconds = "0" + date.getSeconds();

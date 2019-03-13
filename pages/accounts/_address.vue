@@ -813,7 +813,6 @@ Vue.use(VueClipboard);
             this.$axios.$get("/accounts/address/" + this.address).then(res => {
                 // console.log("parseInt(res.Balance)", parseInt(res.Balance))
                 this.atn = parseInt(res.Balance) / 1e18;
-                // console.log(this.atn)
                 this.isContract = res.IsContract;
                 this.leftTable.push({attribute: this.$t('accountTable.balance'), value: (this.atn.toString()) + " ATX"});
                 // this.accountDetailsTable.push({attribute: "Balance: ", value: cutStr(this.atn.toString()) + " ATX"});

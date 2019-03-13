@@ -45,7 +45,12 @@ export const toTime = function(seconds) {
 
 export const toDate = function(timestamp){
     console.log("Date.now", moment().unix(), timestamp)
-    let now = new BigNumber(moment().unix())
+    let now;
+    if(timestamp.toString().length == 13) {
+      timestamp = timestamp.substr(0, 10);
+    }
+    console.log("Date.now", moment().unix(), timestamp)
+    now = new BigNumber(moment().unix())
     let blockTime = new BigNumber(timestamp)
     let seconds = parseInt(now.minus(blockTime))
     // let seconds = parseInt((Math.floor(Date.now() / 1000) - timestamp))
