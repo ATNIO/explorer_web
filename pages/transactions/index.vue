@@ -450,6 +450,7 @@ const BN = require('bignumber.js')
                     let transaction = {};
                     transaction.number = r.BlockNumber;
                     transaction.time = toDate(r.Timestamp);
+                    console.log("transaction.time", transaction.time)
                     transaction.txId = r.Hash.toString().substr(0,10) + '...';
                     transaction.hash = r.Hash.toString();
                     transaction.from = r.From.toString().substr(0,10) + '...';
