@@ -40,7 +40,6 @@
                     <el-table-column
                         prop="number"
                         :label="this.$t('transactionTable.blockNumber')">
-                        >
                         <template slot-scope="scope">
                             <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
                         </template>
@@ -49,7 +48,6 @@
                     <el-table-column
                         prop="time"
                         :label="this.$t('transactionTable.time')">
-                        >
                     </el-table-column>
 
                     <el-table-column
@@ -64,7 +62,6 @@
                     <el-table-column
                         prop="from"
                         :label="this.$t('transactionTable.from')">
-                        >
                         <template slot-scope="scope">
                             <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
                         </template>
@@ -73,7 +70,6 @@
                     <el-table-column
                         prop="to"
                         :label="this.$t('transactionTable.to')">
-                        >
                         <template slot-scope="scope">
                             <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
                         </template>
@@ -82,7 +78,6 @@
                     <el-table-column
                         prop="value"
                         :label="this.$t('transactionTable.value')">
-                    >
                     </el-table-column>
                 </el-table>
                 <br>
