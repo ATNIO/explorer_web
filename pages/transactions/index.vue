@@ -445,10 +445,11 @@ const BN = require('bignumber.js')
         },
         showData() {
             this.$axios.$get("/transactions/list?limit=" + this.pageSize).then(res => {
+                console.log("res", res);
                 for( let r of res ) {
                     let transaction = {};
                     transaction.number = r.BlockNumber;
-                    transaction.time = toTime(r.Seconds);
+                    transaction.time = toDate(r.Timestamp);
                     transaction.txId = r.Hash.toString().substr(0,10) + '...';
                     transaction.hash = r.Hash.toString();
                     transaction.from = r.From.toString().substr(0,10) + '...';
@@ -462,7 +463,7 @@ const BN = require('bignumber.js')
                         array[0] = Math.floor(array[0] * 100) / 100;
                         number = array[0] + "e+" + array[1];
                     }
-                    // console.log("number", number)
+                    console.log("number", number)
                     transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATX";
                     this.transactionTable.push(transaction);
                 }
@@ -478,7 +479,7 @@ const BN = require('bignumber.js')
                 for( let r of res ) {
                     let transaction = {};
                     transaction.number = r.BlockNumber;
-                    transaction.time = toTime(r.Seconds);
+                    transaction.time = toDate(r.Timestamp);
                     transaction.txId = r.Hash.toString().substr(0,10) + '...';
                     transaction.hash = r.Hash.toString();
                     transaction.from = r.From.toString().substr(0,10) + '...';
