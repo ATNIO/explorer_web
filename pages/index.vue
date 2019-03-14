@@ -582,7 +582,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate, toDecimals, toTime, getEstimateGas } from '~/common/method.js'
+import { toDate, toDecimals, getEstimateGas } from '~/common/method.js'
 const BN = require('bignumber.js')
     export default {
 
@@ -661,9 +661,11 @@ const BN = require('bignumber.js')
                     vm.update = false;
                     // console.log("vm.update", vm.update);
                     await vm.$axios.$get("/blocks/list?limit=" + 8).then(async function(res){
-                        // console.log("res", res)
-                        // console.log(new Date())
-                        let date = new Date(res[0].Timestamp*1000);
+                        let date;
+                        if(res[0].Timestamp.length === 10) {
+                          date = new Date(res[0].Timestamp*1000);
+                        }
+                        else date = new Date(+res[0].Timestamp);
                         let hours = date.getHours();
                         let minutes = "0" + date.getMinutes();
                         let seconds = "0" + date.getSeconds();
@@ -676,7 +678,7 @@ const BN = require('bignumber.js')
                             let block = {};
                             block.number = r.Number;
                             block.txns = r.Txns;
-                            block.time = toTime(r.Seconds);
+                            block.time = toDate(r.Timestamp);
                             block.blockHash = r.Hash.toString().substr(0,9) + '...';
                             // console.log("block", block);
                             vm.blockTable.push(block);
@@ -702,7 +704,7 @@ const BN = require('bignumber.js')
                             }
                             // console.log("number", number)
                             transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATX";
-                            transaction.time = toTime(r.Seconds);
+                            transaction.time = toDate(r.Timestamp);
                             // transaction.time = "2 years ago"
                             vm.transactionTable.push(transaction);
                         }
@@ -730,7 +732,7 @@ const BN = require('bignumber.js')
                     if(res[0].Timestamp.length === 10) {
                       date = new Date(res[0].Timestamp*1000);
                     }
-                    else date = new Date(res[0].Timestamp)
+                    else date = new Date(+res[0].Timestamp);
                     let hours = date.getHours();
                     let minutes = "0" + date.getMinutes();
                     let seconds = "0" + date.getSeconds();
@@ -743,7 +745,7 @@ const BN = require('bignumber.js')
                         let block = {};
                         block.number = r.Number;
                         block.txns = r.Txns;
-                        block.time = toTime(r.Seconds);
+                        block.time = toDate(r.Timestamp);
                         // block.time = '2 days ago'
                         block.blockHash = r.Hash.toString().substr(0,9) + '...';
                         // console.log("block", block);
@@ -785,16 +787,16 @@ const BN = require('bignumber.js')
                         }
                         // console.log("number", number)
                         transaction.value = Math.floor(toDecimals(number) * 100) / 100 + " ATX";
-                        transaction.time = toTime(r.Seconds);
+                        transaction.time = toDate(r.Timestamp);
                         // transaction.time = "2 years ago"
                         this.transactionTable.push(transaction);
                     }
                     this.loading2 = false;
-                }),
-
-                this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
-                    this.atnPrice = parseFloat(res[0].price_usd).toFixed(5);
                 })
+
+                // this.$axios.$get("https://api.coinmarketcap.com/v1/ticker/atn/").then(res => {
+                //     this.atnPrice = parseFloat(res[0].price_usd).toFixed(5);
+                // })
                 // this.atnPrice = 0.233416
             },
             // cancelAutoUpdate: function() { clearInterval(this.timer) },
