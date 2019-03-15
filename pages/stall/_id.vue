@@ -768,10 +768,11 @@ Vue.use(VueClipboard);
                 console.log(res)
                 let stall = res.stall;
                 let cert = stall.Cert.toString();
-                let certValue = cert.substr(cert.indexOf('NO'), cert.length);
+                // let certValue = cert.substr(cert.indexOf('NO'), cert.length);
+                let certValue = cert;
                 console.log("certValue", certValue); 
                 let confirmState = stall.StallState === "Confirmed" ? "已确权" : "未确权"
-                let certUrl = "http://greenland-api.atmatrix.org/greenland/v1" + cert;
+                let certUrl = "http://103.36.135.186/greenland" + cert;
                 this.leftTable.push({attribute: "车位编号", value: stall.Serial});
                 this.leftTable.push({attribute: "车位位置", value: stall.Loc});
                 this.leftTable.push({attribute: "车位面积", value: stall.Area + " 平方米"});
