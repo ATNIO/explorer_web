@@ -740,10 +740,17 @@ Vue.use(VueClipboard);
                 console.log(res);
                 let asset = res;
                 this.stallsTable = res.stalls;
-                this.leftTable.push({attribute: "资产包名称", value: asset.Name});
-                this.leftTable.push({attribute: "购买时间", value: toLocalTime(asset.BuyTime)});
-                this.rightTable.push({attribute: "成交价格", value: asset.Price + " RMB"});
-                this.rightTable.push({attribute: "到期时间", value: toLocalTime(asset.EndTime)});
+                this.leftTable.push({attribute: "产品名称", value: asset.Name});
+                this.leftTable.push({attribute: "产品发行人", value: asset.BuyTime});
+                this.leftTable.push({attribute: "产品类型", value: ""});
+                this.leftTable.push({attribute: "起购金额", value: ""});
+                this.rightTable.push({attribute: "参考收益率", value: asset.Price});
+                this.rightTable.push({attribute: "产品期限", value: asset.EndTime});
+                this.rightTable.push({attribute: "监管银行", value: ""});
+                this.rightTable.push({attribute: "交易模式", value: ""});
+                // this.rightTable.push({attribute: "付款方式", value: ""});
+                // this.rightTable.push({attribute: "chan", value: ""});
+                
                 let participants = res.Participants.toString().split(',');
                 this.participantsTotal = participants.length;
                 participants.forEach((p) => {
