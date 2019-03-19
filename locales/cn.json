@@ -14,7 +14,9 @@
       "usd_atn": "ATX价格(美元)",
       "recent_blocks": "最近块",
       "recent_transactions": "最近交易",
-      "gas_price": "当前Gas费"
+      "gas_price": "当前Gas费",
+      "tx_sum":"当前交易总数",
+      "second": "秒"
     },
     "blockTable": {
       "blocks": "块列表",
