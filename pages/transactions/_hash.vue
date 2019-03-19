@@ -890,7 +890,8 @@ import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
 import { toDate, toDecimals } from '~/common/method.js'
-const Web3 = require('web3')
+// const Web3 = require('web3')
+const utils = require('web3-utils')
 import VueClipboard from 'vue-clipboard2';
 import Vue from 'vue'
 import { setInterval, clearInterval } from 'timers';
@@ -1020,8 +1021,10 @@ Vue.use(VueClipboard);
                 else {
                     try {
                       // console.log("Web3.utils.hexToUtf8(this.inputData)", Buffer.from(this.inputData, 'hex').toString('utf8'))
-                        this.inputDataString = Web3.utils.hexToUtf8(this.inputData)
+                        // console.log(utils);
+                        this.inputDataString = utils.hexToUtf8(this.inputData)
                     } catch (error) {
+                        console.log("error",error)
                         this.inputDataString = this.inputData;
                     }
                 }
