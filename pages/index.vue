@@ -42,7 +42,7 @@
                                     </transition>
                                 </div>
                                 <div>
-                                    <img src="~/assets/home-last block-icon.png" class="icon">
+                                    <img src="~/assets/home-last-block-icon.png" class="icon">
                                 </div>
                             </div>
                         </el-card>
@@ -52,12 +52,12 @@
                                     <p class="last-block">
                                         {{ $t('home.block_time' )}}
                                     </p>
-                                    <p  class="last-block1">
-                                        {{blockTime}}S
+                                    <p  class="last-block1"> 
+                                        {{blockTime}} {{ $t('home.second' )}}
                                     </p>
                                 </div>
                                 <div>
-                                    <img src="~/assets/atn-icon.png" class="icon">
+                                    <img src="~/assets/home-block-gap.png" class="icon">
                                 </div>
                             </div>
                         </el-card>
@@ -66,14 +66,16 @@
                             <div class="grid-content" >
                                 <div>  
                                     <p class="last-block">
-                                        {{ $t('home.gas_price' )}}
+                                        {{ $t('home.tx_sum' )}}
                                     </p>
-                                    <p class="last-block1">
-                                        {{gasPrice}} GWei
-                                    </p>
+                                    <transition name="fade">
+                                        <p v-show="update" class="last-block1">
+                                        {{txSum}}
+                                      </p>
+                                    </transition>
                                 </div>
                                 <div>
-                                    <img src="~/assets/home-block time-icon.png" class="icon">
+                                    <img src="~/assets/home-block-tx_sum.png" class="icon">
                                 </div>
                             </div>
                         </el-card>
@@ -618,6 +620,7 @@ const BN = require('bignumber.js')
                 loading2: true,
                 update: true,
                 gasPrice: 20,
+                txSum: 'loading...'
             };
         },
         methods: {
@@ -659,6 +662,9 @@ const BN = require('bignumber.js')
                 let interval = setInterval(async function() {
                     // vm.update = !vm.update;
                     vm.update = false;
+                    vm.$axios.$get("/transactions/count").then(res => {
+                      vm.txSum = res.count + " 条";
+                    })
                     // console.log("vm.update", vm.update);
                     await vm.$axios.$get("/blocks/list?limit=" + 8).then(async function(res){
                         let date;
@@ -727,6 +733,10 @@ const BN = require('bignumber.js')
                 console.log("this.gasPrice", this.gasPrice)
                 this.blockTable = [];
 
+                this.$axios.$get("/transactions/count").then(res => {
+                  this.txSum = res.count + " 条";
+                })
+
                 this.$axios.$get("/blocks/list?limit=8").then(res => {
                     let date;
                     if(res[0].Timestamp.length === 10) {
@@ -746,6 +756,7 @@ const BN = require('bignumber.js')
                         block.number = r.Number;
                         block.txns = r.Txns;
                         block.time = toDate(r.Timestamp);
+                        console.log("block.time", block.time);
                         // block.time = '2 days ago'
                         block.blockHash = r.Hash.toString().substr(0,9) + '...';
                         // console.log("block", block);
@@ -770,6 +781,7 @@ const BN = require('bignumber.js')
                 })
                 
                 this.$axios.$get("/transactions/list?limit=8").then(res => {
+                    // console.log("transactions", res);
                     for( let r of res ) {
                         let transaction = {};
                         transaction.txId = r.Hash.toString().substr(0,9) + '...';
