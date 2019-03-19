@@ -742,12 +742,12 @@ Vue.use(VueClipboard);
                 this.stallsTable = res.stalls;
                 this.leftTable.push({attribute: "产品名称", value: asset.Name});
                 this.leftTable.push({attribute: "产品发行人", value: asset.BuyTime});
-                this.leftTable.push({attribute: "产品类型", value: ""});
-                this.leftTable.push({attribute: "起购金额", value: ""});
+                // this.leftTable.push({attribute: "产品类型", value: ""});
+                // this.leftTable.push({attribute: "起购金额", value: ""});
                 this.rightTable.push({attribute: "参考收益率", value: asset.Price});
                 this.rightTable.push({attribute: "产品期限", value: asset.EndTime});
-                this.rightTable.push({attribute: "监管银行", value: ""});
-                this.rightTable.push({attribute: "交易模式", value: ""});
+                // this.rightTable.push({attribute: "监管银行", value: ""});
+                // this.rightTable.push({attribute: "交易模式", value: ""});
                 // this.rightTable.push({attribute: "付款方式", value: ""});
                 // this.rightTable.push({attribute: "chan", value: ""});
                 
