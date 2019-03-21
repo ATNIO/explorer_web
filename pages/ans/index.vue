@@ -167,6 +167,147 @@
   </div>
 </template>
 
+<script>
+import Header from "~/components/Header.vue";
+import Footer from "~/components/Footer.vue";
+import axios from "axios";
+// import VueQArt from 'vue-qart'
+
+import {
+  search,
+  addressSimplify,
+  timeFormat,
+  hexToUtf8,
+  valueToATNFixed2
+} from "~/common/method.js";
+const Web3 = require("web3");
+
+export default {
+  components: {
+    Header,
+    Footer,
+    // VueQArt
+  },
+  created() {},
+  mounted() {
+    this.showData();
+  },
+  data() {
+    return {
+      ansTable: [],
+      total: 0,
+      currentPage: 1,
+      pageSize: 11,
+      input: "",
+      inputAns: "",
+      loading: true,
+      activeTab: "first",
+      config: {
+        value: "abc",
+        imagePath: require('~/assets/atn3.png'),
+        filter: 'color'
+      }
+    };
+  },
+  methods: {
+    handleSelect(key, keyPath) {},
+    showData() {
+      this.getAnsList();
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      if (this.inputAns) {
+        this.searchNameAnsList();
+      } else {
+        this.getAnsList();
+      }
+    },
+    search() {
+      search(this);
+    },
+    searchAns() {
+      if (this.inputAns) {
+        this.searchNameAnsList();
+      } else {
+        this.getAnsList();
+      }
+    },
+    getAnsList() {
+      this.ansTable = [];
+      this.$axios
+        .$get(
+          "/ans/list?page_size=" +
+            this.pageSize +
+            "&page_number=" +
+            this.currentPage
+        )
+        .then(res => {
+          this.total = res.count;
+          res.ansList.forEach(e => {
+            let ans = {};
+            ans.name = e.Name;
+            ans.blockNumber = e.BlockNumber;
+            ans.owner = e.Owner;
+            ans.ownerAddress = addressSimplify(e.Owner);
+            ans.txId = addressSimplify(e.TransactionHash);
+            ans.time = timeFormat(e.Timestamp);
+            ans.content = hexToUtf8(e.Content);
+            ans.bidPrice = e.BidPrice === "" ? this.$t('ans.noBid') : valueToATNFixed2(e.BidPrice).toLocaleString('en-US') + " ATN";
+            ans.price = e.Price === "" ? this.$t('ans.noPrice') : valueToATNFixed2(e.Price).toLocaleString('en-US') + " ATN";
+            ans.bidder = e.Bidder;
+            ans.bidderAddress = addressSimplify(e.Bidder);
+            this.ansTable.push(ans);
+          });
+          this.loading = false;
+        })
+        .catch(error => {
+          console.log("error", error);
+          this.loading = false;
+        });
+    },
+    searchNameAnsList() {
+      this.ansTable = [];
+      this.$axios
+        .$get(
+          "/ans/name/" +
+            this.inputAns +
+            "?page_size=" +
+            this.pageSize +
+            "&page_number=" +
+            this.currentPage
+        )
+        .then(res => {
+          this.total = res.count;
+          res.ansList.forEach(e => {
+            let ans = {};
+            ans.name = e.Name;
+            ans.blockNumber = e.BlockNumber;
+            ans.owner = e.Owner;
+            ans.ownerAddress = addressSimplify(e.Owner);
+            ans.txId = addressSimplify(e.TransactionHash);
+            ans.time = timeFormat(e.Timestamp);
+            ans.content = hexToUtf8(e.Content);
+            ans.bidPrice = e.BidPrice === "" ? this.$t('ans.noBid') : valueToATNFixed2(e.BidPrice) + " ATN";
+            ans.price = e.Price === "" ? this.$t('ans.noPrice') : valueToATNFixed2(e.Price) + " ATN";
+            ans.bidder = e.Bidder;
+            ans.bidderAddress = addressSimplify(e.Bidder);
+            this.ansTable.push(ans);
+          });
+          this.loading = false;
+        })
+        .catch(error => {
+          console.log("error", error);
+          this.loading = false;
+        });
+    },
+    handleClick() {},
+    showQRcode(name) {
+      this.config.value = name;
+    }
+  }
+};
+</script>
+
 <style scoped lang="less">
 .body {
   background-color: #f5f7fa;
@@ -199,7 +340,7 @@ a {
     .search-icon {
       width: 20px;
       height: 20px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 16px;
       bottom: 9px;
@@ -341,7 +482,7 @@ a {
     .search-icon {
       width: 20px;
       height: 20px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 16px;
       bottom: 9px;
@@ -363,7 +504,7 @@ a {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -460,7 +601,7 @@ a {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: -10px;
       top: 8px;
@@ -483,7 +624,7 @@ a {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -560,144 +701,3 @@ body > .el-container {
   line-height: 320px;
 }
 </style>
-
-<script>
-import Header from "~/components/Header.vue";
-import Footer from "~/components/Footer.vue";
-import axios from "axios";
-// import VueQArt from 'vue-qart'
-
-import {
-  search,
-  addressSimplify,
-  timeFormat,
-  hexToUtf8,
-  valueToATNFixed2
-} from "~/common/method.js";
-const Web3 = require("web3");
-
-export default {
-  components: {
-    Header,
-    Footer,
-    // VueQArt
-  },
-  created() {},
-  mounted() {
-    this.showData();
-  },
-  data() {
-    return {
-      ansTable: [],
-      total: 0,
-      currentPage: 1,
-      pageSize: 11,
-      input: "",
-      inputAns: "",
-      loading: true,
-      activeTab: "first",
-      config: {
-        value: "abc",
-        imagePath: require('~/assets/atn3.png'),
-        filter: 'color'
-      }
-    };
-  },
-  methods: {
-    handleSelect(key, keyPath) {},
-    showData() {
-      this.getAnsList();
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      if (this.inputAns) {
-        this.searchNameAnsList();
-      } else {
-        this.getAnsList();
-      }
-    },
-    search() {
-      search(this);
-    },
-    searchAns() {
-      if (this.inputAns) {
-        this.searchNameAnsList();
-      } else {
-        this.getAnsList();
-      }
-    },
-    getAnsList() {
-      this.ansTable = [];
-      this.$axios
-        .$get(
-          "/ans/list?page_size=" +
-            this.pageSize +
-            "&page_number=" +
-            this.currentPage
-        )
-        .then(res => {
-          this.total = res.count;
-          res.ansList.forEach(e => {
-            let ans = {};
-            ans.name = e.Name;
-            ans.blockNumber = e.BlockNumber;
-            ans.owner = e.Owner;
-            ans.ownerAddress = addressSimplify(e.Owner);
-            ans.txId = addressSimplify(e.TransactionHash);
-            ans.time = timeFormat(e.Timestamp);
-            ans.content = hexToUtf8(e.Content);
-            ans.bidPrice = e.BidPrice === "" ? this.$t('ans.noBid') : valueToATNFixed2(e.BidPrice).toLocaleString('en-US') + " ATN";
-            ans.price = e.Price === "" ? this.$t('ans.noPrice') : valueToATNFixed2(e.Price).toLocaleString('en-US') + " ATN";
-            ans.bidder = e.Bidder;
-            ans.bidderAddress = addressSimplify(e.Bidder);
-            this.ansTable.push(ans);
-          });
-          this.loading = false;
-        })
-        .catch(error => {
-          console.log("error", error);
-          this.loading = false;
-        });
-    },
-    searchNameAnsList() {
-      this.ansTable = [];
-      this.$axios
-        .$get(
-          "/ans/name/" +
-            this.inputAns +
-            "?page_size=" +
-            this.pageSize +
-            "&page_number=" +
-            this.currentPage
-        )
-        .then(res => {
-          this.total = res.count;
-          res.ansList.forEach(e => {
-            let ans = {};
-            ans.name = e.Name;
-            ans.blockNumber = e.BlockNumber;
-            ans.owner = e.Owner;
-            ans.ownerAddress = addressSimplify(e.Owner);
-            ans.txId = addressSimplify(e.TransactionHash);
-            ans.time = timeFormat(e.Timestamp);
-            ans.content = hexToUtf8(e.Content);
-            ans.bidPrice = e.BidPrice === "" ? this.$t('ans.noBid') : valueToATNFixed2(e.BidPrice) + " ATN";
-            ans.price = e.Price === "" ? this.$t('ans.noPrice') : valueToATNFixed2(e.Price) + " ATN";
-            ans.bidder = e.Bidder;
-            ans.bidderAddress = addressSimplify(e.Bidder);
-            this.ansTable.push(ans);
-          });
-          this.loading = false;
-        })
-        .catch(error => {
-          console.log("error", error);
-          this.loading = false;
-        });
-    },
-    handleClick() {},
-    showQRcode(name) {
-      this.config.value = name;
-    }
-  }
-};
-</script>

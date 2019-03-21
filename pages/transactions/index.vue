@@ -49,7 +49,6 @@
               <el-table-column
                 prop="number"
                 :label="this.$t('transaction.blockNumber')">
-              >
                 <template slot-scope="scope">
                   <nuxt-link :to="'/blocks/' + scope.row.number">{{ scope.row.number }}</nuxt-link>
                 </template>
@@ -58,12 +57,11 @@
               <el-table-column
                 prop="time"
                 :label="this.$t('transaction.time')">
-              ></el-table-column>
+              </el-table-column>
 
               <el-table-column
                 prop="txId"
                 :label="this.$t('transaction.txHash')">
-              >
                 <template slot-scope="scope">
                   <nuxt-link :to="'/transactions/' + scope.row.hash">{{ scope.row.txId }}</nuxt-link>
                 </template>
@@ -72,7 +70,6 @@
               <el-table-column
                 prop="from"
                 :label="this.$t('transaction.from')">
-              >
                 <template slot-scope="scope">
                   <nuxt-link :to="'/accounts/' + scope.row.fromAddress">{{ scope.row.from }}</nuxt-link>
                 </template>
@@ -81,7 +78,6 @@
               <el-table-column
                 prop="to"
                 :label="this.$t('transaction.to')">
-              >
                 <template slot-scope="scope">
                   <nuxt-link :to="'/accounts/' + scope.row.toAddress">{{ scope.row.to }}</nuxt-link>
                 </template>
@@ -90,7 +86,7 @@
               <el-table-column
                 prop="value"
                 :label="this.$t('transaction.value')">
-              ></el-table-column>
+              </el-table-column>
             </el-table>
             <br>
             <div class="page">
@@ -124,6 +120,127 @@
     </el-footer>
   </div>
 </template>
+
+
+<script>
+import Header from "~/components/Header.vue";
+import Footer from "~/components/Footer.vue";
+import axios from "axios";
+import {
+  toDate,
+  toDecimals,
+  toTime,
+  addressSimplify,
+  search
+} from "~/common/method.js";
+
+export default {
+  components: {
+    Header,
+    Footer
+  },
+  created() {},
+  mounted() {
+    this.showData();
+  },
+  data() {
+    return {
+      transactionTable: [],
+      total: 0,
+      currentPage: 1,
+      pageSize: 11,
+      input: "",
+      loading: true
+    };
+  },
+  methods: {
+    handleSelect(key, keyPath) {},
+    showData() {
+      this.$axios
+        .$get(
+          "/transactions/list?page_size=" +
+            this.pageSize +
+            "&page_number=" +
+            this.currentPage
+        )
+        .then(res => {
+          this.total = res.count;
+          for (let r of res.transactionsList) {
+            let transaction = {};
+            transaction.number = r.BlockNumber;
+            transaction.time = toTime(r.Timestamp);
+            transaction.txId = addressSimplify(r.Hash);
+            transaction.hash = r.Hash.toString();
+            transaction.from = addressSimplify(r.From);
+            transaction.to = addressSimplify(r.To);
+            transaction.fromAddress = r.From.toString();
+            transaction.toAddress = r.To.toString();
+            let number = (r.Value / 1e18).toString();
+            // console.log('number', r.Value / 1e18)
+            if (number.includes("e+")) {
+              let array = number.split("e+");
+              array[0] = Math.floor(array[0] * 100) / 100;
+              number = array[0] + "e+" + array[1];
+            }
+            // console.log("number", number)
+            transaction.value =
+              Math.floor(toDecimals(number) * 100) / 100 + " ATN";
+            this.transactionTable.push(transaction);
+          }
+          this.loading = false;
+        })
+        .catch(error => {
+          console.log("error", error);
+          this.loading = false;
+        });
+    },
+    handleCurrentChange(val) {
+      this.transactionTable = [];
+      this.currentPage = val;
+      this.$axios
+        .$get(
+          "/transactions/list?page_size=" +
+            this.pageSize +
+            "&page_number=" +
+            this.currentPage
+        )
+        .then(res => {
+          this.total = res.count;
+          for (let r of res.transactionsList) {
+            let transaction = {};
+            transaction.number = r.BlockNumber;
+            transaction.time = toTime(r.Timestamp);
+            transaction.txId = addressSimplify(r.Hash);
+            transaction.hash = r.Hash.toString();
+            transaction.from = addressSimplify(r.From);
+            transaction.to = addressSimplify(r.To);
+            transaction.fromAddress = r.From.toString();
+            transaction.toAddress = r.To.toString();
+            let number = (r.Value / 1e18).toString();
+            // console.log('number', r.Value / 1e18)
+            if (number.includes("e+")) {
+              let array = number.split("e+");
+              array[0] = Math.floor(array[0] * 100) / 100;
+              number = array[0] + "e+" + array[1];
+            }
+            // console.log("number", number)
+            transaction.value =
+              Math.floor(toDecimals(number) * 100) / 100 + " ATN";
+            this.transactionTable.push(transaction);
+          }
+          this.loading = false;
+        })
+        .catch(error => {
+          console.log("error", error);
+          this.loading = false;
+        });
+    },
+    search() {
+      search(this);
+    }
+  }
+};
+</script>
 
 <style scoped lang="less">
 .body {
@@ -251,7 +368,7 @@ a {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -339,7 +456,7 @@ a {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -416,123 +533,3 @@ body > .el-container {
   line-height: 320px;
 }
 </style>
-
-<script>
-import Header from "~/components/Header.vue";
-import Footer from "~/components/Footer.vue";
-import axios from "axios";
-import {
-  toDate,
-  toDecimals,
-  toTime,
-  addressSimplify,
-  search
-} from "~/common/method.js";
-
-export default {
-  components: {
-    Header,
-    Footer
-  },
-  created() {},
-  mounted() {
-    this.showData();
-  },
-  data() {
-    return {
-      transactionTable: [],
-      total: 0,
-      currentPage: 1,
-      pageSize: 11,
-      input: "",
-      loading: true
-    };
-  },
-  methods: {
-    handleSelect(key, keyPath) {},
-    showData() {
-      this.$axios
-        .$get(
-          "/transactions/list?page_size=" +
-            this.pageSize +
-            "&page_number=" +
-            this.currentPage
-        )
-        .then(res => {
-          this.total = res.count;
-          for (let r of res.transactionsList) {
-            let transaction = {};
-            transaction.number = r.BlockNumber;
-            transaction.time = toTime(r.Timestamp);
-            transaction.txId = addressSimplify(r.Hash);
-            transaction.hash = r.Hash.toString();
-            transaction.from = addressSimplify(r.From);
-            transaction.to = addressSimplify(r.To);
-            transaction.fromAddress = r.From.toString();
-            transaction.toAddress = r.To.toString();
-            let number = (r.Value / 1e18).toString();
-            // console.log('number', r.Value / 1e18)
-            if (number.includes("e+")) {
-              let array = number.split("e+");
-              array[0] = Math.floor(array[0] * 100) / 100;
-              number = array[0] + "e+" + array[1];
-            }
-            // console.log("number", number)
-            transaction.value =
-              Math.floor(toDecimals(number) * 100) / 100 + " ATN";
-            this.transactionTable.push(transaction);
-          }
-          this.loading = false;
-        })
-        .catch(error => {
-          console.log("error", error);
-          this.loading = false;
-        });
-    },
-    handleCurrentChange(val) {
-      this.transactionTable = [];
-      this.currentPage = val;
-      this.$axios
-        .$get(
-          "/transactions/list?page_size=" +
-            this.pageSize +
-            "&page_number=" +
-            this.currentPage
-        )
-        .then(res => {
-          this.total = res.count;
-          for (let r of res.transactionsList) {
-            let transaction = {};
-            transaction.number = r.BlockNumber;
-            transaction.time = toTime(r.Timestamp);
-            transaction.txId = addressSimplify(r.Hash);
-            transaction.hash = r.Hash.toString();
-            transaction.from = addressSimplify(r.From);
-            transaction.to = addressSimplify(r.To);
-            transaction.fromAddress = r.From.toString();
-            transaction.toAddress = r.To.toString();
-            let number = (r.Value / 1e18).toString();
-            // console.log('number', r.Value / 1e18)
-            if (number.includes("e+")) {
-              let array = number.split("e+");
-              array[0] = Math.floor(array[0] * 100) / 100;
-              number = array[0] + "e+" + array[1];
-            }
-            // console.log("number", number)
-            transaction.value =
-              Math.floor(toDecimals(number) * 100) / 100 + " ATN";
-            this.transactionTable.push(transaction);
-          }
-          this.loading = false;
-        })
-        .catch(error => {
-          console.log("error", error);
-          this.loading = false;
-        });
-    },
-    search() {
-      search(this);
-    }
-  }
-};
-</script>

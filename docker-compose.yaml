@@ -1,0 +1,8 @@
+version: '3'
+services:
+  explorer_web:
+    image: explorer_web
+    container_name: explorer_web
+    hostname: explorer_web
+    ports:
+      - 4067:4067

@@ -193,6 +193,133 @@
   </div>
 </template>
 
+<script>
+import Header from "~/components/Header.vue";
+import Footer from "~/components/Footer.vue";
+import axios from "axios";
+import { toDate, toTime, search, addressSimplify, valueToATNFixed2 } from "~/common/method.js";
+import VueClipboard from "vue-clipboard2";
+import Vue from "vue";
+
+Vue.use(VueClipboard);
+
+export default {
+  components: {
+    Header,
+    Footer
+  },
+  asyncData({ params }) {
+    // console.log("params address", params.address)
+    return { blockNumber: params.number };
+  },
+
+  created() {},
+  mounted() {
+    this.showData();
+  },
+  data() {
+    return {
+      blockHash: "",
+      blockNumber: "",
+      leftTable: [],
+      rightTable: [],
+      total: 0,
+      currentPage: 1,
+      pageSize: 8,
+      atn: "",
+      atnValue: "",
+      txns: "",
+      activeName2: "first",
+      transactionTable: [],
+      input: "",
+    };
+  },
+  methods: {
+    handleSelect(key, keyPath) {
+      // console.log(key, keyPath);
+    },
+    async showData() {
+      this.$axios.$get("/blocks/number/" + this.blockNumber).then(res => {
+        this.blockHash = res.Hash;
+        this.leftTable.push({attribute: this.$t('block.blockNumber'), value: res.Number});
+        this.leftTable.push({attribute: this.$t('block.txns'), value: res.Txns});
+        this.rightTable.push({attribute: this.$t('block.miner'), value: res.Miner});
+        this.rightTable.push({attribute: this.$t('block.size'), value: res.Size});
+      });
+
+      this.$axios
+        .$get(
+          "/transactions/list/blocknumber/" +
+            this.blockNumber +
+            "?page_size=" +
+            this.pageSize +
+            "&page_number=" +
+            this.currentPage
+        )
+        .then(res => {
+          this.total = res.count;
+          for (let r of res.transactionsList) {
+            let tx = {};
+            tx.txId = addressSimplify(r.Hash);
+            tx.hash = r.Hash.toString();
+            tx.time = toTime(r.Timestamp);
+            tx.from = addressSimplify(r.From);
+            tx.fromAddress = r.From.toString();
+            tx.to = addressSimplify(r.To);
+            tx.toAddress = r.To.toString();
+            tx.value = valueToATNFixed2(r.Value) + " ATN";
+            this.transactionTable.push(tx);
+          }
+        });
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.$axios
+        .$get(
+          "/transactions/list/blocknumber/" +
+            this.blockNumber +
+            "?page_size=" +
+            this.pageSize +
+            "&page_number=" +
+            this.currentPage
+        )
+        .then(res => {
+          this.total = res.count;
+          for (let r of res.transactionsList) {
+            let tx = {};
+            tx.txId = addressSimplify(r.Hash);
+            tx.hash = r.Hash.toString();
+            tx.time = toTime(r.Timestamp);
+            tx.from = addressSimplify(r.From);
+            tx.fromAddress = r.From.toString();
+            tx.to = addressSimplify(r.To);
+            tx.toAddress = r.To.toString();
+            tx.value = valueToATNFixed2(r.Value) + " ATN";
+            this.transactionTable.push(tx);
+          }
+        });
+    },
+    handleClick(tab, event) {
+      // console.log(tab, event);
+    },
+    search() {
+      search(this);
+    },
+    onCopy() {
+      this.$notify({
+        title: "success",
+        message: "复制成功！",
+        type: "success"
+      });
+    },
+    onError() {
+      // alert();
+    }
+  }
+};
+</script>
+
+
 <style scoped lang="less">
 .tag {
   font-size: 14px;
@@ -495,7 +622,7 @@ a {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -644,7 +771,7 @@ a {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -723,129 +850,3 @@ body > .el-container {
   line-height: 320px;
 }
 </style>
-
-<script>
-import Header from "~/components/Header.vue";
-import Footer from "~/components/Footer.vue";
-import axios from "axios";
-import { toDate, toTime, search, addressSimplify, valueToATNFixed2 } from "~/common/method.js";
-import VueClipboard from "vue-clipboard2";
-import Vue from "vue";
-
-Vue.use(VueClipboard);
-
-export default {
-  components: {
-    Header,
-    Footer
-  },
-  asyncData({ params }) {
-    // console.log("params address", params.address)
-    return { blockNumber: params.number };
-  },
-
-  created() {},
-  mounted() {
-    this.showData();
-  },
-  data() {
-    return {
-      blockHash: "",
-      blockNumber: "",
-      leftTable: [],
-      rightTable: [],
-      total: 0,
-      currentPage: 1,
-      pageSize: 8,
-      atn: "",
-      atnValue: "",
-      txns: "",
-      activeName2: "first",
-      transactionTable: [],
-      input: "",
-    };
-  },
-  methods: {
-    handleSelect(key, keyPath) {
-      // console.log(key, keyPath);
-    },
-    async showData() {
-      this.$axios.$get("/blocks/number/" + this.blockNumber).then(res => {
-        this.blockHash = res.Hash;
-        this.leftTable.push({attribute: this.$t('block.blockNumber'), value: res.Number});
-        this.leftTable.push({attribute: this.$t('block.txns'), value: res.Txns});
-        this.rightTable.push({attribute: this.$t('block.miner'), value: res.Miner});
-        this.rightTable.push({attribute: this.$t('block.size'), value: res.Size});
-      });
-
-      this.$axios
-        .$get(
-          "/transactions/list/blocknumber/" +
-            this.blockNumber +
-            "?page_size=" +
-            this.pageSize +
-            "&page_number=" +
-            this.currentPage
-        )
-        .then(res => {
-          this.total = res.count;
-          for (let r of res.transactionsList) {
-            let tx = {};
-            tx.txId = addressSimplify(r.Hash);
-            tx.hash = r.Hash.toString();
-            tx.time = toTime(r.Timestamp);
-            tx.from = addressSimplify(r.From);
-            tx.fromAddress = r.From.toString();
-            tx.to = addressSimplify(r.To);
-            tx.toAddress = r.To.toString();
-            tx.value = valueToATNFixed2(r.Value) + " ATN";
-            this.transactionTable.push(tx);
-          }
-        });
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      this.$axios
-        .$get(
-          "/transactions/list/blocknumber/" +
-            this.blockNumber +
-            "?page_size=" +
-            this.pageSize +
-            "&page_number=" +
-            this.currentPage
-        )
-        .then(res => {
-          this.total = res.count;
-          for (let r of res.transactionsList) {
-            let tx = {};
-            tx.txId = addressSimplify(r.Hash);
-            tx.hash = r.Hash.toString();
-            tx.time = toTime(r.Timestamp);
-            tx.from = addressSimplify(r.From);
-            tx.fromAddress = r.From.toString();
-            tx.to = addressSimplify(r.To);
-            tx.toAddress = r.To.toString();
-            tx.value = valueToATNFixed2(r.Value) + " ATN";
-            this.transactionTable.push(tx);
-          }
-        });
-    },
-    handleClick(tab, event) {
-      // console.log(tab, event);
-    },
-    search() {
-      search(this);
-    },
-    onCopy() {
-      this.$notify({
-        title: "success",
-        message: "复制成功！",
-        type: "success"
-      });
-    },
-    onError() {
-      // alert();
-    }
-  }
-};
-</script>

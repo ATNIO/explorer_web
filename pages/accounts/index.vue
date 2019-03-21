@@ -118,6 +118,114 @@
   </div>
 </template>
 
+
+<script>
+import Header from "~/components/Header.vue";
+import Footer from "~/components/Footer.vue";
+import { search, valueToATNFixed2 } from "~/common/method.js";
+import axios from "axios";
+const BigNumber = require('bignumber.js');
+
+export default {
+  components: {
+    Header,
+    Footer
+  },
+  created() {},
+  mounted() {
+    this.showData();
+  },
+  data() {
+    return {
+      accountTable: [],
+      total: 0,
+      currentPage: 1,
+      pageSize: 9,
+      input: "",
+      loading: true
+    };
+  },
+  methods: {
+    handleSelect(key, keyPath) {
+      // console.log(key, keyPath);
+    },
+    showData() {
+      this.$axios
+        .$get(
+          "/accounts/list?page_size=" +
+            this.pageSize +
+            "&page_number=" +
+            this.currentPage
+        )
+        .then(res => {
+          this.total = res.count;
+          for (let r of res.accountsList) {
+            let account = {};
+            // console.log("accounts list res", res)
+            account.address = r.Address;
+            account.balance =valueToATNFixed2(r.Balance) + " ATN";
+            let temp = new BigNumber(r.Balance).div(1e18).div(new BigNumber(9.1e56)).toFixed(10) * 100;
+            var e = parseInt(temp.toString().split("e-")[1]);
+            // console.log("e",e)
+            if (e) {
+              temp *= Math.pow(10, e - 1);
+              temp =
+                "0." + new Array(e).join("0") + temp.toString().substring(2);
+            }
+            account.percentage = temp + "%";
+            account.name = r.Name;
+            this.accountTable.push(account);
+          }
+          this.loading = false;
+        })
+        .catch(error => {
+          console.log("error", error);
+          this.loading = false;
+        });
+    },
+    handleCurrentChange(val) {
+      this.accountTable = [];
+      this.currentPage = val;
+      this.$axios
+        .$get(
+          "/accounts/list?page_size=" +
+            this.pageSize +
+            "&page_number=" +
+            this.currentPage
+        )
+        .then(res => {
+          this.total = res.count;
+          for (let r of res.accountsList) {
+            let account = {};
+            // console.log("accounts list res", res)
+            account.address = r.Address;
+            account.balance =valueToATNFixed2(r.Balance) + " ATN";
+            let temp = new BigNumber(r.Balance).div(1e18).div(210000000).toFixed(10);
+            var e = parseInt(temp.toString().split("e-")[1]);
+            // console.log("e",e)
+            if (e) {
+              temp *= Math.pow(10, e - 1);
+              temp =
+                "0." + new Array(e).join("0") + temp.toString().substring(2);
+            }
+            account.percentage = temp + "%";
+            account.name = r.Name;
+            this.accountTable.push(account);
+          }
+          this.loading = false;
+        })
+        .catch(error => {
+          console.log("error", error);
+          this.loading = false;
+        });
+    },
+    search() {
+      search(this);
+    }
+  }
+};
+</script>
+
 <style scoped lang="less">
 .body {
   background-color: #f5f7fa;
@@ -286,7 +394,7 @@ body > .el-container {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -368,7 +476,7 @@ body > .el-container {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -441,110 +549,3 @@ body > .el-container {
   line-height: 320px;
 }
 </style>
-
-<script>
-import Header from "~/components/Header.vue";
-import Footer from "~/components/Footer.vue";
-import { search, valueToATNFixed2 } from "~/common/method.js";
-import axios from "axios";
-const BigNumber = require('bignumber.js');
-
-export default {
-  components: {
-    Header,
-    Footer
-  },
-  created() {},
-  mounted() {
-    this.showData();
-  },
-  data() {
-    return {
-      accountTable: [],
-      total: 0,
-      currentPage: 1,
-      pageSize: 9,
-      input: "",
-      loading: true
-    };
-  },
-  methods: {
-    handleSelect(key, keyPath) {
-      // console.log(key, keyPath);
-    },
-    showData() {
-      this.$axios
-        .$get(
-          "/accounts/list?page_size=" +
-            this.pageSize +
-            "&page_number=" +
-            this.currentPage
-        )
-        .then(res => {
-          this.total = res.count;
-          for (let r of res.accountsList) {
-            let account = {};
-            // console.log("accounts list res", res)
-            account.address = r.Address;
-            account.balance =valueToATNFixed2(r.Balance) + " ATN";
-            let temp = new BigNumber(r.Balance).div(1e18).div(new BigNumber(9.1e56)).toFixed(10) * 100;
-            var e = parseInt(temp.toString().split("e-")[1]);
-            // console.log("e",e)
-            if (e) {
-              temp *= Math.pow(10, e - 1);
-              temp =
-                "0." + new Array(e).join("0") + temp.toString().substring(2);
-            }
-            account.percentage = temp + "%";
-            account.name = r.Name;
-            this.accountTable.push(account);
-          }
-          this.loading = false;
-        })
-        .catch(error => {
-          console.log("error", error);
-          this.loading = false;
-        });
-    },
-    handleCurrentChange(val) {
-      this.accountTable = [];
-      this.currentPage = val;
-      this.$axios
-        .$get(
-          "/accounts/list?page_size=" +
-            this.pageSize +
-            "&page_number=" +
-            this.currentPage
-        )
-        .then(res => {
-          this.total = res.count;
-          for (let r of res.accountsList) {
-            let account = {};
-            // console.log("accounts list res", res)
-            account.address = r.Address;
-            account.balance =valueToATNFixed2(r.Balance) + " ATN";
-            let temp = new BigNumber(r.Balance).div(1e18).div(210000000).toFixed(10);
-            var e = parseInt(temp.toString().split("e-")[1]);
-            // console.log("e",e)
-            if (e) {
-              temp *= Math.pow(10, e - 1);
-              temp =
-                "0." + new Array(e).join("0") + temp.toString().substring(2);
-            }
-            account.percentage = temp + "%";
-            account.name = r.Name;
-            this.accountTable.push(account);
-          }
-          this.loading = false;
-        })
-        .catch(error => {
-          console.log("error", error);
-          this.loading = false;
-        });
-    },
-    search() {
-      search(this);
-    }
-  }
-};
-</script>

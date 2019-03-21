@@ -94,6 +94,80 @@
   </div>
 </template>
 
+
+<script>
+import Header from "~/components/Header.vue";
+import Footer from "~/components/Footer.vue";
+import axios from "axios";
+import { search } from "~/common/method.js";
+export default {
+  components: {
+    Header,
+    Footer
+  },
+  created() {},
+  mounted() {
+    this.showData();
+  },
+  data() {
+    return {
+      block: [],
+      total: 0,
+      currentPage: 1,
+      pageSize: 11,
+      input: "",
+      loading: true
+    };
+  },
+  methods: {
+    handleSelect(key, keyPath) {},
+    showData() {
+      this.$axios
+        .$get(
+          "/blocks/list?page_size=" +
+            this.pageSize +
+            "&page_number=" +
+            this.currentPage
+        )
+        .then(res => {
+          this.total = res.count;
+          for (let r of res.blocksList) {
+            let block = {};
+            block.number = r.Number;
+            block.txns = r.Txns;
+            this.block.push(block);
+          }
+          this.loading = false;
+        });
+    },
+    handleCurrentChange(val) {
+      console.log("val", val);
+      this.currentPage = val;
+      this.$axios
+        .$get(
+          "/blocks/list?page_size=" +
+            this.pageSize +
+            "&page_number=" +
+            this.currentPage
+        )
+        .then(res => {
+          this.total = res.count;
+          this.block = [];
+          for (let r of res.blocksList) {
+            let block = {};
+            block.number = r.Number;
+            block.txns = r.Txns;
+            this.block.push(block);
+          }
+        });
+    },
+    search() {
+      search(this);
+    }
+  }
+};
+</script>
+
 <style scoped lang="less">
 .body {
   background-color: #f5f7fa;
@@ -209,7 +283,7 @@ a {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -297,7 +371,7 @@ a {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -374,76 +448,3 @@ body > .el-container {
   line-height: 320px;
 }
 </style>
-
-<script>
-import Header from "~/components/Header.vue";
-import Footer from "~/components/Footer.vue";
-import axios from "axios";
-import { search } from "~/common/method.js";
-export default {
-  components: {
-    Header,
-    Footer
-  },
-  created() {},
-  mounted() {
-    this.showData();
-  },
-  data() {
-    return {
-      block: [],
-      total: 0,
-      currentPage: 1,
-      pageSize: 11,
-      input: "",
-      loading: true
-    };
-  },
-  methods: {
-    handleSelect(key, keyPath) {},
-    showData() {
-      this.$axios
-        .$get(
-          "/blocks/list?page_size=" +
-            this.pageSize +
-            "&page_number=" +
-            this.currentPage
-        )
-        .then(res => {
-          this.total = res.count;
-          for (let r of res.blocksList) {
-            let block = {};
-            block.number = r.Number;
-            block.txns = r.Txns;
-            this.block.push(block);
-          }
-          this.loading = false;
-        });
-    },
-    handleCurrentChange(val) {
-      console.log("val", val);
-      this.currentPage = val;
-      this.$axios
-        .$get(
-          "/blocks/list?page_size=" +
-            this.pageSize +
-            "&page_number=" +
-            this.currentPage
-        )
-        .then(res => {
-          this.total = res.count;
-          this.block = [];
-          for (let r of res.blocksList) {
-            let block = {};
-            block.number = r.Number;
-            block.txns = r.Txns;
-            this.block.push(block);
-          }
-        });
-    },
-    search() {
-      search(this);
-    }
-  }
-};
-</script>

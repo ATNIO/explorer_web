@@ -36,9 +36,9 @@ module.exports = {
   */
   plugins: [
     '@/plugins/element-ui',
-  { src: '~plugins/account-icon', ssr: false },
+  { src: '~plugins/account-icon', mode: 'client' },
   '~/plugins/i18n.js',
-  { src: '~/plugins/vue-qart', ssr: false },
+  { src: '~/plugins/vue-qart', mode: 'client' },
   ],
 
   /*
@@ -60,9 +60,9 @@ module.exports = {
 
   proxy: {
     '/api': {
-      target: 'http://119.3.57.66:4068',
+      // target: 'http://119.3.57.66:4068',
       // target: 'http://localhost:4068',
-      // target: 'http://localhost:7001',
+      target: 'http://localhost:7001',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
@@ -98,6 +98,10 @@ module.exports = {
           exclude: /(node_modules)/
         })
       }
+
+      config.node = {
+        fs: "empty"
+      };
     }
   }
 }

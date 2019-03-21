@@ -133,6 +133,153 @@
   </div>
 </template>
 
+<script>
+import Header from "~/components/Header.vue";
+import Footer from "~/components/Footer.vue";
+import axios from "axios";
+import {
+  toDate,
+  toDecimals,
+  toTime,
+  addressSimplify2,
+  timeToHms,
+  search
+} from "~/common/method.js";
+const Web3 = require("web3");
+import VueClipboard from "vue-clipboard2";
+import Vue from "vue";
+
+Vue.use(VueClipboard);
+
+export default {
+  components: {
+    Header,
+    Footer
+  },
+  asyncData({ params }) {
+    console.log("params address", params.address);
+    return { address: params.address };
+  },
+
+  created() {},
+  mounted() {
+    this.showData();
+  },
+  data() {
+    return {
+      address: "",
+      votes: "",
+      voters: "",
+      scores: "",
+      rank: 1,
+      pVotes: 0,
+      lastSealTime: "",
+      transactionTable: [],
+      total: 0,
+      currentPage: 1,
+      pageSize: 21,
+      loading: true,
+      votersTable: [],
+      input: "",
+      pageNumber: 1
+    };
+  },
+  methods: {
+    handleSelect(key, keyPath) {
+      // console.log(key, keyPath);
+    },
+    async showData() {
+      await this.$axios
+        .$get(
+          "/votes/candidatesStatus?page_size=" +
+            this.pageSize +
+            "&page_number=1"
+        )
+        .then(res => {
+          let candidates = res.candidates;
+          let i = 1;
+          for (let c of candidates) {
+            if (c.address === this.address) {
+              this.rank = i;
+              this.pVotes = c.pVotes.toFixed(3) + "%";
+            }
+            i++;
+          }
+          this.loading = false;
+        })
+        .catch(error => {
+          console.log("error", error);
+          this.loading = false;
+        });
+
+      this.$axios
+        .$get("/votes/candidatesStatus/" + this.address)
+        .then(res => {
+          this.votes = +res.votes.toLocaleString("en-US");
+          this.scores = this.votes + " (" + this.pVotes + ")";
+          this.voters = parseInt(res.voters).toLocaleString("en-US");
+          this.lastSealTime = timeToHms(res.lastSealTime);
+          this.loading = false;
+        })
+        .catch(error => {
+          console.log("error", error);
+          this.loading = false;
+        });
+
+      this.getCacheVotes();
+    },
+
+    getCacheVotes() {
+      this.votersTable = [];
+      this.$axios
+        .$get(
+          "/votes/cacheVotes/" +
+            this.address +
+            "?page_size=" +
+            this.pageSize +
+            "&page_number=" +
+            this.pageNumber
+        )
+        .then(res => {
+          this.total = res.length;
+          for (let r of res) {
+            let voters = {};
+            voters.name = addressSimplify2(r.address);
+            voters.address = r.address;
+            voters.votes = r.votes;
+            this.votersTable.push(voters);
+          }
+          this.loading = false;
+        });
+    },
+
+    handleClick(tab, event) {
+      // console.log(tab, event);
+    },
+
+    handleCurrentChange(val) {
+      this.pageNumber = val;
+      this.getCacheVotes();
+    },
+
+    search() {
+      search(this);
+    },
+    onCopy() {
+      this.$notify({
+        title: "success",
+        message: "复制成功！",
+        type: "success"
+      });
+    },
+    onError() {
+      // alert();
+    }
+  }
+};
+</script>
+
+
 <style scoped lang="less">
 
 .body {
@@ -479,7 +626,7 @@ a {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -657,7 +804,7 @@ a {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -746,149 +893,3 @@ body > .el-container {
   line-height: 320px;
 }
 </style>
-
-<script>
-import Header from "~/components/Header.vue";
-import Footer from "~/components/Footer.vue";
-import axios from "axios";
-import {
-  toDate,
-  toDecimals,
-  toTime,
-  addressSimplify2,
-  timeToHms,
-  search
-} from "~/common/method.js";
-const Web3 = require("web3");
-import VueClipboard from "vue-clipboard2";
-import Vue from "vue";
-
-Vue.use(VueClipboard);
-
-export default {
-  components: {
-    Header,
-    Footer
-  },
-  asyncData({ params }) {
-    console.log("params address", params.address);
-    return { address: params.address };
-  },
-
-  created() {},
-  mounted() {
-    this.showData();
-  },
-  data() {
-    return {
-      address: "",
-      votes: "",
-      voters: "",
-      scores: "",
-      rank: 1,
-      pVotes: 0,
-      lastSealTime: "",
-      transactionTable: [],
-      total: 0,
-      currentPage: 1,
-      pageSize: 21,
-      loading: true,
-      votersTable: [],
-      input: "",
-      pageNumber: 1
-    };
-  },
-  methods: {
-    handleSelect(key, keyPath) {
-      // console.log(key, keyPath);
-    },
-    async showData() {
-      await this.$axios
-        .$get(
-          "/votes/candidatesStatus?page_size=" +
-            this.pageSize +
-            "&page_number=1"
-        )
-        .then(res => {
-          let candidates = res.candidates;
-          let i = 1;
-          for (let c of candidates) {
-            if (c.address === this.address) {
-              this.rank = i;
-              this.pVotes = c.pVotes.toFixed(3) + "%";
-            }
-            i++;
-          }
-          this.loading = false;
-        })
-        .catch(error => {
-          console.log("error", error);
-          this.loading = false;
-        });
-
-      this.$axios
-        .$get("/votes/candidatesStatus/" + this.address)
-        .then(res => {
-          this.votes = +res.votes.toLocaleString("en-US");
-          this.scores = this.votes + " (" + this.pVotes + ")";
-          this.voters = parseInt(res.voters).toLocaleString("en-US");
-          this.lastSealTime = timeToHms(res.lastSealTime);
-          this.loading = false;
-        })
-        .catch(error => {
-          console.log("error", error);
-          this.loading = false;
-        });
-
-      this.getCacheVotes();
-    },
-
-    getCacheVotes() {
-      this.votersTable = [];
-      this.$axios
-        .$get(
-          "/votes/cacheVotes/" +
-            this.address +
-            "?page_size=" +
-            this.pageSize +
-            "&page_number=" +
-            this.pageNumber
-        )
-        .then(res => {
-          this.total = res.length;
-          for (let r of res) {
-            let voters = {};
-            voters.name = addressSimplify2(r.address);
-            voters.address = r.address;
-            voters.votes = r.votes;
-            this.votersTable.push(voters);
-          }
-          this.loading = false;
-        });
-    },
-
-    handleClick(tab, event) {
-      // console.log(tab, event);
-    },
-
-    handleCurrentChange(val) {
-      this.pageNumber = val;
-      this.getCacheVotes();
-    },
-
-    search() {
-      search(this);
-    },
-    onCopy() {
-      this.$notify({
-        title: "success",
-        message: "复制成功！",
-        type: "success"
-      });
-    },
-    onError() {
-      // alert();
-    }
-  }
-};
-</script>

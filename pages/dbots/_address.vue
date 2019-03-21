@@ -153,6 +153,88 @@
 </div>
 </template>
 
+<script>
+import Header from '~/components/Header.vue'
+import Footer from '~/components/Footer.vue'
+import axios from 'axios'
+import { toDate, search } from '~/common/method.js'
+const Web3 = require('web3')
+import VueClipboard from 'vue-clipboard2';
+import Vue from 'vue'
+
+Vue.use(VueClipboard);
+
+  export default {
+
+    components: {
+        Header,
+        Footer
+    },
+    asyncData({ params }) {
+        // console.log("params address", params.address)
+        return { dbotAddress: params.address }
+    },
+
+    created() {
+    },
+    mounted() {
+        this.showData();
+    },
+    data() {
+        return {
+                dbotAddress: '',
+                leftTable: [],
+                rightTable: [],
+                activeName2: 'first',
+                methodTable: [],
+                input: '', 
+                isRegistered: 'false',
+                marketUrl: 'https://market-test.atnio.net/detail/',
+        };
+    },
+    methods: {
+        handleSelect(key, keyPath) {
+            // console.log(key, keyPath);
+        },
+        async showData() {
+            this.$axios.$get("/dbots/address/" + this.dbotAddress).then(res => {
+                this.leftTable.push({attribute: this.$t('dbot.name'), value: Web3.utils.hexToUtf8(res.Name)});
+                this.rightTable.push({attribute: this.$t('dbot.domain'), value: Web3.utils.hexToUtf8(res.Domain)});
+                let keyToEndPoints = res.KeyToEndPoints;
+                for(let k of keyToEndPoints) {
+                    let method = {};
+                    console.log("Web3.utils.hexToNumber(k.Endpoint.Price) / 1e18",k.Endpoint.Price)
+                    method.method = Web3.utils.hexToAscii(k.Endpoint.Method);
+                    method.price = parseInt(Web3.utils.hexToNumberString(k.Endpoint.Price)) / 1e18 + ' ATN';
+                    method.uri = Web3.utils.hexToAscii(k.Endpoint.Uri);
+                    this.methodTable.push(method);
+                }
+                this.isRegistered = res.IsRegistered;
+                this.marketUrl += this.dbotAddress;
+                console.log("this.isRegistered", res)
+            })
+        },
+        handleClick(tab, event) {
+            // console.log(tab, event);
+        },
+        search() {
+            search(this);
+        },
+        onCopy() {
+            this.$notify({
+                title: 'success',
+                message: '复制成功！',
+                type: 'success'
+            });
+        },
+        onError() {
+            // alert();
+        },
+      
+    },
+  }
+</script>
+
 <style scoped lang="less">
 
 
@@ -497,7 +579,7 @@
             .search-icon{
                 width: 24px;
                 height: 24px;
-                background-image: url(~/assets/home-search-icon.png);
+                background-image: url(~assets/home-search-icon.png);
                 position: absolute;
                 right: 34px;
                 top: 8px;
@@ -661,7 +743,7 @@
             .search-icon{
                 width: 24px;
                 height: 24px;
-                background-image: url(~/assets/home-search-icon.png);
+                background-image: url(~assets/home-search-icon.png);
                 position: absolute;
                 right: 34px;
                 top: 8px;
@@ -751,85 +833,3 @@
         line-height: 320px;
     }
 </style>
-
-<script>
-import Header from '~/components/Header.vue'
-import Footer from '~/components/Footer.vue'
-import axios from 'axios'
-import { toDate, search } from '~/common/method.js'
-const Web3 = require('web3')
-import VueClipboard from 'vue-clipboard2';
-import Vue from 'vue'
-
-Vue.use(VueClipboard);
-
-  export default {
-
-    components: {
-        Header,
-        Footer
-    },
-    asyncData({ params }) {
-        // console.log("params address", params.address)
-        return { dbotAddress: params.address }
-    },
-
-    created() {
-    },
-    mounted() {
-        this.showData();
-    },
-    data() {
-        return {
-                dbotAddress: '',
-                leftTable: [],
-                rightTable: [],
-                activeName2: 'first',
-                methodTable: [],
-                input: '', 
-                isRegistered: 'false',
-                marketUrl: 'https://market-test.atnio.net/detail/',
-        };
-    },
-    methods: {
-        handleSelect(key, keyPath) {
-            // console.log(key, keyPath);
-        },
-        async showData() {
-            this.$axios.$get("/dbots/address/" + this.dbotAddress).then(res => {
-                this.leftTable.push({attribute: this.$t('dbot.name'), value: Web3.utils.hexToUtf8(res.Name)});
-                this.rightTable.push({attribute: this.$t('dbot.domain'), value: Web3.utils.hexToUtf8(res.Domain)});
-                let keyToEndPoints = res.KeyToEndPoints;
-                for(let k of keyToEndPoints) {
-                    let method = {};
-                    console.log("Web3.utils.hexToNumber(k.Endpoint.Price) / 1e18",k.Endpoint.Price)
-                    method.method = Web3.utils.hexToAscii(k.Endpoint.Method);
-                    method.price = parseInt(Web3.utils.hexToNumberString(k.Endpoint.Price)) / 1e18 + ' ATN';
-                    method.uri = Web3.utils.hexToAscii(k.Endpoint.Uri);
-                    this.methodTable.push(method);
-                }
-                this.isRegistered = res.IsRegistered;
-                this.marketUrl += this.dbotAddress;
-                console.log("this.isRegistered", res)
-            })
-        },
-        handleClick(tab, event) {
-            // console.log(tab, event);
-        },
-        search() {
-            search(this);
-        },
-        onCopy() {
-            this.$notify({
-                title: 'success',
-                message: '复制成功！',
-                type: 'success'
-            });
-        },
-        onError() {
-            // alert();
-        },
-      
-    },
-  }
-</script>

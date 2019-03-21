@@ -285,7 +285,7 @@
             .search-icon{
                 width: 20px;
                 height: 20px;
-                background-image: url(../assets/home-search-icon.png);
+                background-image: url(~assets/home-search-icon.png);
                 position: absolute;
                 right: 16px;
                 bottom: 9px;

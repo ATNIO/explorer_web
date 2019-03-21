@@ -129,7 +129,7 @@
                 .search-icon{
                     width: 20px;
                     height: 20px;
-                    background-image: url(../assets/home-search-icon.png);
+                    background-image: url(~assets/home-search-icon.png);
                     position: absolute;
                     right: 16px;
                     bottom: 9px;
@@ -226,7 +226,7 @@
             .search-icon{
                 width: 24px;
                 height: 24px;
-                background-image: url(../assets/home-search-icon.png);
+                background-image: url(~assets/home-search-icon.png);
                 position: absolute;
                 right: 34px;
                 top: 8px;

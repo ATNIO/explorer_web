@@ -1,7 +1,8 @@
 const BigNumber = require('bignumber.js');
 const moment = require('moment');
 const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider("http://47.110.54.206:4051"));
+const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc-test.atnio.net"));
+const fs = require('fs')
 
 export const toTime = function (timestamp) {
   if(!timestamp)return "";
@@ -58,9 +59,19 @@ export const toTime = function (timestamp) {
 
 export const toDate = function (timestamp) {
   if(!timestamp)return "";
-  let now = new BigNumber(moment().unix() * 1000)
+  let now;
+  let microTimeStamp = false;
+  if (timestamp.length > 10) {
+    microTimeStamp = true;
+    now = new BigNumber(moment().unix() * 1000);
+  } else {
+    microTimeStamp = false
+    now = new BigNumber(moment().unix());
+  }
   let blockTime = new BigNumber(timestamp)
-  let seconds = parseInt(now.minus(blockTime)) / 1000;
+  let seconds = parseInt(now.minus(blockTime));
+  if (microTimeStamp) seconds /= 1000;
+
   let minutes, hours, days;
   minutes = ~~(seconds / 60);
   if (minutes > 0) {
@@ -241,4 +252,10 @@ export const valueToATNFixed2 = (value) => {
   }
   else result = result.toFormat(2);
   return result;
+}
+
+export const getAbi = (abiFile) => {
+  const data = fs.readFileSync(abiFile);
+  console.log("data", data);
+  return JSON.parse(data.toString());
 }

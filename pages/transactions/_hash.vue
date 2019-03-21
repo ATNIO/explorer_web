@@ -287,6 +287,848 @@
   </div>
 </template>
 
+<script>
+import Header from "~/components/Header.vue";
+import Footer from "~/components/Footer.vue";
+import axios from "axios";
+import { toDate, toDecimals, search, getAbi } from "~/common/method.js";
+const Web3 = require("web3");
+import VueClipboard from "vue-clipboard2";
+import Vue from "vue";
+import { setInterval, clearInterval } from "timers";
+const bigInt = require("big-integer");
+const abiDecoder = require("abi-decoder");
+const fs = require("fs");
+
+Vue.use(VueClipboard);
+
+export default {
+  components: {
+    Header,
+    Footer
+  },
+  asyncData({ params }) {
+    // console.log("params address", params.address)
+    return { hash: params.hash };
+  },
+
+  created() {},
+  mounted() {
+    this.showData();
+  },
+  data() {
+    return {
+      hash: "",
+      status: "",
+      blockHeight: "",
+      timeStamp: "",
+      from: "",
+      to: "",
+      value: "",
+      gasLimit: "",
+      gasUsedByTxn: "",
+      gasPrice: "",
+      actualTxCost: "",
+      nonce: "",
+      inputData: "",
+      inputDataString: "",
+      inputTemp: "",
+      decodedData: "",
+      activeName2: "first",
+      input: "",
+      internalData: [],
+      isContract: "false",
+      pending: "false",
+      confirmations: ""
+    };
+  },
+  methods: {
+    handleSelect(key, keyPath) {
+      // console.log(key, keyPath);
+    },
+    async showData() {
+      let self = this;
+      await this.$axios
+        .$get("/transactions/hash/" + this.hash)
+        .then(async function(res) {
+          // console.log(res.BlockNumber)
+          self.pending = res.Pending;
+          self.blockHeight = res.BlockNumber;
+          let blockHeight = self.blockHeight;
+          self.$axios.$get("/blocks/count").then(res => {
+            // console.log("====", blockHeight, res.count)
+            let confirmations = Math.abs(res - blockHeight);
+            // console.log("confirmations", confirmations)
+            if (confirmations > 1)
+              self.confirmations =
+                "(" + confirmations + " block confirmations)";
+            else
+              self.confirmations = "(" + confirmations + " block confirmation)";
+          });
+
+          self.timeStamp = toDate(res.Timestamp);
+          self.from = res.From;
+          self.to = res.To;
+
+          await self.$axios
+            .$get("/accounts/address/" + self.to)
+            .then(res => {
+              self.isContract = res.IsContract;
+            })
+            .catch(error => {
+              console.log("trace error", error);
+            });
+          console.log("res.value", res.Value);
+          self.value = toDecimals(res.Value / 1e18) + " ATN";
+          self.gasLimit = res.Gas;
+          self.gasUsedByTxn = res.GasUsed;
+          self.gasPrice = toDecimals(res.GasPrice / 1e18) + " ATN";
+          self.actualTxCost =
+            toDecimals(
+              (parseFloat(bigInt(res.GasUsed)) *
+                parseFloat(bigInt(res.GasPrice))) /
+                1e18
+            ) + " ATN";
+          self.nonce = res.Nonce;
+          self.inputData = res.Input;
+
+          abiDecoder.addABI(dbotFactoryABI);
+          abiDecoder.addABI(transferChannelsABI);
+          abiDecoder.addABI(ansABI);
+          const testData = self.inputData.toString();
+          const decodedData = abiDecoder.decodeMethod(testData);
+          // console.log('decodedData', decodedData)
+          self.inputDataString = self.inputData;
+          if (decodedData != undefined) {
+            let functionName = decodedData.name;
+            let params = decodedData.params;
+            let paramsName = [];
+            let paramsValue = [];
+            let paramsType = [];
+            for (let p of params) {
+              paramsName.push(p.name);
+              paramsType.push(p.type);
+              paramsValue.push(p.value);
+            }
+            console.log(functionName, params);
+
+            self.inputDataString = "Function: " + functionName + "(";
+            for (let i = 0; i < paramsName.length; i++) {
+              self.inputDataString +=
+                paramsType[i] + "  " + paramsName[i] + ",";
+            }
+            if (params.length === 0)
+              self.inputDataString = self.inputDataString + ") \n\n";
+            else
+              self.inputDataString =
+                self.inputDataString.substr(
+                  0,
+                  self.inputDataString.length - 1
+                ) + ") \n\n";
+            // console.log("inputdata", this.inputData)
+            let methodId = self.inputData.substr(0, 10);
+            self.inputDataString += "MethodID:  " + methodId;
+            for (let i = 0; i < paramsValue.length; i++) {
+              self.inputDataString +=
+                "\n[" + i + "]:     " + paramsValue[i] + "\n";
+            }
+            // console.log("inputDataString", this.inputDataString)
+          } else {
+            try {
+              self.inputDataString = Web3.utils.hexToUtf8(self.inputData);
+            } catch (error) {
+              self.inputDataString = self.inputData;
+            }
+            // console.log("web3", Web3.utils.hexToUtf8(this.inputData))
+          }
+          self.inputTemp = self.inputData;
+          self.inputData = self.inputDataString;
+
+          // console.log('res.Pending', res.Pending)
+          if (res.Pending === "true") {
+            self.status = "Pending...";
+            // console.log("pending this.pending", this.pending)
+            let interval = setInterval(async function() {
+              // console.log("send self.pending", self.pending)
+              if (self.pending == "true") {
+                await self.$axios
+                  .$get("/transactions/hash/" + self.hash)
+                  .then(res => {
+                    self.pending = res.Pending;
+                  });
+              } else {
+                // console.log("res.Status", res.Status)
+                if (res.Status == "1") {
+                  self.status = "Success";
+                } else self.status = "Failed";
+                clearInterval(interval);
+              }
+            }, 5000);
+          } else {
+            self.pending = "false";
+            if (res.Status == "1") {
+              self.status = "Success";
+            } else self.status = "Failed";
+          }
+        })
+        .catch(error => {
+          console.log("trace error", error);
+        });
+      this.$axios.$get("/traces/hash/" + this.hash).then(res => {
+        let trace = res.Trace;
+        for (let t of trace) {
+          let data = {};
+          data.from = t.From.toString().substr(0, 10) + "...";
+          data.fromAddress = t.From;
+          data.to = t.To.toString().substr(0, 10) + "...";
+          data.toAddress = t.To;
+          data.input = t.Input;
+          data.value = toDecimals(t.Value / 1e18) + " ATN";
+          data.type = t.Op;
+          this.internalData.push(data);
+        }
+      });
+    },
+
+    handleClick(tab, event) {
+      // console.log(tab, event);
+    },
+    handleCommand(command) {
+      // this.$message('click on item ' + command);
+      if (command === "default") {
+        // this.inputTemp = this.inputData;
+        this.inputData = this.inputDataString;
+      } else if (command === "original") {
+        this.inputData = this.inputTemp;
+      }
+    },
+    search() {
+      search(this);
+    },
+    onCopy() {
+      this.$notify({
+        title: "success",
+        message: "复制成功！",
+        type: "success"
+      });
+    },
+    onError() {
+      // alert();
+    }
+  }
+};
+
+//inputdata to contract function
+let dbotFactoryABI = [
+  {
+    constant: true,
+    inputs: [{ name: "", type: "uint256" }],
+    name: "idToAddress",
+    outputs: [{ name: "", type: "address" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [{ name: "_dbotAddress", type: "address" }],
+    name: "register",
+    outputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [{ name: "", type: "uint256" }],
+    name: "dbots",
+    outputs: [{ name: "", type: "address" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, name: "id", type: "uint256" },
+      { indexed: false, name: "dbotAddress", type: "address" }
+    ],
+    name: "Register",
+    type: "event"
+  }
+];
+let transferChannelsABI = [
+  {
+    constant: true,
+    inputs: [
+      { name: "_receiver_address", type: "address" },
+      { name: "_open_block_number", type: "uint32" },
+      { name: "_balance", type: "uint256" },
+      { name: "_balance_msg_sig", type: "bytes" }
+    ],
+    name: "extractBalanceProofSignature",
+    outputs: [{ name: "", type: "address" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [
+      { name: "_sender_address", type: "address" },
+      { name: "_receiver_address", type: "address" },
+      { name: "_open_block_number", type: "uint32" }
+    ],
+    name: "getChannelInfo",
+    outputs: [
+      { name: "", type: "bytes32" },
+      { name: "", type: "uint256" },
+      { name: "", type: "uint32" },
+      { name: "", type: "uint256" },
+      { name: "", type: "uint256" }
+    ],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [
+      { name: "_receiver_address", type: "address" },
+      { name: "_open_block_number", type: "uint32" },
+      { name: "_balance", type: "uint256" }
+    ],
+    name: "uncooperativeClose",
+    outputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [{ name: "_trusted_contracts", type: "address[]" }],
+    name: "removeTrustedContracts",
+    outputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [{ name: "", type: "bytes32" }],
+    name: "withdrawn_balances",
+    outputs: [{ name: "", type: "uint256" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [
+      { name: "_sender_address", type: "address" },
+      { name: "_receiver_address", type: "address" }
+    ],
+    name: "createChannelDelegate",
+    outputs: [],
+    payable: true,
+    stateMutability: "payable",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [
+      { name: "_receiver_address", type: "address" },
+      { name: "_open_block_number", type: "uint32" },
+      { name: "_balance", type: "uint256" },
+      { name: "_balance_msg_sig", type: "bytes" },
+      { name: "_closing_sig", type: "bytes" }
+    ],
+    name: "cooperativeClose",
+    outputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [
+      { name: "_open_block_number", type: "uint32" },
+      { name: "_balance", type: "uint256" },
+      { name: "_balance_msg_sig", type: "bytes" }
+    ],
+    name: "withdraw",
+    outputs: [{ name: "", type: "uint256" }],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: "version",
+    outputs: [{ name: "", type: "string" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [
+      { name: "_receiver_address", type: "address" },
+      { name: "_open_block_number", type: "uint32" }
+    ],
+    name: "settle",
+    outputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: "channel_deposit_bugbounty_limit",
+    outputs: [{ name: "", type: "uint256" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [{ name: "_receiver_address", type: "address" }],
+    name: "createChannel",
+    outputs: [],
+    payable: true,
+    stateMutability: "payable",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [{ name: "", type: "bytes32" }],
+    name: "closing_requests",
+    outputs: [
+      { name: "closing_balance", type: "uint256" },
+      { name: "settle_block_number", type: "uint32" }
+    ],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [{ name: "", type: "bytes32" }],
+    name: "channels",
+    outputs: [
+      { name: "deposit", type: "uint256" },
+      { name: "open_block_number", type: "uint32" }
+    ],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [
+      { name: "_receiver_address", type: "address" },
+      { name: "_open_block_number", type: "uint32" }
+    ],
+    name: "topUp",
+    outputs: [],
+    payable: true,
+    stateMutability: "payable",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [
+      { name: "_sender_address", type: "address" },
+      { name: "_receiver_address", type: "address" },
+      { name: "_open_block_number", type: "uint32" }
+    ],
+    name: "getKey",
+    outputs: [{ name: "data", type: "bytes32" }],
+    payable: false,
+    stateMutability: "pure",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [{ name: "_trusted_contracts", type: "address[]" }],
+    name: "addTrustedContracts",
+    outputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: "ownerAddress",
+    outputs: [{ name: "", type: "address" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [{ name: "", type: "address" }],
+    name: "trusted_contracts",
+    outputs: [{ name: "", type: "bool" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [
+      { name: "_sender_address", type: "address" },
+      { name: "_open_block_number", type: "uint32" },
+      { name: "_balance", type: "uint256" },
+      { name: "_closing_sig", type: "bytes" }
+    ],
+    name: "extractClosingSignature",
+    outputs: [{ name: "", type: "address" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [
+      { name: "_sender_address", type: "address" },
+      { name: "_receiver_address", type: "address" },
+      { name: "_open_block_number", type: "uint32" }
+    ],
+    name: "topUpDelegate",
+    outputs: [],
+    payable: true,
+    stateMutability: "payable",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: "challengePeriod",
+    outputs: [{ name: "", type: "uint32" }],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    inputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "constructor"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: "_sender_address", type: "address" },
+      { indexed: true, name: "_receiver_address", type: "address" },
+      { indexed: false, name: "_deposit", type: "uint256" }
+    ],
+    name: "ChannelCreated",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: "_sender_address", type: "address" },
+      { indexed: true, name: "_receiver_address", type: "address" },
+      { indexed: true, name: "_open_block_number", type: "uint32" },
+      { indexed: false, name: "_added_deposit", type: "uint256" }
+    ],
+    name: "ChannelToppedUp",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: "_sender_address", type: "address" },
+      { indexed: true, name: "_receiver_address", type: "address" },
+      { indexed: true, name: "_open_block_number", type: "uint32" },
+      { indexed: false, name: "_balance", type: "uint256" }
+    ],
+    name: "ChannelCloseRequested",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: "_sender_address", type: "address" },
+      { indexed: true, name: "_receiver_address", type: "address" },
+      { indexed: true, name: "_open_block_number", type: "uint32" },
+      { indexed: false, name: "_balance", type: "uint256" },
+      {
+        indexed: false,
+        name: "_receiver_remaining_balance",
+        type: "uint256"
+      }
+    ],
+    name: "ChannelSettled",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, name: "_sender_address", type: "address" },
+      { indexed: true, name: "_receiver_address", type: "address" },
+      { indexed: true, name: "_open_block_number", type: "uint32" },
+      { indexed: false, name: "_withdrawn_balance", type: "uint256" }
+    ],
+    name: "ChannelWithdraw",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        name: "_trusted_contract_address",
+        type: "address"
+      },
+      { indexed: false, name: "_trusted_status", type: "bool" }
+    ],
+    name: "TrustedContract",
+    type: "event"
+  }
+];
+let ansABI = [
+  {
+    constant: false,
+    inputs: [],
+    name: "reBid",
+    outputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [{ name: "_content", type: "bytes32" }],
+    name: "setContent",
+    outputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [{ name: "_name", type: "string" }],
+    name: "bidPrice",
+    outputs: [],
+    payable: true,
+    stateMutability: "payable",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [{ name: "_name", type: "string" }],
+    name: "buy",
+    outputs: [],
+    payable: true,
+    stateMutability: "payable",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [{ name: "_name", type: "string" }],
+    name: "getNameSpace",
+    outputs: [
+      { name: "addr", type: "address" },
+      { name: "price", type: "uint256" },
+      { name: "name", type: "string" }
+    ],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [{ name: "", type: "address" }],
+    name: "nss",
+    outputs: [
+      { name: "name", type: "string" },
+      { name: "content", type: "bytes32" },
+      { name: "price", type: "uint256" }
+    ],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [{ name: "_addr", type: "address" }],
+    name: "getAuction",
+    outputs: [
+      { name: "price", type: "uint256" },
+      { name: "blockNo", type: "uint256" },
+      { name: "name", type: "string" }
+    ],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [{ name: "_price", type: "uint256" }],
+    name: "setPrice",
+    outputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [{ name: "_to", type: "address" }],
+    name: "sell",
+    outputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [],
+    name: "unregister",
+    outputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    constant: true,
+    inputs: [{ name: "_name", type: "string" }],
+    name: "getAuction",
+    outputs: [
+      { name: "addr", type: "address" },
+      { name: "price", type: "uint256" },
+      { name: "blockNo", type: "uint256" }
+    ],
+    payable: false,
+    stateMutability: "view",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [
+      { name: "_content", type: "bytes32" },
+      { name: "_price", type: "uint256" }
+    ],
+    name: "setContentAndPrice",
+    outputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "function"
+  },
+  {
+    constant: false,
+    inputs: [{ name: "_name", type: "string" }],
+    name: "register",
+    outputs: [],
+    payable: true,
+    stateMutability: "payable",
+    type: "function"
+  },
+  {
+    inputs: [],
+    payable: false,
+    stateMutability: "nonpayable",
+    type: "constructor"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, name: "_from", type: "address" },
+      { indexed: false, name: "_name", type: "string" }
+    ],
+    name: "EventRegister",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, name: "_from", type: "address" },
+      { indexed: false, name: "_name", type: "string" }
+    ],
+    name: "EventUnRegister",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, name: "_from", type: "address" },
+      { indexed: false, name: "_name", type: "string" },
+      { indexed: false, name: "_price", type: "uint256" }
+    ],
+    name: "EventSetPrice",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, name: "_from", type: "address" },
+      { indexed: false, name: "_name", type: "string" },
+      { indexed: false, name: "_content", type: "bytes32" }
+    ],
+    name: "EventSetContent",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, name: "_from", type: "address" },
+      { indexed: false, name: "_name", type: "string" },
+      { indexed: false, name: "_content", type: "bytes32" },
+      { indexed: false, name: "_price", type: "uint256" }
+    ],
+    name: "EventContentAndPrice",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, name: "_from", type: "address" },
+      { indexed: false, name: "_to", type: "address" },
+      { indexed: false, name: "_price", type: "uint256" }
+    ],
+    name: "EventBuy",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, name: "_from", type: "address" },
+      { indexed: false, name: "_name", type: "string" },
+      { indexed: false, name: "_price", type: "uint256" }
+    ],
+    name: "EventBidPrice",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, name: "_from", type: "address" },
+      { indexed: false, name: "_to", type: "address" },
+      { indexed: false, name: "_name", type: "string" },
+      { indexed: false, name: "_price", type: "uint256" }
+    ],
+    name: "EventSell",
+    type: "event"
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, name: "_from", type: "address" },
+      { indexed: false, name: "_name", type: "string" },
+      { indexed: false, name: "_price", type: "uint256" }
+    ],
+    name: "EventReBid",
+    type: "event"
+  }
+];
+
+</script>
+
 <style scoped lang="less">
 .name {
   width: 300px;
@@ -651,7 +1493,7 @@ a {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -832,7 +1674,7 @@ a {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -913,839 +1755,3 @@ body > .el-container {
   line-height: 320px;
 }
 </style>
-
-<script>
-import Header from "~/components/Header.vue";
-import Footer from "~/components/Footer.vue";
-import axios from "axios";
-import { toDate, toDecimals, search } from "~/common/method.js";
-const Web3 = require("web3");
-import VueClipboard from "vue-clipboard2";
-import Vue from "vue";
-import { setInterval, clearInterval } from "timers";
-const bigInt = require("big-integer");
-const abiDecoder = require("abi-decoder");
-
-Vue.use(VueClipboard);
-
-export default {
-  components: {
-    Header,
-    Footer
-  },
-  asyncData({ params }) {
-    // console.log("params address", params.address)
-    return { hash: params.hash };
-  },
-
-  created() {},
-  mounted() {
-    this.showData();
-  },
-  data() {
-    return {
-      hash: "",
-      status: "",
-      blockHeight: "",
-      timeStamp: "",
-      from: "",
-      to: "",
-      value: "",
-      gasLimit: "",
-      gasUsedByTxn: "",
-      gasPrice: "",
-      actualTxCost: "",
-      nonce: "",
-      inputData: "",
-      inputDataString: "",
-      inputTemp: "",
-      decodedData: "",
-      activeName2: "first",
-      input: "",
-      internalData: [],
-      isContract: "false",
-      pending: "false",
-      confirmations: ""
-    };
-  },
-  methods: {
-    handleSelect(key, keyPath) {
-      // console.log(key, keyPath);
-    },
-    async showData() {
-      let self = this;
-      await this.$axios
-        .$get("/transactions/hash/" + this.hash)
-        .then(async function(res) {
-          // console.log(res.BlockNumber)
-          self.pending = res.Pending;
-          self.blockHeight = res.BlockNumber;
-          let blockHeight = self.blockHeight;
-          self.$axios.$get("/blocks/count").then(res => {
-            // console.log("====", blockHeight, res.count)
-            let confirmations = Math.abs(res - blockHeight);
-            // console.log("confirmations", confirmations)
-            if (confirmations > 1)
-              self.confirmations =
-                "(" + confirmations + " block confirmations)";
-            else
-              self.confirmations = "(" + confirmations + " block confirmation)";
-          });
-
-          self.timeStamp = toDate(res.Timestamp);
-          self.from = res.From;
-          self.to = res.To;
-
-          await self.$axios
-            .$get("/accounts/address/" + self.to)
-            .then(res => {
-              self.isContract = res.IsContract;
-            })
-            .catch(error => {
-              console.log("trace error", error);
-            });
-          console.log("res.value", res.Value);
-          self.value = toDecimals(res.Value / 1e18) + " ATN";
-          self.gasLimit = res.Gas;
-          self.gasUsedByTxn = res.GasUsed;
-          self.gasPrice = toDecimals(res.GasPrice / 1e18) + " ATN";
-          self.actualTxCost =
-            toDecimals(
-              (parseFloat(bigInt(res.GasUsed)) *
-                parseFloat(bigInt(res.GasPrice))) /
-                1e18
-            ) + " ATN";
-          self.nonce = res.Nonce;
-          self.inputData = res.Input;
-
-          //inputdata to contract function
-          let dbotFactoryABI = [
-            {
-              constant: true,
-              inputs: [{ name: "", type: "uint256" }],
-              name: "idToAddress",
-              outputs: [{ name: "", type: "address" }],
-              payable: false,
-              stateMutability: "view",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [{ name: "_dbotAddress", type: "address" }],
-              name: "register",
-              outputs: [],
-              payable: false,
-              stateMutability: "nonpayable",
-              type: "function"
-            },
-            {
-              constant: true,
-              inputs: [{ name: "", type: "uint256" }],
-              name: "dbots",
-              outputs: [{ name: "", type: "address" }],
-              payable: false,
-              stateMutability: "view",
-              type: "function"
-            },
-            {
-              anonymous: false,
-              inputs: [
-                { indexed: false, name: "id", type: "uint256" },
-                { indexed: false, name: "dbotAddress", type: "address" }
-              ],
-              name: "Register",
-              type: "event"
-            }
-          ];
-          let transferChannelsABI = [
-            {
-              constant: true,
-              inputs: [
-                { name: "_receiver_address", type: "address" },
-                { name: "_open_block_number", type: "uint32" },
-                { name: "_balance", type: "uint256" },
-                { name: "_balance_msg_sig", type: "bytes" }
-              ],
-              name: "extractBalanceProofSignature",
-              outputs: [{ name: "", type: "address" }],
-              payable: false,
-              stateMutability: "view",
-              type: "function"
-            },
-            {
-              constant: true,
-              inputs: [
-                { name: "_sender_address", type: "address" },
-                { name: "_receiver_address", type: "address" },
-                { name: "_open_block_number", type: "uint32" }
-              ],
-              name: "getChannelInfo",
-              outputs: [
-                { name: "", type: "bytes32" },
-                { name: "", type: "uint256" },
-                { name: "", type: "uint32" },
-                { name: "", type: "uint256" },
-                { name: "", type: "uint256" }
-              ],
-              payable: false,
-              stateMutability: "view",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [
-                { name: "_receiver_address", type: "address" },
-                { name: "_open_block_number", type: "uint32" },
-                { name: "_balance", type: "uint256" }
-              ],
-              name: "uncooperativeClose",
-              outputs: [],
-              payable: false,
-              stateMutability: "nonpayable",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [{ name: "_trusted_contracts", type: "address[]" }],
-              name: "removeTrustedContracts",
-              outputs: [],
-              payable: false,
-              stateMutability: "nonpayable",
-              type: "function"
-            },
-            {
-              constant: true,
-              inputs: [{ name: "", type: "bytes32" }],
-              name: "withdrawn_balances",
-              outputs: [{ name: "", type: "uint256" }],
-              payable: false,
-              stateMutability: "view",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [
-                { name: "_sender_address", type: "address" },
-                { name: "_receiver_address", type: "address" }
-              ],
-              name: "createChannelDelegate",
-              outputs: [],
-              payable: true,
-              stateMutability: "payable",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [
-                { name: "_receiver_address", type: "address" },
-                { name: "_open_block_number", type: "uint32" },
-                { name: "_balance", type: "uint256" },
-                { name: "_balance_msg_sig", type: "bytes" },
-                { name: "_closing_sig", type: "bytes" }
-              ],
-              name: "cooperativeClose",
-              outputs: [],
-              payable: false,
-              stateMutability: "nonpayable",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [
-                { name: "_open_block_number", type: "uint32" },
-                { name: "_balance", type: "uint256" },
-                { name: "_balance_msg_sig", type: "bytes" }
-              ],
-              name: "withdraw",
-              outputs: [{ name: "", type: "uint256" }],
-              payable: false,
-              stateMutability: "nonpayable",
-              type: "function"
-            },
-            {
-              constant: true,
-              inputs: [],
-              name: "version",
-              outputs: [{ name: "", type: "string" }],
-              payable: false,
-              stateMutability: "view",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [
-                { name: "_receiver_address", type: "address" },
-                { name: "_open_block_number", type: "uint32" }
-              ],
-              name: "settle",
-              outputs: [],
-              payable: false,
-              stateMutability: "nonpayable",
-              type: "function"
-            },
-            {
-              constant: true,
-              inputs: [],
-              name: "channel_deposit_bugbounty_limit",
-              outputs: [{ name: "", type: "uint256" }],
-              payable: false,
-              stateMutability: "view",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [{ name: "_receiver_address", type: "address" }],
-              name: "createChannel",
-              outputs: [],
-              payable: true,
-              stateMutability: "payable",
-              type: "function"
-            },
-            {
-              constant: true,
-              inputs: [{ name: "", type: "bytes32" }],
-              name: "closing_requests",
-              outputs: [
-                { name: "closing_balance", type: "uint256" },
-                { name: "settle_block_number", type: "uint32" }
-              ],
-              payable: false,
-              stateMutability: "view",
-              type: "function"
-            },
-            {
-              constant: true,
-              inputs: [{ name: "", type: "bytes32" }],
-              name: "channels",
-              outputs: [
-                { name: "deposit", type: "uint256" },
-                { name: "open_block_number", type: "uint32" }
-              ],
-              payable: false,
-              stateMutability: "view",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [
-                { name: "_receiver_address", type: "address" },
-                { name: "_open_block_number", type: "uint32" }
-              ],
-              name: "topUp",
-              outputs: [],
-              payable: true,
-              stateMutability: "payable",
-              type: "function"
-            },
-            {
-              constant: true,
-              inputs: [
-                { name: "_sender_address", type: "address" },
-                { name: "_receiver_address", type: "address" },
-                { name: "_open_block_number", type: "uint32" }
-              ],
-              name: "getKey",
-              outputs: [{ name: "data", type: "bytes32" }],
-              payable: false,
-              stateMutability: "pure",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [{ name: "_trusted_contracts", type: "address[]" }],
-              name: "addTrustedContracts",
-              outputs: [],
-              payable: false,
-              stateMutability: "nonpayable",
-              type: "function"
-            },
-            {
-              constant: true,
-              inputs: [],
-              name: "ownerAddress",
-              outputs: [{ name: "", type: "address" }],
-              payable: false,
-              stateMutability: "view",
-              type: "function"
-            },
-            {
-              constant: true,
-              inputs: [{ name: "", type: "address" }],
-              name: "trusted_contracts",
-              outputs: [{ name: "", type: "bool" }],
-              payable: false,
-              stateMutability: "view",
-              type: "function"
-            },
-            {
-              constant: true,
-              inputs: [
-                { name: "_sender_address", type: "address" },
-                { name: "_open_block_number", type: "uint32" },
-                { name: "_balance", type: "uint256" },
-                { name: "_closing_sig", type: "bytes" }
-              ],
-              name: "extractClosingSignature",
-              outputs: [{ name: "", type: "address" }],
-              payable: false,
-              stateMutability: "view",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [
-                { name: "_sender_address", type: "address" },
-                { name: "_receiver_address", type: "address" },
-                { name: "_open_block_number", type: "uint32" }
-              ],
-              name: "topUpDelegate",
-              outputs: [],
-              payable: true,
-              stateMutability: "payable",
-              type: "function"
-            },
-            {
-              constant: true,
-              inputs: [],
-              name: "challengePeriod",
-              outputs: [{ name: "", type: "uint32" }],
-              payable: false,
-              stateMutability: "view",
-              type: "function"
-            },
-            {
-              inputs: [],
-              payable: false,
-              stateMutability: "nonpayable",
-              type: "constructor"
-            },
-            {
-              anonymous: false,
-              inputs: [
-                { indexed: true, name: "_sender_address", type: "address" },
-                { indexed: true, name: "_receiver_address", type: "address" },
-                { indexed: false, name: "_deposit", type: "uint256" }
-              ],
-              name: "ChannelCreated",
-              type: "event"
-            },
-            {
-              anonymous: false,
-              inputs: [
-                { indexed: true, name: "_sender_address", type: "address" },
-                { indexed: true, name: "_receiver_address", type: "address" },
-                { indexed: true, name: "_open_block_number", type: "uint32" },
-                { indexed: false, name: "_added_deposit", type: "uint256" }
-              ],
-              name: "ChannelToppedUp",
-              type: "event"
-            },
-            {
-              anonymous: false,
-              inputs: [
-                { indexed: true, name: "_sender_address", type: "address" },
-                { indexed: true, name: "_receiver_address", type: "address" },
-                { indexed: true, name: "_open_block_number", type: "uint32" },
-                { indexed: false, name: "_balance", type: "uint256" }
-              ],
-              name: "ChannelCloseRequested",
-              type: "event"
-            },
-            {
-              anonymous: false,
-              inputs: [
-                { indexed: true, name: "_sender_address", type: "address" },
-                { indexed: true, name: "_receiver_address", type: "address" },
-                { indexed: true, name: "_open_block_number", type: "uint32" },
-                { indexed: false, name: "_balance", type: "uint256" },
-                {
-                  indexed: false,
-                  name: "_receiver_remaining_balance",
-                  type: "uint256"
-                }
-              ],
-              name: "ChannelSettled",
-              type: "event"
-            },
-            {
-              anonymous: false,
-              inputs: [
-                { indexed: true, name: "_sender_address", type: "address" },
-                { indexed: true, name: "_receiver_address", type: "address" },
-                { indexed: true, name: "_open_block_number", type: "uint32" },
-                { indexed: false, name: "_withdrawn_balance", type: "uint256" }
-              ],
-              name: "ChannelWithdraw",
-              type: "event"
-            },
-            {
-              anonymous: false,
-              inputs: [
-                {
-                  indexed: true,
-                  name: "_trusted_contract_address",
-                  type: "address"
-                },
-                { indexed: false, name: "_trusted_status", type: "bool" }
-              ],
-              name: "TrustedContract",
-              type: "event"
-            }
-          ];
-          let ansABI = [
-            {
-              constant: false,
-              inputs: [],
-              name: "reBid",
-              outputs: [],
-              payable: false,
-              stateMutability: "nonpayable",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [{ name: "_content", type: "bytes32" }],
-              name: "setContent",
-              outputs: [],
-              payable: false,
-              stateMutability: "nonpayable",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [{ name: "_name", type: "string" }],
-              name: "bidPrice",
-              outputs: [],
-              payable: true,
-              stateMutability: "payable",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [{ name: "_name", type: "string" }],
-              name: "buy",
-              outputs: [],
-              payable: true,
-              stateMutability: "payable",
-              type: "function"
-            },
-            {
-              constant: true,
-              inputs: [{ name: "_name", type: "string" }],
-              name: "getNameSpace",
-              outputs: [
-                { name: "addr", type: "address" },
-                { name: "price", type: "uint256" },
-                { name: "name", type: "string" }
-              ],
-              payable: false,
-              stateMutability: "view",
-              type: "function"
-            },
-            {
-              constant: true,
-              inputs: [{ name: "", type: "address" }],
-              name: "nss",
-              outputs: [
-                { name: "name", type: "string" },
-                { name: "content", type: "bytes32" },
-                { name: "price", type: "uint256" }
-              ],
-              payable: false,
-              stateMutability: "view",
-              type: "function"
-            },
-            {
-              constant: true,
-              inputs: [{ name: "_addr", type: "address" }],
-              name: "getAuction",
-              outputs: [
-                { name: "price", type: "uint256" },
-                { name: "blockNo", type: "uint256" },
-                { name: "name", type: "string" }
-              ],
-              payable: false,
-              stateMutability: "view",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [{ name: "_price", type: "uint256" }],
-              name: "setPrice",
-              outputs: [],
-              payable: false,
-              stateMutability: "nonpayable",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [{ name: "_to", type: "address" }],
-              name: "sell",
-              outputs: [],
-              payable: false,
-              stateMutability: "nonpayable",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [],
-              name: "unregister",
-              outputs: [],
-              payable: false,
-              stateMutability: "nonpayable",
-              type: "function"
-            },
-            {
-              constant: true,
-              inputs: [{ name: "_name", type: "string" }],
-              name: "getAuction",
-              outputs: [
-                { name: "addr", type: "address" },
-                { name: "price", type: "uint256" },
-                { name: "blockNo", type: "uint256" }
-              ],
-              payable: false,
-              stateMutability: "view",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [
-                { name: "_content", type: "bytes32" },
-                { name: "_price", type: "uint256" }
-              ],
-              name: "setContentAndPrice",
-              outputs: [],
-              payable: false,
-              stateMutability: "nonpayable",
-              type: "function"
-            },
-            {
-              constant: false,
-              inputs: [{ name: "_name", type: "string" }],
-              name: "register",
-              outputs: [],
-              payable: true,
-              stateMutability: "payable",
-              type: "function"
-            },
-            {
-              inputs: [],
-              payable: false,
-              stateMutability: "nonpayable",
-              type: "constructor"
-            },
-            {
-              anonymous: false,
-              inputs: [
-                { indexed: false, name: "_from", type: "address" },
-                { indexed: false, name: "_name", type: "string" }
-              ],
-              name: "EventRegister",
-              type: "event"
-            },
-            {
-              anonymous: false,
-              inputs: [
-                { indexed: false, name: "_from", type: "address" },
-                { indexed: false, name: "_name", type: "string" }
-              ],
-              name: "EventUnRegister",
-              type: "event"
-            },
-            {
-              anonymous: false,
-              inputs: [
-                { indexed: false, name: "_from", type: "address" },
-                { indexed: false, name: "_name", type: "string" },
-                { indexed: false, name: "_price", type: "uint256" }
-              ],
-              name: "EventSetPrice",
-              type: "event"
-            },
-            {
-              anonymous: false,
-              inputs: [
-                { indexed: false, name: "_from", type: "address" },
-                { indexed: false, name: "_name", type: "string" },
-                { indexed: false, name: "_content", type: "bytes32" }
-              ],
-              name: "EventSetContent",
-              type: "event"
-            },
-            {
-              anonymous: false,
-              inputs: [
-                { indexed: false, name: "_from", type: "address" },
-                { indexed: false, name: "_name", type: "string" },
-                { indexed: false, name: "_content", type: "bytes32" },
-                { indexed: false, name: "_price", type: "uint256" }
-              ],
-              name: "EventContentAndPrice",
-              type: "event"
-            },
-            {
-              anonymous: false,
-              inputs: [
-                { indexed: false, name: "_from", type: "address" },
-                { indexed: false, name: "_to", type: "address" },
-                { indexed: false, name: "_price", type: "uint256" }
-              ],
-              name: "EventBuy",
-              type: "event"
-            },
-            {
-              anonymous: false,
-              inputs: [
-                { indexed: false, name: "_from", type: "address" },
-                { indexed: false, name: "_name", type: "string" },
-                { indexed: false, name: "_price", type: "uint256" }
-              ],
-              name: "EventBidPrice",
-              type: "event"
-            },
-            {
-              anonymous: false,
-              inputs: [
-                { indexed: false, name: "_from", type: "address" },
-                { indexed: false, name: "_to", type: "address" },
-                { indexed: false, name: "_name", type: "string" },
-                { indexed: false, name: "_price", type: "uint256" }
-              ],
-              name: "EventSell",
-              type: "event"
-            },
-            {
-              anonymous: false,
-              inputs: [
-                { indexed: false, name: "_from", type: "address" },
-                { indexed: false, name: "_name", type: "string" },
-                { indexed: false, name: "_price", type: "uint256" }
-              ],
-              name: "EventReBid",
-              type: "event"
-            }
-          ];
-          abiDecoder.addABI(dbotFactoryABI);
-          abiDecoder.addABI(transferChannelsABI);
-          abiDecoder.addABI(ansABI);
-          const testData = self.inputData.toString();
-          const decodedData = abiDecoder.decodeMethod(testData);
-          // console.log('decodedData', decodedData)
-          self.inputDataString = self.inputData;
-          if (decodedData != undefined) {
-            let functionName = decodedData.name;
-            let params = decodedData.params;
-            let paramsName = [];
-            let paramsValue = [];
-            let paramsType = [];
-            for (let p of params) {
-              paramsName.push(p.name);
-              paramsType.push(p.type);
-              paramsValue.push(p.value);
-            }
-            console.log(functionName, params)
-
-            self.inputDataString = "Function: " + functionName + "(";
-            for (let i = 0; i < paramsName.length; i++) {
-              self.inputDataString +=
-                paramsType[i] + "  " + paramsName[i] + ",";
-            }
-            if(params.length === 0) self.inputDataString =
-              self.inputDataString + ") \n\n";
-            else self.inputDataString =
-              self.inputDataString.substr(0, self.inputDataString.length - 1) +
-              ") \n\n";
-            // console.log("inputdata", this.inputData)
-            let methodId = self.inputData.substr(0, 10);
-            self.inputDataString += "MethodID:  " + methodId;
-            for (let i = 0; i < paramsValue.length; i++) {
-              self.inputDataString +=
-                "\n[" + i + "]:     " + paramsValue[i] + "\n";
-            }
-            // console.log("inputDataString", this.inputDataString)
-          } else {
-            try {
-              self.inputDataString = Web3.utils.hexToUtf8(self.inputData);
-            } catch (error) {
-              self.inputDataString = self.inputData;
-            }
-            // console.log("web3", Web3.utils.hexToUtf8(this.inputData))
-          }
-          self.inputTemp = self.inputData;
-          self.inputData = self.inputDataString;
-
-          // console.log('res.Pending', res.Pending)
-          if (res.Pending === "true") {
-            self.status = "Pending...";
-            // console.log("pending this.pending", this.pending)
-            let interval = setInterval(async function() {
-              // console.log("send self.pending", self.pending)
-              if (self.pending == "true") {
-                await self.$axios
-                  .$get("/transactions/hash/" + self.hash)
-                  .then(res => {
-                    self.pending = res.Pending;
-                  });
-              } else {
-                // console.log("res.Status", res.Status)
-                if (res.Status == "1") {
-                  self.status = "Success";
-                } else self.status = "Failed";
-                clearInterval(interval);
-              }
-            }, 5000);
-          } else {
-            self.pending = "false";
-            if (res.Status == "1") {
-              self.status = "Success";
-            } else self.status = "Failed";
-          }
-        })
-        .catch(error => {
-          console.log("trace error", error);
-        });
-      this.$axios.$get("/traces/hash/" + this.hash).then(res => {
-        let trace = res.Trace;
-        for (let t of trace) {
-          let data = {};
-          data.from = t.From.toString().substr(0, 10) + "...";
-          data.fromAddress = t.From;
-          data.to = t.To.toString().substr(0, 10) + "...";
-          data.toAddress = t.To;
-          data.input = t.Input;
-          data.value = toDecimals(t.Value / 1e18) + " ATN";
-          data.type = t.Op;
-          this.internalData.push(data);
-        }
-      });
-    },
-
-    handleClick(tab, event) {
-      // console.log(tab, event);
-    },
-    handleCommand(command) {
-      // this.$message('click on item ' + command);
-      if (command === "default") {
-        // this.inputTemp = this.inputData;
-        this.inputData = this.inputDataString;
-      } else if (command === "original") {
-        this.inputData = this.inputTemp;
-      }
-    },
-    search() {
-      search(this);
-    },
-    onCopy() {
-      this.$notify({
-        title: "success",
-        message: "复制成功！",
-        type: "success"
-      });
-    },
-    onError() {
-      // alert();
-    }
-  }
-};
-</script>

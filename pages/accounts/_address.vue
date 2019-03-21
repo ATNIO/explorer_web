@@ -220,6 +220,146 @@
   </div>
 </template>
 
+
+<script>
+import Header from "~/components/Header.vue";
+import Footer from "~/components/Footer.vue";
+import axios from "axios";
+import { toDate, toTime, addressSimplify, search, valueToATNFixed2 } from "~/common/method.js";
+import VueClipboard from "vue-clipboard2";
+import Vue from "vue";
+
+Vue.use(VueClipboard);
+
+export default {
+  components: {
+    Header,
+    Footer
+  },
+  asyncData({ params }) {
+    console.log("params address", params.address);
+    return { address: params.address };
+  },
+
+  created() {},
+  mounted() {
+    this.showData();
+  },
+  data() {
+    return {
+      address: "",
+      leftTable: [],
+      rightTable: [],
+      accountDetailsTable: [],
+      total: 0,
+      currentPage: 1,
+      pageSize: 9,
+      atn: "",
+      atnValue: "",
+      txns: "",
+      activeName2: "first",
+      transactionTable: [],
+      input: "",
+      isContract: "false"
+    };
+  },
+  methods: {
+    handleSelect(key, keyPath) {
+      // console.log(key, keyPath);
+    },
+    async showData() {
+      this.$axios.$get("/accounts/address/" + this.address).then(res => {
+        this.atn = valueToATNFixed2(res.Balance);
+        this.isContract = res.IsContract;
+        this.leftTable.push({
+          attribute: this.$t('account.balance'),
+          value: this.atn.toString() + " ATN"
+        });
+      });
+
+      this.transactionTable = [];
+      this.$axios
+        .$get(
+          "/transactions/list/account/" +
+            this.address +
+            "?page_size=" +
+            this.pageSize +
+            "&page_number=" +
+            this.currentPage
+        )
+        .then(res => {
+          this.txns = res.count;
+          this.rightTable.push({
+            attribute: this.$t('account.transactions'),
+            value: this.txns + " txns"
+          });
+          this.total = res.count;
+          for (let r of res.transactionsList) {
+            let tx = {};
+            tx.blockNumber = r.BlockNumber;
+            tx.time = toTime(r.Timestamp);
+            tx.from = addressSimplify(r.From);
+            tx.txId = addressSimplify(r.Hash);
+            tx.hash = r.Hash.toString();
+            tx.to = addressSimplify(r.To);
+            tx.fromAddress = r.From.toString();
+            tx.toAddress = r.To.toString();
+            tx.value = valueToATNFixed2(r.Value) + " ATN";
+            this.transactionTable.push(tx);
+          }
+          // console.log(Date.now())
+        });
+    },
+    handleCurrentChange(val) {
+      // console.log(`当前页: ${val}`);
+      this.currentPage = val;
+      this.transactionTable = [];
+      this.$axios
+        .$get(
+          "/transactions/list/account/" +
+            this.address +
+            "?page_size=" +
+            this.pageSize +
+            "&page_number=" +
+            this.currentPage
+        )
+        .then(res => {
+          for (let r of res.transactionsList) {
+            let tx = {};
+            tx.blockNumber = r.BlockNumber;
+            tx.time = toTime(r.Timestamp);
+            tx.from = addressSimplify(r.From);
+            tx.txId = addressSimplify(r.Hash);
+            tx.hash = r.Hash.toString();
+            tx.to = addressSimplify(r.To);
+            tx.fromAddress = r.From.toString();
+            tx.toAddress = r.To.toString();
+            tx.value = valueToATNFixed2(r.Value) + " ATN";
+            this.transactionTable.push(tx);
+          }
+          // console.log(Date.now())
+        });
+    },
+    handleClick(tab, event) {
+      // console.log(tab, event);
+    },
+    search() {
+      search(this);
+    },
+    onCopy() {
+      this.$notify({
+        title: "success",
+        message: "复制成功！",
+        type: "success"
+      });
+    },
+    onError() {
+      // alert();
+    }
+  }
+};
+</script>
+
 <style scoped lang="less">
 .tag {
   font-size: 14px;
@@ -544,7 +684,7 @@ a {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -697,7 +837,7 @@ a {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -776,142 +916,3 @@ body > .el-container {
   line-height: 320px;
 }
 </style>
-
-<script>
-import Header from "~/components/Header.vue";
-import Footer from "~/components/Footer.vue";
-import axios from "axios";
-import { toDate, toTime, addressSimplify, search, valueToATNFixed2 } from "~/common/method.js";
-import VueClipboard from "vue-clipboard2";
-import Vue from "vue";
-
-Vue.use(VueClipboard);
-
-export default {
-  components: {
-    Header,
-    Footer
-  },
-  asyncData({ params }) {
-    console.log("params address", params.address);
-    return { address: params.address };
-  },
-
-  created() {},
-  mounted() {
-    this.showData();
-  },
-  data() {
-    return {
-      address: "",
-      leftTable: [],
-      rightTable: [],
-      accountDetailsTable: [],
-      total: 0,
-      currentPage: 1,
-      pageSize: 9,
-      atn: "",
-      atnValue: "",
-      txns: "",
-      activeName2: "first",
-      transactionTable: [],
-      input: "",
-      isContract: "false"
-    };
-  },
-  methods: {
-    handleSelect(key, keyPath) {
-      // console.log(key, keyPath);
-    },
-    async showData() {
-      this.$axios.$get("/accounts/address/" + this.address).then(res => {
-        this.atn = valueToATNFixed2(res.Balance);
-        this.isContract = res.IsContract;
-        this.leftTable.push({
-          attribute: this.$t('account.balance'),
-          value: this.atn.toString() + " ATN"
-        });
-      });
-
-      this.transactionTable = [];
-      this.$axios
-        .$get(
-          "/transactions/list/account/" +
-            this.address +
-            "?page_size=" +
-            this.pageSize +
-            "&page_number=" +
-            this.currentPage
-        )
-        .then(res => {
-          this.txns = res.count;
-          this.rightTable.push({
-            attribute: this.$t('account.transactions'),
-            value: this.txns + " txns"
-          });
-          this.total = res.count;
-          for (let r of res.transactionsList) {
-            let tx = {};
-            tx.blockNumber = r.BlockNumber;
-            tx.time = toTime(r.Timestamp);
-            tx.from = addressSimplify(r.From);
-            tx.txId = addressSimplify(r.Hash);
-            tx.hash = r.Hash.toString();
-            tx.to = addressSimplify(r.To);
-            tx.fromAddress = r.From.toString();
-            tx.toAddress = r.To.toString();
-            tx.value = valueToATNFixed2(r.Value) + " ATN";
-            this.transactionTable.push(tx);
-          }
-          // console.log(Date.now())
-        });
-    },
-    handleCurrentChange(val) {
-      // console.log(`当前页: ${val}`);
-      this.currentPage = val;
-      this.transactionTable = [];
-      this.$axios
-        .$get(
-          "/transactions/list/account/" +
-            this.address +
-            "?page_size=" +
-            this.pageSize +
-            "&page_number=" +
-            this.currentPage
-        )
-        .then(res => {
-          for (let r of res.transactionsList) {
-            let tx = {};
-            tx.blockNumber = r.BlockNumber;
-            tx.time = toTime(r.Timestamp);
-            tx.from = addressSimplify(r.From);
-            tx.txId = addressSimplify(r.Hash);
-            tx.hash = r.Hash.toString();
-            tx.to = addressSimplify(r.To);
-            tx.fromAddress = r.From.toString();
-            tx.toAddress = r.To.toString();
-            tx.value = valueToATNFixed2(r.Value) + " ATN";
-            this.transactionTable.push(tx);
-          }
-          // console.log(Date.now())
-        });
-    },
-    handleClick(tab, event) {
-      // console.log(tab, event);
-    },
-    search() {
-      search(this);
-    },
-    onCopy() {
-      this.$notify({
-        title: "success",
-        message: "复制成功！",
-        type: "success"
-      });
-    },
-    onError() {
-      // alert();
-    }
-  }
-};
-</script>

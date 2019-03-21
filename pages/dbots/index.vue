@@ -120,6 +120,100 @@
   </div>
 </template>
 
+<script>
+import Header from "~/components/Header.vue";
+import Footer from "~/components/Footer.vue";
+import axios from "axios";
+import { search, addressSimplify3 } from "~/common/method.js";
+const Web3 = require("web3");
+
+export default {
+  components: {
+    Header,
+    Footer
+  },
+  created() {},
+  mounted() {
+    this.showData();
+  },
+  data() {
+    return {
+      dbotTable: [],
+      total: 0,
+      currentPage: 1,
+      pageSize: 11,
+      input: "",
+      loading: true
+    };
+  },
+  methods: {
+    handleSelect(key, keyPath) {},
+    showData() {
+      this.$axios
+        .$get(
+          "/dbots/list?page_size=" +
+            this.pageSize +
+            "&page_number=" +
+            this.currentPage
+        )
+        .then(res => {
+          console.log(res);
+          this.total = res.count;
+          for (let r of res.dbotsList) {
+            let dbot = {};
+            dbot.name = Web3.utils.hexToUtf8(r.Name).toString();
+            dbot.domain = Web3.utils.hexToUtf8(r.Domain).toString();
+            dbot.address = addressSimplify3(r.Address);
+            dbot.dbotAddress = r.Address.toString();
+            dbot.txId = addressSimplify3(r.transaction.Hash);
+            dbot.txHash = r.transaction.Hash.toString();
+            dbot.isRegistered = r.IsRegistered.toString();
+            this.dbotTable.push(dbot);
+          }
+          this.loading = false;
+        })
+        .catch(error => {
+          console.log("error", error);
+          this.loading = false;
+        });
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.$axios
+        .$get(
+          "/dbots/list?page_size=" +
+            this.pageSize +
+            "&page_number=" +
+            this.currentPage
+        )
+        .then(res => {
+          this.dbotTable = [];
+          console.log("res", res);
+          for (let r of res.dbotsList) {
+            let dbot = {};
+            dbot.name = Web3.utils.hexToUtf8(r.Name).toString();
+            dbot.domain = Web3.utils.hexToUtf8(r.Domain).toString();
+            dbot.address = addressSimplify3(r.Address);
+            dbot.dbotAddress = r.Address.toString();
+            dbot.txId = addressSimplify3(r.transaction.Hash);
+            dbot.txHash = r.transaction.Hash.toString();
+            dbot.isRegistered = r.IsRegistered.toString();
+            this.dbotTable.push(dbot);
+          }
+          this.loading = false;
+        })
+        .catch(error => {
+          console.log("error", error);
+          this.loading = false;
+        });
+    },
+    search() {
+      search(this);
+    }
+  }
+};
+</script>
+
 <style scoped lang="less">
 .body {
   background-color: #f5f7fa;
@@ -243,7 +337,7 @@ a {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -331,7 +425,7 @@ a {
     .search-icon {
       width: 24px;
       height: 24px;
-      background-image: url(~/assets/home-search-icon.png);
+      background-image: url(~assets/home-search-icon.png);
       position: absolute;
       right: 34px;
       top: 8px;
@@ -408,97 +502,3 @@ body > .el-container {
   line-height: 320px;
 }
 </style>
-
-<script>
-import Header from "~/components/Header.vue";
-import Footer from "~/components/Footer.vue";
-import axios from "axios";
-import { search, addressSimplify3 } from "~/common/method.js";
-const Web3 = require("web3");
-
-export default {
-  components: {
-    Header,
-    Footer
-  },
-  created() {},
-  mounted() {
-    this.showData();
-  },
-  data() {
-    return {
-      dbotTable: [],
-      total: 0,
-      currentPage: 1,
-      pageSize: 11,
-      input: "",
-      loading: true
-    };
-  },
-  methods: {
-    handleSelect(key, keyPath) {},
-    showData() {
-      this.$axios
-        .$get(
-          "/dbots/list?page_size=" +
-            this.pageSize +
-            "&page_number=" +
-            this.currentPage
-        )
-        .then(res => {
-          console.log(res);
-          this.total = res.count;
-          for (let r of res.dbotsList) {
-            let dbot = {};
-            dbot.name = Web3.utils.hexToUtf8(r.Name).toString();
-            dbot.domain = Web3.utils.hexToUtf8(r.Domain).toString();
-            dbot.address = addressSimplify3(r.Address);
-            dbot.dbotAddress = r.Address.toString();
-            dbot.txId = addressSimplify3(r.transaction.Hash);
-            dbot.txHash = r.transaction.Hash.toString();
-            dbot.isRegistered = r.IsRegistered.toString();
-            this.dbotTable.push(dbot);
-          }
-          this.loading = false;
-        })
-        .catch(error => {
-          console.log("error", error);
-          this.loading = false;
-        });
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      this.$axios
-        .$get(
-          "/dbots/list?page_size=" +
-            this.pageSize +
-            "&page_number=" +
-            this.currentPage
-        )
-        .then(res => {
-          this.dbotTable = [];
-          console.log("res", res);
-          for (let r of res.dbotsList) {
-            let dbot = {};
-            dbot.name = Web3.utils.hexToUtf8(r.Name).toString();
-            dbot.domain = Web3.utils.hexToUtf8(r.Domain).toString();
-            dbot.address = addressSimplify3(r.Address);
-            dbot.dbotAddress = r.Address.toString();
-            dbot.txId = addressSimplify3(r.transaction.Hash);
-            dbot.txHash = r.transaction.Hash.toString();
-            dbot.isRegistered = r.IsRegistered.toString();
-            this.dbotTable.push(dbot);
-          }
-          this.loading = false;
-        })
-        .catch(error => {
-          console.log("error", error);
-          this.loading = false;
-        });
-    },
-    search() {
-      search(this);
-    }
-  }
-};
-</script>
