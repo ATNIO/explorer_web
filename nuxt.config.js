@@ -59,7 +59,7 @@ module.exports = {
 
   proxy: {
     '/api': {
-      target: 'http://explorer_server_greenland:4166',
+      target: 'http://explorer_server_consortiumdev:4166',
       // target: 'http://localhost:7066',
       // target: 'http://10.5.0.13:4166',
       changeOrigin: true,
