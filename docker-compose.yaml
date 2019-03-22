@@ -1,0 +1,10 @@
+version: '2'
+services:
+  explorer_web_greenland:
+    image: explorer_web_greenland
+    restart: always
+    container_name: explorer_web_greenland
+    hostname: explorer_web_greenland
+    # network_mode: bridge
+    ports:
+      - "4165:4165"

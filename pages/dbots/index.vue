@@ -411,8 +411,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-const Web3 = require('web3')
-
+import { hexToAscii, hexToBigNumber } from '~/common/method.js'
 
   export default {
 
@@ -443,8 +442,8 @@ const Web3 = require('web3')
             this.$axios.$get("/dbots/allList?limit=" + this.pageSize).then(res => {
                 for( let r of res ) {
                     let dbot = {};
-                    dbot.name = Web3.utils.hexToUtf8(r.Name).toString();
-                    dbot.domain = Web3.utils.hexToUtf8(r.Domain).toString();
+                    dbot.name = hexToAscii(r.Name).toString();
+                    dbot.domain = hexToAscii(r.Domain).toString();
                     dbot.address = r.Address.toString().substr(0,20) + '...';
                     dbot.dbotAddress = r.Address.toString();
                     dbot.txId = r.TxHash.toString().substr(0,20) + '...';
@@ -464,8 +463,8 @@ const Web3 = require('web3')
                 // console.log("res",res)
                 for( let r of res ) {
                     let dbot = {};
-                    dbot.name = Web3.utils.hexToUtf8(r.Name).toString();
-                    dbot.domain = Web3.utils.hexToUtf8(r.Domain).toString();
+                    dbot.name = hexToAscii(r.Name).toString();
+                    dbot.domain = hexToAscii(r.Domain).toString();
                     dbot.address = r.Address.toString().substr(0,20) + '...';
                     dbot.dbotAddress = r.Address.toString();
                     dbot.txId = r.TxHash.toString().substr(0,20) + '...';

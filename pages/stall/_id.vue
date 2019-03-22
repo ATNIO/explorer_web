@@ -722,7 +722,6 @@ import axios from 'axios'
 import { toLocalTime } from '~/common/method.js'
 import VueClipboard from 'vue-clipboard2';
 import Vue from 'vue'
-const Web3 = require('web3');
 
 Vue.use(VueClipboard);
 

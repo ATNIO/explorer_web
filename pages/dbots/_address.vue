@@ -756,8 +756,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate } from '~/common/method.js'
-const Web3 = require('web3')
+import { toDate, hexToAscii, hexToBigNumber } from '~/common/method.js'
 import VueClipboard from 'vue-clipboard2';
 import Vue from 'vue'
 
@@ -803,9 +802,9 @@ Vue.use(VueClipboard);
                 for(let k of keyToEndPoints) {
                     let method = {};
                     console.log("Web3.utils.hexToNumber(k.Endpoint.Price) / 1e18",k.Endpoint.Price)
-                    method.method = Web3.utils.hexToAscii(k.Endpoint.Method);
-                    method.price = parseInt(Web3.utils.hexToNumberString(k.Endpoint.Price)) / 1e18 + ' ATX';
-                    method.uri = Web3.utils.hexToAscii(k.Endpoint.Uri);
+                    method.method = hexToAscii(k.Endpoint.Method);
+                    method.price = parseInt(hexToBigNumber(k.Endpoint.Price).div(1e18)) + ' ATX';
+                    method.uri = hexToAscii(k.Endpoint.Uri);
                     this.methodTable.push(method);
                 }
                 this.isRegistered = res.IsRegistered;

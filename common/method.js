@@ -146,3 +146,11 @@ export const getEstimateGas = async function(){
     let result = await web3.eth.getGasPrice();
     return result / 1e9;
 }
+
+export const hexToAscii = (hex) => {
+  return web3.toAscii(hex);
+}
+
+export const hexToBigNumber = (hex) => {
+  return web3.toBigNumber(hex);
+}
