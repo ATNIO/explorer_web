@@ -291,7 +291,7 @@
 import Header from "~/components/Header.vue";
 import Footer from "~/components/Footer.vue";
 import axios from "axios";
-import { toDate, toDecimals, search, getAbi } from "~/common/method.js";
+import { toDate, toDecimals, search } from "~/common/method.js";
 const Web3 = require("web3");
 import VueClipboard from "vue-clipboard2";
 import Vue from "vue";

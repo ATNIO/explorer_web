@@ -1,8 +1,8 @@
 const BigNumber = require('bignumber.js');
 const moment = require('moment');
 const Web3 = require('web3');
-const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc-test.atnio.net"));
-const fs = require('fs')
+const rpcUrl = process.env.RPC_URL || "http://47.110.54.206:4051"
+const web3 = new Web3(new Web3.providers.HttpProvider(rpcUrl));
 
 export const toTime = function (timestamp) {
   if(!timestamp)return "";
@@ -252,10 +252,4 @@ export const valueToATNFixed2 = (value) => {
   }
   else result = result.toFormat(2);
   return result;
-}
-
-export const getAbi = (abiFile) => {
-  const data = fs.readFileSync(abiFile);
-  console.log("data", data);
-  return JSON.parse(data.toString());
 }

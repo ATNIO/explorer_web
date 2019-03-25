@@ -1,6 +1,6 @@
 const pkg = require('./package')
 // const axios = require('axios')
-
+const serverUrl = process.env.SERVER || "http://explorer_server_dposback1:4068"
 module.exports = {
   mode: 'universal',
 
@@ -62,7 +62,7 @@ module.exports = {
     '/api': {
       // target: 'http://119.3.57.66:4068',
       // target: 'http://localhost:4068',
-      target: 'http://localhost:7001',
+      target: serverUrl,
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
