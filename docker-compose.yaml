@@ -5,7 +5,7 @@ services:
     restart: always
     environment:
       - RPC_URL="http://47.110.54.206:4051"
-      - SERVER="http://explorer_server_dposback1:4068"
+      - SERVER="http://explorer_server_dposback2:4068"
     container_name: explorer_web_dposback1
     hostname: explorer_web_dposback1
     # depends_on:

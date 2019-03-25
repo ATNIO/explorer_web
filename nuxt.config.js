@@ -1,6 +1,6 @@
 const pkg = require('./package')
 // const axios = require('axios')
-const serverUrl = process.env.SERVER || "http://explorer_server_dposback1:4068"
+const serverUrl = process.env.SERVER || "http://explorer_server_dposback2:4068"
 module.exports = {
   mode: 'universal',
 
