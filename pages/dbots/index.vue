@@ -124,7 +124,7 @@
 import Header from "~/components/Header.vue";
 import Footer from "~/components/Footer.vue";
 import axios from "axios";
-import { search, addressSimplify3 } from "~/common/method.js";
+import { search, addressSimplify3, hexToUtf8 } from "~/common/method.js";
 const Web3 = require("web3");
 
 export default {
@@ -161,8 +161,8 @@ export default {
           this.total = res.count;
           for (let r of res.dbotsList) {
             let dbot = {};
-            dbot.name = Web3.utils.hexToUtf8(r.Name).toString();
-            dbot.domain = Web3.utils.hexToUtf8(r.Domain).toString();
+            dbot.name = hexToUtf8(r.Name).toString();
+            dbot.domain = hexToUtf8(r.Domain).toString();
             dbot.address = addressSimplify3(r.Address);
             dbot.dbotAddress = r.Address.toString();
             dbot.txId = addressSimplify3(r.transaction.Hash);
@@ -191,8 +191,8 @@ export default {
           console.log("res", res);
           for (let r of res.dbotsList) {
             let dbot = {};
-            dbot.name = Web3.utils.hexToUtf8(r.Name).toString();
-            dbot.domain = Web3.utils.hexToUtf8(r.Domain).toString();
+            dbot.name = hexToUtf8(r.Name).toString();
+            dbot.domain = hexToUtf8(r.Domain).toString();
             dbot.address = addressSimplify3(r.Address);
             dbot.dbotAddress = r.Address.toString();
             dbot.txId = addressSimplify3(r.transaction.Hash);

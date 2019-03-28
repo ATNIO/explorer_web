@@ -157,7 +157,7 @@
 import Header from '~/components/Header.vue'
 import Footer from '~/components/Footer.vue'
 import axios from 'axios'
-import { toDate, search } from '~/common/method.js'
+import { toDate, search, hexToUtf8 } from '~/common/method.js'
 const Web3 = require('web3')
 import VueClipboard from 'vue-clipboard2';
 import Vue from 'vue'
@@ -198,8 +198,8 @@ Vue.use(VueClipboard);
         },
         async showData() {
             this.$axios.$get("/dbots/address/" + this.dbotAddress).then(res => {
-                this.leftTable.push({attribute: this.$t('dbot.name'), value: Web3.utils.hexToUtf8(res.Name)});
-                this.rightTable.push({attribute: this.$t('dbot.domain'), value: Web3.utils.hexToUtf8(res.Domain)});
+                this.leftTable.push({attribute: this.$t('dbot.name'), value: hexToUtf8(res.Name)});
+                this.rightTable.push({attribute: this.$t('dbot.domain'), value: hexToUtf8(res.Domain)});
                 let keyToEndPoints = res.KeyToEndPoints;
                 for(let k of keyToEndPoints) {
                     let method = {};

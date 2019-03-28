@@ -154,15 +154,15 @@ export async function getANSInfo(addr) {
   return info;
 }
 
-export const hexToNumber = (hex) => {
-  if(!hex)return 0;
-  return web3.utils.hexToNumber(hex);
-}
+// export const hexToNumber = (hex) => {
+//   if(!hex)return 0;
+//   return web3.utils.hexToNumber(hex);
+// }
 
-export const hexToUtf8 = (hex) => {
-  if(!hex)return "";
-  return web3.utils.hexToUtf8(hex);
-}
+// export const hexToUtf8 = (hex) => {
+//   if(!hex)return "";
+//   return web3.utils.hexToUtf8(hex);
+// }
 
 //地址显示缩短
 export const addressSimplify = (address) => {
@@ -252,4 +252,16 @@ export const valueToATNFixed2 = (value) => {
   }
   else result = result.toFormat(2);
   return result;
+}
+
+export const hexToAscii = (hex) => {
+  return web3.toAscii(hex);
+}
+
+export const hexToBigNumber = (hex) => {
+  return web3.toBigNumber(hex);
+}
+
+export const hexToUtf8 = (hex) => {
+  return Buffer.from(hex.substr(2), 'hex').toString('utf8');
 }
