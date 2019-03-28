@@ -177,7 +177,7 @@ import {
   search,
   addressSimplify,
   timeFormat,
-  hexToUtf8,
+  hexToAscii,
   valueToATNFixed2
 } from "~/common/method.js";
 const Web3 = require("web3");
@@ -251,7 +251,7 @@ export default {
             ans.ownerAddress = addressSimplify(e.Owner);
             ans.txId = addressSimplify(e.TransactionHash);
             ans.time = timeFormat(e.Timestamp);
-            ans.content = hexToUtf8(e.Content);
+            ans.content = hexToAscii(e.Content);
             ans.bidPrice = e.BidPrice === "" ? this.$t('ans.noBid') : valueToATNFixed2(e.BidPrice).toLocaleString('en-US') + " ATN";
             ans.price = e.Price === "" ? this.$t('ans.noPrice') : valueToATNFixed2(e.Price).toLocaleString('en-US') + " ATN";
             ans.bidder = e.Bidder;
@@ -286,7 +286,7 @@ export default {
             ans.ownerAddress = addressSimplify(e.Owner);
             ans.txId = addressSimplify(e.TransactionHash);
             ans.time = timeFormat(e.Timestamp);
-            ans.content = hexToUtf8(e.Content);
+            ans.content = hexToAscii(e.Content);
             ans.bidPrice = e.BidPrice === "" ? this.$t('ans.noBid') : valueToATNFixed2(e.BidPrice) + " ATN";
             ans.price = e.Price === "" ? this.$t('ans.noPrice') : valueToATNFixed2(e.Price) + " ATN";
             ans.bidder = e.Bidder;

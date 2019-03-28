@@ -250,8 +250,7 @@ import {
   toDecimals,
   toTime,
   getANSInfo,
-  hexToNumber,
-  hexToUtf8,
+  hexToBigNumber,
   addressSimplify,
   addressSimplify2,
   timeToHms,
@@ -334,6 +333,7 @@ export default {
             self.candidatesPage
         )
         .then(async function(res) {
+          console.log("res", res);
           self.top = res.count;
           self.totalCandidates = res.count;
           let i = self.pageSize * (self.candidatesPage - 1) + 1;
@@ -399,7 +399,7 @@ export default {
               delegater.content = content;
               delegater.name = name + address;
             } else delegater.name = addressSimplify2(delegater.address);
-            delegater.lastSeal = hexToNumber(r.lastSeal);
+            delegater.lastSeal = (r.lastSeal);
             delegater.sealInEpoch = r.sealInEpoch;
             delegater.votes = (+r.votes).toLocaleString("en-US");
 
@@ -516,7 +516,7 @@ export default {
               delegater.name = name + address;
             } else delegater.name = addressSimplify2(delegater.address);
 
-            delegater.lastSeal = hexToNumber(delegaters[j].lastSeal);
+            delegater.lastSeal = (delegaters[j].lastSeal);
             delegater.sealInEpoch = delegaters[j].sealInEpoch;
             delegater.votes = (+delegaters[j].votes).toLocaleString("en-US");
 

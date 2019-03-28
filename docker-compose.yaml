@@ -1,7 +1,7 @@
 version: '3'
 services:
-   explorer_web_dposback1:
-    image: atnio/explorer_web_dposback1:latest
+   explorer_web_dpos:
+    image: atnio/explorer_web_dpos:latest
     restart: always
     environment:
       - RPC_URL="http://47.110.54.206:4051"
@@ -9,6 +9,6 @@ services:
     container_name: explorer_web_dposback1
     hostname: explorer_web_dposback1
     # depends_on:
-    #   - explorer_server_dposback1
+    #   - explorer_server_dpos
     ports:
       - "4067:4067"

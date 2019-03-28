@@ -291,7 +291,7 @@
 import Header from "~/components/Header.vue";
 import Footer from "~/components/Footer.vue";
 import axios from "axios";
-import { toDate, toDecimals, search } from "~/common/method.js";
+import { toDate, toDecimals, search, hexToUtf8 } from "~/common/method.js";
 const Web3 = require("web3");
 import VueClipboard from "vue-clipboard2";
 import Vue from "vue";
@@ -435,7 +435,7 @@ export default {
             // console.log("inputDataString", this.inputDataString)
           } else {
             try {
-              self.inputDataString = Web3.utils.hexToUtf8(self.inputData);
+              self.inputDataString = hexToUtf8(self.inputData);
             } catch (error) {
               self.inputDataString = self.inputData;
             }
