@@ -1,8 +1,8 @@
 version: '3'
 services:
-  explorer_web:
-    image: explorer_web
-    container_name: explorer_web
-    hostname: explorer_web
+  explorer_web_dpos:
+    image: atnio/explorer_web_dpos
+    container_name: explorer_web_dpos
+    hostname: explorer_web_dpos
     ports:
       - 4067:4067
